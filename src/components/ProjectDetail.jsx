@@ -1677,7 +1677,7 @@ function PkgHero({ cs, slide, cfg, heroContent }) {
       <Reveal delay={0.04}>
         <div className="cs-hero-pills">
           {(slide.tags || []).map((t) => (
-            <span key={t} className="cs-hero-pill" style={{ background: accent + '18', color: accent, borderColor: accent + '44' }}>{t}</span>
+            <span key={t} className="cs-hero-pill" style={{ background: 'rgba(51,92,255,0.10)', color: '#335CFF', borderColor: 'rgba(51,92,255,0.35)' }}>{t}</span>
           ))}
         </div>
       </Reveal>
@@ -3362,25 +3362,28 @@ function BrandPlaceholder({ label, aspect = '4/3', accent = '#C4B8F0' }) {
 
 // ── Buttons Preschool ─────────────────────────────────────────────────
 
-const BUTTONS_CFG = {
+const PRESCHOOLS_CFG = {
   accent: '#F9D48B', lightAccent: '#F9D48B', dark: '#333333',
   specs: [
-    { label: 'Client',     value: 'Spurgeons / Buttons Preschool' },
+    { label: 'Client',     value: 'Spurgeons' },
     { label: 'Year',       value: '2022' },
     { label: 'Type',       value: 'Brand Identity' },
-    { label: 'Output',     value: 'Logo · Collateral · Signage' },
+    { label: 'Output',     value: 'Logos · Collateral · Signage · Merch' },
     { label: 'Location',   value: 'Kent, UK' },
-    { label: 'Status',     value: 'Live' },
+    { label: 'Status',     value: 'Now Closed' },
   ],
   stats: [
-    { value: '2',    label: 'Preschool sites in Maidstone and Ramsgate' },
-    { value: '100%', label: 'Co-designed with Buttons staff for real-world accuracy' },
-    { value: '∞',    label: 'Children whose first branded environment this became' },
+    { value: '3',         label: 'Preschool settings branded for Spurgeons' },
+    { value: '7+',        label: 'Merch designs across both schools' },
+    { value: '10+',       label: 'Signage and print pieces produced' },
+    { value: 'Quarterly', label: 'Brand consultations to keep the identity consistent' },
   ],
 }
 
-function ButtonsCaseStudyView({ cat, cs, slide }) {
-  const cfg = BUTTONS_CFG
+function PreschoolsCaseStudyView({ cat, cs, slide }) {
+  const cfg = PRESCHOOLS_CFG
+  const B = `${BASE}spurgeons-preschools/`
+  const logoStyle = { width: '100%', height: '200px', borderRadius: 16, background: '#fff', border: '1px solid rgba(0,0,0,0.07)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)', padding: '2rem', objectFit: 'contain', display: 'block' }
   return (
     <div className="cs-wrap pkg-case-study">
       <PkgHero cs={cs} slide={slide} cfg={cfg} />
@@ -3388,82 +3391,128 @@ function ButtonsCaseStudyView({ cat, cs, slide }) {
 
       <CSSection title="The Brief" variant="dark">
         <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
-            Buttons Preschool needed a brand identity that parents could trust at first glance —
-            warm, playful, and professional in equal measure. Studio KAIL worked closely with
-            the Buttons staff throughout the process, running feedback loops to ensure the
-            final system genuinely reflected how the team wanted to present their settings
-            to families across Kent.
+          <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff', marginBottom: '2rem' }}>
+            Spurgeons commissioned Studio KAIL to develop brand identities for two of their early years settings across Kent. Each had its own character, audience, and tone, but both shared a commitment to warmth, safety, and professional care.
           </p>
         </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
+          <Reveal delay={0.08}>
+            <h4 style={{ color: cfg.accent, marginBottom: '0.5rem', fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Buttons Preschool</h4>
+            <p style={{ lineHeight: 1.7, color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem' }}>
+              With sites in Maidstone and Ramsgate, Buttons needed a brand parents could trust at first glance: warm, playful, and professional in equal measure. Studio KAIL ran close feedback loops with the Buttons team throughout, ensuring the final system genuinely reflected how they wanted to show up for families across Kent.
+            </p>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <h4 style={{ color: cfg.accent, marginBottom: '0.5rem', fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Little Lambs</h4>
+            <p style={{ lineHeight: 1.7, color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem' }}>
+              A smaller community setting, Little Lambs needed a softer, more intimate identity: gentle and approachable, with a visual language that communicated safety and care from the very first point of contact. The school has since closed, but the brand served its families throughout its operation.
+            </p>
+          </Reveal>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+          <Reveal delay={0.2}>
+            <h4 style={{ color: cfg.accent, marginBottom: '0.5rem', fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Audience</h4>
+            <p style={{ lineHeight: 1.7, color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem' }}>
+              Parents and carers of children aged 2 to 5, often making their first childcare decision. Staff, local authorities, and Ofsted inspectors formed a secondary audience, requiring each identity to carry credibility well beyond the nursery gate.
+            </p>
+          </Reveal>
+          <Reveal delay={0.26}>
+            <h4 style={{ color: cfg.accent, marginBottom: '0.5rem', fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Tone of Voice</h4>
+            <p style={{ lineHeight: 1.7, color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem' }}>
+              Warm without being whimsical. Playful without being chaotic. The visual tone aimed to put anxious parents at ease, approachable and friendly, while retaining the confidence that signals professional care. Nothing precious, nothing cold.
+            </p>
+          </Reveal>
+        </div>
       </CSSection>
 
-      <CSSection title="The Brand" variant="light">
-        <Reveal><p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
-          The identity centres on a logo mark that balances child-friendly energy with the
-          confidence and clarity parents expect from an Ofsted-rated setting. A carefully
-          considered colour palette, typographic system, and a set of collateral templates
-          give the Buttons team a consistent toolkit for signage, print, and digital communication.
+      <CSSection title="The Logos" variant="light">
+        <Reveal><p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2.5rem', maxWidth: 720 }}>
+          Each setting received its own distinct mark, siblings in spirit but distinct in character. All three were designed to work across signage, print, digital, and merchandise without losing their integrity at any scale.
         </p></Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Logo Mark', 'Colour Palette', 'Brand Sheet', 'Collateral Sample', 'Signage'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.07}><BrandPlaceholder label={l} accent={cfg.accent} /></Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
+          <Reveal delay={0}>
+            <div>
+              <img src={`${B}Buttons%20LOGO.png`} alt="Buttons Preschool primary logo" style={logoStyle} />
+              <h4 style={{ marginTop: '1rem', marginBottom: '0.4rem', fontSize: '0.9rem', fontWeight: 600, color: cfg.dark }}>Buttons: Primary Mark</h4>
+              <p style={{ lineHeight: 1.6, fontSize: '0.9rem', color: '#555' }}>The main Buttons logo, used across all printed material, signage, and digital communication for the Maidstone and Ramsgate sites. The mark incorporates a playful button motif that gives the identity its name and personality, sitting naturally on uniforms, tote bags, and stationery without feeling forced at any size.</p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div>
+              <img src={`${B}Buttons%20ABC%20Logo.png`} alt="Buttons ABC variant logo" style={logoStyle} />
+              <h4 style={{ marginTop: '1rem', marginBottom: '0.4rem', fontSize: '0.9rem', fontWeight: 600, color: cfg.dark }}>Buttons ABC: Secondary Mark</h4>
+              <p style={{ lineHeight: 1.6, fontSize: '0.9rem', color: '#555' }}>A secondary variant built for classroom materials, letterheads, and stationery where a more educational tone was needed. The ABC lockup reinforces the early years learning focus and gives teachers a logo that feels at home on worksheets, welcome packs, and room signage without competing with the primary mark.</p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <div>
+              <img src={`${B}LittleLambs%20Logo.png`} alt="Little Lambs logo" style={logoStyle} />
+              <h4 style={{ marginTop: '1rem', marginBottom: '0.4rem', fontSize: '0.9rem', fontWeight: 600, color: cfg.dark }}>Little Lambs: Logo</h4>
+              <p style={{ lineHeight: 1.6, fontSize: '0.9rem', color: '#555' }}>A gentler, more intimate mark built around a playful lamb illustration. The character is soft and expressive without tipping into clip-art territory, giving the setting a face that felt genuinely welcoming to young children and their families. Where Buttons is bright and confident, Little Lambs is warm and reassuring, a visual language centred on comfort and care.</p>
+            </div>
+          </Reveal>
+        </div>
+      </CSSection>
+
+      <CSSection title="Merch & Collateral" variant="dark">
+        <Reveal>
+          <p style={{ color: 'rgba(255,255,255,0.80)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
+            Both schools received a suite of branded merchandise: items designed to feel considered rather than off-the-shelf, giving staff and families something tangible to connect with. Each piece carries the school's identity into everyday life, from tote bags and lanyards to keyrings and water bottles.
+          </p>
+        </Reveal>
+        <div style={{ columns: '2 200px', columnGap: '1rem' }}>
+          {[
+            { src: `${B}merch.png`,               alt: 'Buttons branded merchandise',       delay: 0 },
+            { src: `${B}merch2.jpg`,              alt: 'Buttons branded merchandise detail', delay: 0.06 },
+            { src: `${B}little-lambs-merch1.jpg`, alt: 'Little Lambs merchandise',           delay: 0.12 },
+            { src: `${B}little-lambs-merch2.jpg`, alt: 'Little Lambs merchandise',           delay: 0.18 },
+            { src: `${B}little-lambs-merch3.jpg`, alt: 'Little Lambs merchandise',           delay: 0.24 },
+            { src: `${B}little-lambs-merch4.jpg`, alt: 'Little Lambs merchandise',           delay: 0.30 },
+          ].map(({ src, alt, delay }) => (
+            <Reveal key={src} delay={delay}>
+              <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
+                <img src={src} alt={alt} style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+              </div>
+            </Reveal>
           ))}
         </div>
+      </CSSection>
+
+      <CSSection title="Signage & Print" variant="light">
+        <Reveal>
+          <p style={{ lineHeight: 1.7, color: cfg.dark, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
+            From A5 handouts to large-format banners, the print suite gave Buttons a consistent presence across waiting room tables, nursery walls, and outdoor spaces. Each piece was designed to work hard in the real world, not just on screen.
+          </p>
+        </Reveal>
+        <div style={{ columns: '2 200px', columnGap: '1rem', marginBottom: '1rem' }}>
+          <Reveal delay={0}>
+            <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
+              <img src={`${B}Banner_Mockup1.jpg`} alt="Buttons banner mockup" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+            </div>
+          </Reveal>
+          <Reveal delay={0.07}>
+            <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
+              <img src={`${B}Banner_Mockup2.png`} alt="Buttons banner mockup" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+            </div>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
+              <img src={`${B}A5%20flyer.png`} alt="Buttons A5 flyer" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+            </div>
+          </Reveal>
+          <Reveal delay={0.21}>
+            <div style={{ breakInside: 'avoid', marginBottom: '1rem', borderRadius: 12, overflow: 'hidden', maxHeight: 360 }}>
+              <img src={`${B}A2%20Sign.jpg`} alt="Buttons A2 sign" style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </div>
+          </Reveal>
+        </div>
+        <Reveal delay={0.28}>
+          <img src={`${B}Banner.png`} alt="Buttons banner design" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+        </Reveal>
       </CSSection>
 
       <MotionStats cfg={cfg} />
       <PkgLinks cs={cs} cfg={cfg} />
-      <CSCTA cat={cat} />
-    </div>
-  )
-}
-
-// ── Little Lambs ──────────────────────────────────────────────────────
-
-const LITTLE_LAMBS_CFG = {
-  accent: '#B8E6C0', lightAccent: '#B8E6C0', dark: '#333333',
-  specs: [
-    { label: 'Client',   value: 'Spurgeons / Little Lambs' },
-    { label: 'Year',     value: '2022' },
-    { label: 'Type',     value: 'Brand Identity' },
-    { label: 'Output',   value: 'Logo · Collateral · Brand Sheet' },
-    { label: 'Status',   value: 'Closed' },
-  ],
-  stats: [
-    { value: '1',    label: 'Complete brand system delivered from discovery to handover' },
-    { value: '∞',    label: 'Families who experienced the brand during its operation' },
-  ],
-}
-
-function LittleLambsCaseStudyView({ cat, cs, slide }) {
-  const cfg = LITTLE_LAMBS_CFG
-  return (
-    <div className="cs-wrap pkg-case-study">
-      <PkgHero cs={cs} slide={slide} cfg={cfg} />
-      <PkgOverview cs={cs} cfg={cfg} />
-
-      <CSSection title="The Identity" variant="dark">
-        <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
-            Little Lambs was a Spurgeons-operated preschool that has since closed. During
-            its operation, Studio KAIL developed the full brand identity: a gentle, approachable
-            logo, a warm and considered colour palette, typography, and collateral templates.
-            The system was designed to communicate care and safety — giving families a visual
-            anchor they could recognise and trust from the first point of contact.
-          </p>
-        </Reveal>
-      </CSSection>
-
-      <CSSection title="Brand Assets" variant="light">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Logo Mark', 'Colour Palette', 'Brand Sheet', 'Collateral Sample'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.07}><BrandPlaceholder label={l} accent={cfg.accent} /></Reveal>
-          ))}
-        </div>
-      </CSSection>
-
-      <MotionStats cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
   )
@@ -3490,6 +3539,8 @@ const INVISIBLE_WALLS_CFG = {
 
 function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
   const cfg = INVISIBLE_WALLS_CFG
+  const IW = `${BASE}spurgeons-iw/`
+  const logoStyle = { width: '100%', height: '200px', borderRadius: 16, background: '#fff', border: '1px solid rgba(0,0,0,0.07)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)', padding: '2rem', objectFit: 'contain', display: 'block' }
   return (
     <div className="cs-wrap pkg-case-study">
       <PkgHero cs={cs} slide={slide} cfg={cfg} />
@@ -3497,31 +3548,51 @@ function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
 
       <CSSection title="The Brief" variant="dark">
         <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
+          <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff' }}>
             Invisible Walls is Spurgeons' programme at HMP Winchester, helping imprisoned
             fathers stay connected with their children through parenting courses, family
             visits, and resettlement support. The brief was to give this long-running and
-            deeply important programme a visual identity that reflected its humanity — a mark
+            deeply important programme a visual identity that reflected its humanity: a mark
             and communications system built on connection, not incarceration.
           </p>
         </Reveal>
       </CSSection>
 
-      <CSSection title="Logo & Identity" variant="light">
-        <Reveal><p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
-          Every design decision was made with care for the context: a logo mark centred on
-          connection and family rather than prison iconography, a colour system warm enough
-          for family spaces within the prison environment, and illustrated material that
-          portrays people with dignity and agency.
-        </p></Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Logo Mark', 'Colour System', 'Programme Leaflet', 'Illustration', 'Signage'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.07}><BrandPlaceholder label={l} accent={cfg.accent} /></Reveal>
+      <CSSection title="The Logo" variant="light">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem', alignItems: 'start' }}>
+          <Reveal delay={0}>
+            <img src={`${IW}IW%20logo.png`} alt="Invisible Walls logo" style={logoStyle} />
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem' }}>
+              The Invisible Walls logo centres on connection: two figures reaching toward each other, evoking the bond between a father and child separated by circumstance rather than choice. The figures also pay homage to the Spurgeons organisational logo and its symbolism of people in relationship, grounding Invisible Walls firmly within the wider Spurgeons family while giving the programme its own distinct voice. The mark deliberately avoids any imagery associated with incarceration, instead drawing on warmth, presence, and continuity. It works quietly across the programme's materials: leaflets, signage, and printed resources used within the prison environment, without ever overpowering the human stories it exists to support.
+            </p>
+          </Reveal>
+        </div>
+      </CSSection>
+
+      <CSSection title="Merch & Print" variant="dark">
+        <Reveal>
+          <p style={{ color: 'rgba(255,255,255,0.80)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
+            Every piece of printed material was designed with the sensitivity the context demands: clear, human, and accessible for fathers, families, and prison staff alike.
+          </p>
+        </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+          {[
+            { src: `${IW}merch1.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0 },
+            { src: `${IW}merch2.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0.07 },
+            { src: `${IW}merch3.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0.14 },
+            { src: `${IW}merch4.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0.21 },
+          ].map(({ src, alt, delay }) => (
+            <Reveal key={src} delay={delay}>
+              <div style={{ borderRadius: 12, overflow: 'hidden', height: '220px' }}>
+                <img src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              </div>
+            </Reveal>
           ))}
         </div>
       </CSSection>
 
-      <MotionStats cfg={cfg} />
       <PkgLinks cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
@@ -4321,8 +4392,7 @@ function CaseStudyView({ cat, slide }) {
   if (cat.id === 'web' && slide.id === 1) return <PortfolioWebsiteCaseStudyView    cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'web' && slide.id === 2) return <SpurgeonsCoursePortalCaseStudyView cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 2) return <PGMCaseStudyView           cat={cat} cs={cs} slide={slide} />
-  if (cat.id === 'brand' && slide.id === 3) return <ButtonsCaseStudyView        cat={cat} cs={cs} slide={slide} />
-  if (cat.id === 'brand' && slide.id === 4) return <LittleLambsCaseStudyView    cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'brand' && slide.id === 3) return <PreschoolsCaseStudyView      cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 5) return <InvisibleWallsCaseStudyView cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 6) return <ParentsConnectCaseStudyView cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 7) return <DFHCaseStudyView            cat={cat} cs={cs} slide={slide} />

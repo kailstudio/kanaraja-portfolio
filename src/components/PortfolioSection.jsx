@@ -195,57 +195,40 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 3, bg: '#F9D48B', img: null, label: 'Buttons Preschool',
+        id: 3, bg: '#F9D48B', img: 'projects/spurgeons-preschools.jpg', label: 'Spurgeons: Preschools',
         tags: ['Logo', 'Brand Identity', 'Collateral'],
         caseStudy: {
           subtitle: 'Logo · Brand Sheet · Collateral · Signage',
           year: '2022',
           duration: 'Ongoing',
-          status: 'Live',
-          client: 'Spurgeons / Buttons Preschool',
+          status: 'Now Closed',
+          client: 'Spurgeons',
           website: 'https://spurgeons.org/how-we-help/family-life/early-years-and-family-support/buttons-preschools/',
           sections: [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Buttons Preschool is a family of Ofsted-rated early years settings run by Spurgeons across Kent, with sites in Maidstone and Ramsgate. Trained staff deliver high-quality nursery education within friendly, caring, and stimulating environments — nurturing children through their most formative developmental years.\n\nStudio KAIL worked closely with the Buttons team to develop a brand that felt genuinely warm and child-centred without tipping into the generic: a mark, colour system, and collateral suite that parents and carers could trust at first glance.`,
+              body: `Spurgeons runs a family of Ofsted-rated early years settings across Kent. Studio KAIL developed brand identities for two of their preschools: Buttons, with sites in Maidstone and Ramsgate, and Little Lambs, a community setting that has since closed.\n\nBoth brands were built to feel genuinely warm and child-centred without tipping into the generic: a mark, colour system, and collateral suite that parents and carers could trust at first glance.`,
             },
           ],
         },
       },
+
       {
-        id: 4, bg: '#C8E6C9', img: null, label: 'Little Lambs',
-        tags: ['Logo', 'Brand Identity', 'Collateral'],
-        caseStudy: {
-          subtitle: 'Logo · Brand Sheet · Collateral',
-          year: '2022',
-          duration: 'Completed',
-          status: 'Closed',
-          client: 'Spurgeons / Little Lambs Preschool',
-          sections: [
-            {
-              id: 'overview',
-              title: 'Project Overview',
-              body: `Little Lambs was a Spurgeons-run preschool that has since closed. During its operation, Studio KAIL developed the full brand identity: logo, colour palette, typography, and supporting collateral — a gentle, approachable system designed to communicate care and safety to families.\n\nEven as a closed chapter, the work represents the studio's commitment to bringing the same rigour and warmth to smaller, community-facing services as to larger organisational brands.`,
-            },
-          ],
-        },
-      },
-      {
-        id: 5, bg: '#B8C8D8', img: null, label: 'Invisible Walls',
+        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-iw.jpg', label: 'Spurgeons: Invisible Walls',
         tags: ['Logo', 'Leaflets', 'Illustration', 'Signage'],
         caseStudy: {
           subtitle: 'Logo · Leaflets · Illustrations · Signage',
           year: '2022–2024',
           duration: 'Ongoing',
-          status: 'Live',
+          status: 'Now Closed',
           client: 'Spurgeons',
           website: 'https://spurgeons.org/how-we-help/affected-by-imprisonment/hmp-winchester/',
           sections: [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Invisible Walls is Spurgeons' programme at HMP Winchester, operating since 2011 to support imprisoned fathers in maintaining meaningful relationships with their children. The service delivers parenting courses, family visits with dedicated children's activities, and resettlement support — with the belief that prisoners are parents first.\n\nStudio KAIL developed the brand identity for Invisible Walls: a logo built around connection and humanity rather than incarceration, supported by a suite of leaflets, illustrations, and signage used across the prison environment. Every design decision was made with the sensitivity the context demands.`,
+              body: `Invisible Walls is Spurgeons' programme at HMP Winchester, operating since 2011 to support imprisoned fathers in maintaining meaningful relationships with their children. The service delivers parenting courses, family visits with dedicated children's activities, and resettlement support, with the belief that prisoners are parents first.\n\nStudio KAIL developed the brand identity for Invisible Walls: a logo built around connection and humanity rather than incarceration, supported by a suite of leaflets, illustrations, and signage used across the prison environment. Every design decision was made with the sensitivity the context demands.`,
             },
           ],
         },
@@ -257,7 +240,7 @@ export const CATEGORIES = [
           subtitle: 'Logo · Animated Logo · Digital Collateral',
           year: '2023',
           duration: 'Completed',
-          status: 'Live',
+          status: 'Now Closed',
           client: 'Spurgeons',
           website: 'https://spurgeons.org/resources-and-courses/courses/parents-connect/',
           sections: [
@@ -276,7 +259,7 @@ export const CATEGORIES = [
           subtitle: 'Logo · Animated Logo · Digital Collateral',
           year: '2026',
           duration: 'Ongoing',
-          status: 'Live',
+          status: 'Now Closed',
           client: 'Spurgeons',
           website: 'https://spurgeons.org/resources-and-courses/',
           sections: [
