@@ -1156,7 +1156,7 @@ function CTABanner() {
 function CSCTA() {
   return (
     <section className="cs-end-cta">
-      {/* Background image — large, right-anchored, bottom may be clipped */}
+      {/* Background image, large, right-anchored, bottom may be clipped */}
       <div className="cs-cta-img-wrap" aria-hidden="true">
         <img src={`${BASE}footer/getintouch.webp`} alt="" className="cs-cta-img cs-cta-img--desktop" />
       </div>
@@ -2357,7 +2357,7 @@ function StudioIntroCaseStudyView({ cat, cs, slide }) {
       <MotionHero cs={cs} slide={slide} cfg={STUDIO_INTRO_CFG} />
       <MotionVideo slide={slide} cfg={STUDIO_INTRO_CFG} />
 
-      {/* Preview clips — all three on one line */}
+      {/* Preview clips, all three on one line */}
       <CSSection title="Snapshots">
         <div className="wl-grid-3">
           {previews.map((src, i) => (
@@ -2463,7 +2463,7 @@ function StepsCaseStudyView({ cat, cs, slide }) {
       <MotionVideo slide={slide} cfg={STEPS_CFG} />
       <MotionOverview cs={cs} cfg={STEPS_CFG} />
 
-      {/* Previews — 4 small on one line, large on its own */}
+      {/* Previews, 4 small on one line, large on its own */}
       <CSSection title="The Work" variant="dark">
         <div className="wl-grid-4" style={{ marginBottom: 12 }}>
           {previews.map((src, i) => (
@@ -2724,7 +2724,7 @@ function WellLabCaseStudyView({ cat, cs, slide }) {
     <div className="cs-wrap pkg-case-study">
       <MotionHero cs={cs} slide={slide} cfg={WELL_LAB_CFG} />
 
-      {/* Full video — pill glassmorphism player */}
+      {/* Full video, pill glassmorphism player */}
       <CSSection title="Full Film" variant="dark">
         <Reveal delay={0.08}>
           <WellLabPlayer />
@@ -3043,7 +3043,7 @@ function SpurgeonsPASCaseStudyView({ cat, cs, slide }) {
       <CSSection title="The Brief">
         <div style={{ maxWidth: 740, margin: '0 auto' }}>
           <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.85, marginBottom: 32 }}>
-            Spurgeons commissioned this short-form vertical advert to raise awareness of their Parenting After Separation course — a self-paced online programme built to support parents through one of the most emotionally complex transitions a family can experience.
+            Spurgeons commissioned this short-form vertical advert to raise awareness of their Parenting After Separation course, a self-paced online programme built to support parents through one of the most emotionally complex transitions a family can experience.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.85, marginBottom: 48 }}>
             The goal was to communicate warmth, accessibility, and hope. Animated characters were designed and built specifically for this piece, giving a human face to a course that deals with very real and sensitive family circumstances.
@@ -3507,7 +3507,7 @@ const PRESCHOOLS_CFG = {
     { label: 'Type',       value: 'Brand Identity' },
     { label: 'Output',     value: 'Logos · Collateral · Signage · Merch' },
     { label: 'Location',   value: 'Kent, UK' },
-    { label: 'Status',     value: 'Now Closed' },
+    { label: 'Status',     value: 'Live' },
   ],
   stats: [
     { value: '3',         label: 'Preschool settings branded for Spurgeons' },
@@ -3783,7 +3783,7 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <CSSection title="Social Media Posts" variant="light" style={{ background: '#335CFF', color: '#ffffff' }}>
+      <CSSection title="Social Media Posts" variant="light" style={{ background: '#EEF0F8', color: '#1a1a2e' }}>
         <Reveal>
           <p style={{ lineHeight: 1.7, color: '#555', marginBottom: '2rem', maxWidth: 640, fontSize: '0.95rem' }}>
             A series of branded social media posts produced for both preschool settings, designed to bring each school's identity to life across Instagram and Facebook.
@@ -3827,6 +3827,12 @@ const INVISIBLE_WALLS_CFG = {
     { value: '∞',   label: 'Families supported in maintaining bonds across the prison divide' },
   ],
 }
+const INVISIBLE_WALLS_MERCH_COLORS = [
+  'rgba(255,255,255,0.25)',
+  'rgba(51,92,255,0.15)',
+  'rgba(255,255,255,0.20)',
+  'rgba(51,92,255,0.12)',
+]
 
 function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
   const cfg = INVISIBLE_WALLS_CFG
@@ -3850,41 +3856,34 @@ function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       <CSSection title="The Logo" variant="light">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem', alignItems: 'start' }}>
-          <Reveal delay={0}>
-            <img src={`${IW}IW%20logo.png`} alt="Invisible Walls logo" style={logoStyle} />
-          </Reveal>
-          <Reveal delay={0.08}>
-            <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem' }}>
-              The Invisible Walls logo centres on connection: two figures reaching toward each other, evoking the bond between a father and child separated by circumstance rather than choice. The figures also pay homage to the Spurgeons organisational logo and its symbolism of people in relationship, grounding Invisible Walls firmly within the wider Spurgeons family while giving the programme its own distinct voice. The mark deliberately avoids any imagery associated with incarceration, instead drawing on warmth, presence, and continuity. It works quietly across the programme's materials: leaflets, signage, and printed resources used within the prison environment, without ever overpowering the human stories it exists to support.
-            </p>
-          </Reveal>
-        </div>
+        <Reveal delay={0}>
+          <img src={`${IW}IW%20logo.png`} alt="Invisible Walls logo" style={{ ...logoStyle, height: '320px', maxWidth: 600, margin: '0 auto', display: 'block' }} />
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem', maxWidth: 680, margin: '2rem auto 0' }}>
+            The Invisible Walls logo centres on connection: two figures reaching toward each other, evoking the bond between a father and child separated by circumstance rather than choice. The figures also pay homage to the Spurgeons organisational logo and its symbolism of people in relationship, grounding Invisible Walls firmly within the wider Spurgeons family while giving the programme its own distinct voice. The mark deliberately avoids any imagery associated with incarceration, instead drawing on warmth, presence, and continuity. It works quietly across the programme's materials: leaflets, signage, and printed resources used within the prison environment, without ever overpowering the human stories it exists to support.
+          </p>
+        </Reveal>
       </CSSection>
 
-      <CSSection title="Merch & Print" variant="dark">
+      <CSSection title="Merch & Print" variant="light" style={{ background: '#E8E0FF', color: '#333333' }}>
         <Reveal>
-          <p style={{ color: 'rgba(255,255,255,0.80)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
+          <p style={{ color: '#333333', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
             Every piece of printed material was designed with the sensitivity the context demands: clear, human, and accessible for fathers, families, and prison staff alike.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
-          {[
-            { src: `${IW}merch1.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0 },
-            { src: `${IW}merch2.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0.07 },
-            { src: `${IW}merch3.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0.14 },
-            { src: `${IW}merch4.jpg`,   alt: 'Invisible Walls merchandise',  delay: 0.21 },
-          ].map(({ src, alt, delay }) => (
-            <Reveal key={src} delay={delay}>
-              <div style={{ borderRadius: 12, overflow: 'hidden', height: '220px' }}>
-                <img src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <ImageGallery
+          images={[
+            `${IW}merch1.jpg`,
+            `${IW}merch2.jpg`,
+            `${IW}merch3.jpg`,
+            `${IW}merch4.jpg`,
+          ]}
+          colors={INVISIBLE_WALLS_MERCH_COLORS}
+        />
       </CSSection>
 
-      <PkgLinks cs={cs} cfg={cfg} />
+      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
       <CSCTA cat={cat} />
     </div>
   )
@@ -3902,41 +3901,152 @@ const PARENTS_CONNECT_CFG = {
     { label: 'Status',   value: 'Live' },
   ],
   stats: [
-    { value: '3',    label: 'Ready-to-run parenting courses covered under the Parents Connect brand' },
-    { value: '1',    label: 'Animated logo bringing the brand to life in video and digital contexts' },
-    { value: '∞',    label: 'Families supported by volunteers trained through Parents Connect' },
+    { value: '3',        label: 'Full courses ready to run in churches and community spaces' },
+    { value: '3+',       label: 'Modules per course, each with its own tailored session materials' },
+    { value: '70+',      label: 'Handouts designed across the full course suite' },
+    { value: '2',        label: 'Handbooks produced for facilitators and participants' },
+    { value: '4',        label: 'Subject matter experts guiding approach and trauma-informed design' },
+    { value: 'Biweekly', label: 'Check-ins for review, feedback, and new material sign-off' },
+    { value: '100+',     label: 'Custom illustrations created across the brand suite' },
+    { value: '10+',      label: 'Custom animations bringing the content to life' },
   ],
 }
 
 function ParentsConnectCaseStudyView({ cat, cs, slide }) {
   const cfg = PARENTS_CONNECT_CFG
+  const PC = `${BASE}parents-connect/`
   return (
     <div className="cs-wrap pkg-case-study">
+      {/* Header image — glassmorphism card */}
+      <Reveal>
+        <div style={{
+          margin: '2rem 1.5rem',
+          borderRadius: 24,
+          overflow: 'hidden',
+          background: 'rgba(255,255,255,0.08)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.18)',
+          boxShadow: '0 8px 48px rgba(0,0,0,0.18)',
+          padding: '1rem',
+        }}>
+          <img
+            src={`${PC}header%20image.png`}
+            alt="Parents Connect header"
+            style={{ width: '100%', display: 'block', borderRadius: 16 }}
+          />
+        </div>
+      </Reveal>
+
       <PkgHero cs={cs} slide={slide} cfg={cfg} />
       <PkgOverview cs={cs} cfg={cfg} />
 
       <CSSection title="The Brief" variant="dark">
         <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
+          <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff' }}>
             Parents Connect is Spurgeons' suite of three evidence-based parenting courses,
             designed to be run by church and community volunteers. The brand needed to feel
-            welcoming and accessible for both facilitators and the families they support —
-            professional enough for institutional contexts, warm enough for community settings.
+            welcoming and accessible for both facilitators and the families they support,
+            professional enough for institutional contexts and warm enough for community settings.
             An animated logo was also required for use in the course video content.
           </p>
         </Reveal>
       </CSSection>
 
-      <CSSection title="Logo & Animation" variant="light">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Logo Static', 'Logo Animated', 'Colour System', 'Digital Collateral', 'Course Materials'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.07}><BrandPlaceholder label={l} accent={cfg.accent} /></Reveal>
+      <CSSection title="Logo" variant="light">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+          <Reveal delay={0}>
+            <div>
+              <img
+                src={`${PC}Parents%20Connect%20Logo.svg`}
+                alt="Parents Connect logo"
+                style={{ width: '100%', height: 180, objectFit: 'contain', display: 'block', padding: '1.25rem', background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
+              />
+              <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.9rem', marginTop: '1rem' }}>
+                The Parents Connect wordmark pairs a clean, approachable typeface with a connecting motif that speaks directly to the programme's purpose: bringing parents and communities together. The full lockup works across the complete course suite in both digital and printed contexts.
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div>
+              <img
+                src={`${PC}Connect%20Logo.svg`}
+                alt="Connect sub-brand logo"
+                style={{ width: '100%', height: 180, objectFit: 'contain', display: 'block', padding: '1.25rem', background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
+              />
+              <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.9rem', marginTop: '1rem' }}>
+                The Connect mark distils the identity to its core, used across course-level materials where the full Parents Connect lockup would be too large. It retains the same warmth and visual language while giving each course its own breathing room.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </CSSection>
+
+      <CSSection title="Logo Animation" variant="light" style={{ background: '#f5f3ff' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
+          <Reveal delay={0}>
+            <div style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.10)' }}>
+              <video
+                src={`${PC}PC%20logo%20animation.mp4`}
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: '100%', display: 'block' }}
+              />
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p style={{ lineHeight: 1.8, color: cfg.dark, fontSize: '0.95rem' }}>
+              An animated version of the logo was produced for use in course videos and digital content, bringing the brand to life with a considered motion sequence that reflects the programme's warmth and sense of connection.
+            </p>
+            <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.88rem', marginTop: '1rem', opacity: 0.6 }}>
+              The full range of animations produced for this project can be viewed in the Motion section.
+            </p>
+          </Reveal>
+        </div>
+      </CSSection>
+
+      <CSSection title="Print and Packaging Materials" variant="dark">
+        <Reveal>
+          <p style={{ color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
+            From course handbooks to packaging and printed collateral, every piece was designed to feel cohesive and considered. The print suite gives facilitators and participants something tactile and trustworthy to hold onto throughout the course.
+          </p>
+        </Reveal>
+        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+          <SwipeStackCarousel images={[
+            `${PC}print1.jpg`,
+            `${PC}print2.jpg`,
+            `${PC}print3.jpg`,
+            `${PC}print4.png`,
+          ]} />
+          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8, color: '#fff' }}>Drag to browse</p>
+        </div>
+      </CSSection>
+
+      <CSSection title="Handout Samples" variant="light">
+        <Reveal>
+          <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem', maxWidth: 680, marginBottom: '2rem' }}>
+            Every session across the course suite comes with its own handout, each one designed with custom illustrations and a layout that makes the content feel inviting rather than clinical. Over 70 handouts were produced across all three courses, giving participants something worth keeping long after the session ends.
+          </p>
+        </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+          {[1,2,3,4,5,6,7,8].map((n, i) => (
+            <Reveal key={n} delay={i * 0.06}>
+              <div style={{ borderRadius: 12, overflow: 'hidden', background: '#f8f8f8', border: '1px solid rgba(0,0,0,0.06)' }}>
+                <img
+                  src={`${PC}handout${n}.png`}
+                  alt={`Handout ${n}`}
+                  style={{ width: '100%', height: 'auto', display: 'block', imageRendering: 'auto' }}
+                />
+              </div>
+            </Reveal>
           ))}
         </div>
       </CSSection>
 
       <MotionStats cfg={cfg} />
-      <PkgLinks cs={cs} cfg={cfg} />
+      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
       <CSCTA cat={cat} />
     </div>
   )
@@ -3955,13 +4065,16 @@ const DFH_CFG = {
   ],
   stats: [
     { value: '2026', label: 'Year the Digital Family Hub launched as its own team' },
-    { value: '1',    label: 'Full-time studio presence — embedded from day one' },
+    { value: '1',    label: 'Full-time studio presence, embedded from day one' },
+    { value: '3',    label: 'Breathing technique animations produced for course content' },
+    { value: '40+',  label: 'Resources designed and produced for the platform' },
     { value: '∞',    label: 'Families accessing free expert support through the Hub' },
   ],
 }
 
 function DFHCaseStudyView({ cat, cs, slide }) {
   const cfg = DFH_CFG
+  const DFH = `${BASE}dfh/`
   return (
     <div className="cs-wrap pkg-case-study">
       <PkgHero cs={cs} slide={slide} cfg={cfg} />
@@ -3969,33 +4082,100 @@ function DFHCaseStudyView({ cat, cs, slide }) {
 
       <CSSection title="The Brief" variant="dark">
         <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
-            In 2026, Spurgeons established the Digital Family Hub as a standalone team —
+          <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff' }}>
+            In 2026, Spurgeons established the Digital Family Hub as a standalone team,
             and Studio KAIL moved there full time from Spurgeons' central marketing function.
-            The brief was to build the DFH brand from scratch: a mark that communicated
-            expert, trusted, and genuinely accessible — capable of representing a free online
-            platform serving parents, carers, and professionals across a wide range of
+            Since conception, Studio KAIL has been the sole designer within the DFH team,
+            responsible for all creative output: conceiving the initial brand and logo,
+            producing custom illustrations and animations, designing handouts and course materials,
+            and managing all print and packaging. The brief was to build the DFH identity from scratch,
+            a mark that communicated expert, trusted, and genuinely accessible, capable of representing
+            a free online platform serving parents, carers, and professionals across a wide range of
             complex family circumstances.
           </p>
         </Reveal>
       </CSSection>
 
-      <CSSection title="Identity & Animation" variant="light">
-        <Reveal><p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
-          The identity was built to flex across the full range of DFH outputs: logo marks for
-          digital and print, an animated logo for video content and the platform itself, and
-          a suite of digital collateral templates enabling the team to produce consistently
-          on-brand content across the hub's growing library of courses and resources.
-        </p></Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Logo Mark', 'Logo Animated', 'Colour System', 'Digital Collateral', 'Platform Assets'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.07}><BrandPlaceholder label={l} accent="#E0F87D" /></Reveal>
+      <CSSection title="Logo" variant="light">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+          {/* DFH Logo — dark, needs light bg */}
+          <Reveal delay={0}>
+            <div>
+              <img
+                src={`${DFH}DFH%20Logo.svg`}
+                alt="DFH full logo"
+                style={{ width: '100%', height: 180, objectFit: 'contain', display: 'block', padding: '1.25rem', background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
+              />
+              <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.9rem', marginTop: '1rem' }}>
+                The primary Digital Family Hub wordmark, used across the platform, course materials, and official communications. Designed to feel expert and trustworthy while remaining warm and accessible for the families and professionals it serves.
+              </p>
+            </div>
+          </Reveal>
+          {/* DFH Light — light version, needs dark bg */}
+          <Reveal delay={0.08}>
+            <div>
+              <img
+                src={`${DFH}DFH%20Light.svg`}
+                alt="DFH logo light version"
+                style={{ width: '100%', height: 180, objectFit: 'contain', display: 'block', padding: '1.25rem', background: '#1a1a2e', borderRadius: 16, border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 24px rgba(0,0,0,0.12)' }}
+              />
+              <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.9rem', marginTop: '1rem' }}>
+                The light variant of the full wordmark, used on dark backgrounds and in video contexts. Maintains full legibility across the hub's range of digital surfaces.
+              </p>
+            </div>
+          </Reveal>
+          {/* DFH Shorthand Dark — dark version, needs light bg */}
+          <Reveal delay={0.12}>
+            <div>
+              <img
+                src={`${DFH}DFH%20Shorthand_Dark.svg`}
+                alt="DFH shorthand dark"
+                style={{ width: '100%', height: 180, objectFit: 'contain', display: 'block', padding: '1.25rem', background: '#fff', borderRadius: 16, border: '1px solid rgba(0,0,0,0.07)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
+              />
+              <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.9rem', marginTop: '1rem' }}>
+                The shorthand mark condenses the identity to its initials for use in compact spaces: favicons, social avatars, and anywhere the full wordmark would be too large. The dark version sits on light backgrounds.
+              </p>
+            </div>
+          </Reveal>
+          {/* DFH Shorthand Light — light version, needs dark bg */}
+          <Reveal delay={0.18}>
+            <div>
+              <img
+                src={`${DFH}DFH%20Shorthand%20Light.svg`}
+                alt="DFH shorthand light"
+                style={{ width: '100%', height: 180, objectFit: 'contain', display: 'block', padding: '1.25rem', background: '#1a1a2e', borderRadius: 16, border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 4px 24px rgba(0,0,0,0.12)' }}
+              />
+              <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.9rem', marginTop: '1rem' }}>
+                The shorthand mark in its light variant, used on dark or coloured backgrounds. Together, the four marks give the identity full flexibility across every digital and print context the Hub operates in.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </CSSection>
+
+      <CSSection title="Handout Samples" variant="light" style={{ background: '#f5f8ff' }}>
+        <Reveal>
+          <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem', maxWidth: 680, marginBottom: '2rem' }}>
+            Every course on the platform comes with its own set of handouts, each designed with custom illustrations to make the content feel engaging and accessible. All handout design is produced in-house by Studio KAIL as part of the embedded team.
+          </p>
+        </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+          {[1,2,3,4,5,6,7,8].map((n, i) => (
+            <Reveal key={n} delay={i * 0.06}>
+              <div style={{ borderRadius: 12, overflow: 'hidden', background: '#f8f8f8', border: '1px solid rgba(0,0,0,0.06)' }}>
+                <img
+                  src={`${DFH}handout${n}.png`}
+                  alt={`DFH handout ${n}`}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </div>
+            </Reveal>
           ))}
         </div>
       </CSSection>
 
       <MotionStats cfg={cfg} />
-      <PkgLinks cs={cs} cfg={cfg} />
+      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
       <CSCTA cat={cat} />
     </div>
   )
@@ -4023,14 +4203,14 @@ const PORTFOLIO_WEB_CFG = {
     { value: '17+',     label: 'Projects showcased across four disciplines'                },
     { value: '16',      label: 'Full case studies with custom-built views'                 },
     { value: '4',       label: 'Disciplines: Brand, Motion, Packaging, Web'               },
-    { value: '100%',    label: 'Custom CSS — not a single UI framework used'              },
+    { value: '100%',    label: 'Custom CSS, not a single UI framework used'              },
     { value: '5',       label: 'Brand colours in the complete system'                      },
     { value: '0',       label: 'External component libraries'                              },
-    { value: '1',       label: 'Designer and developer — built solo, start to finish'     },
-    { value: 'Raleway', label: 'Single typeface — three weights, all the range needed'    },
+    { value: '1',       label: 'Designer and developer, built solo, start to finish'     },
+    { value: 'Raleway', label: 'Single typeface, three weights, all the range needed'    },
     { value: 'Glass',   label: 'Glassmorphism token system across every surface'          },
     { value: 'GitHub',  label: 'Version controlled and deployed via GitHub Pages'         },
-    { value: '∞',       label: 'Iterations — and still going'                            },
+    { value: '∞',       label: 'Iterations, and still going'                            },
   ],
 }
 
@@ -4053,7 +4233,7 @@ const PORTFOLIO_WEB_STACK = [
   {
     icon: '✦',
     name: 'Custom CSS',
-    body: 'Every layout, surface, and effect is written from first principles: glass tokens, bento grids, motion curves, dark/light variants, and responsive breakpoints — no Tailwind, no Bootstrap.',
+    body: 'Every layout, surface, and effect is written from first principles: glass tokens, bento grids, motion curves, dark/light variants, and responsive breakpoints, no Tailwind, no Bootstrap.',
   },
 ]
 
@@ -4097,11 +4277,11 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      {/* Custom Illustrations — the six characters */}
+      {/* Custom Illustrations, the six characters */}
       <CSSection title="Custom Illustrations">
         <Reveal delay={0.06}>
           <p style={{ color: 'rgba(51,51,51,0.7)', lineHeight: 1.85, marginBottom: 28, maxWidth: 600 }}>
-            Six original characters were created as part of the Studio KAIL 2026 rebrand and are woven through the entire site. They orbit the studio mark in the animated hero section, each appearing in turn as an introduction to the studio and its values. They reappear in the footer, anchoring the navigation links with the same warmth and personality. Together they give the portfolio a sense of continuity — the same cast, in different moments, across every page.
+            Six original characters were created as part of the Studio KAIL 2026 rebrand and are woven through the entire site. They orbit the studio mark in the animated hero section, each appearing in turn as an introduction to the studio and its values. They reappear in the footer, anchoring the navigation links with the same warmth and personality. Together they give the portfolio a sense of continuity, the same cast, in different moments, across every page.
           </p>
         </Reveal>
 
@@ -4133,11 +4313,11 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      {/* In the Site — footer images */}
+      {/* In the Site, footer images */}
       <CSSection title="In the Site" variant="dark">
         <Reveal delay={0.06}>
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13, marginBottom: 24, lineHeight: 1.7, maxWidth: 560 }}>
-            The characters carry through to the footer, each appearing alongside a different navigation link — portfolio, contact, socials — so that the base of every page feels like an extension of the same world introduced at the top.
+            The characters carry through to the footer, each appearing alongside a different navigation link, portfolio, contact, socials, so that the base of every page feels like an extension of the same world introduced at the top.
           </p>
         </Reveal>
         <div className="wl-grid-3">
@@ -4203,7 +4383,7 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
             Spurgeons attends community festivals and public events throughout the year.
-            These large-format banners serve as the charity's visible presence at those moments —
+            These large-format banners serve as the charity's visible presence at those moments,
             bold enough to cut through a busy outdoor environment, warm enough to invite approach.
           </p>
         </Reveal>
@@ -4225,7 +4405,7 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
             Pull-up banners and large format posters designed for indoor events, community spaces,
-            and reception areas — carrying Spurgeons' brand with clarity and confidence whether
+            and reception areas, carrying Spurgeons' brand with clarity and confidence whether
             displayed solo or alongside other materials.
           </p>
         </Reveal>
@@ -4246,7 +4426,7 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
       <CSSection title="Building & Location Signage" variant="dark">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
-            Permanent and semi-permanent signage for Spurgeons' physical locations — from
+            Permanent and semi-permanent signage for Spurgeons' physical locations, from
             neighbourhood-specific banners to large building-mounted graphics that establish
             the charity's presence in the communities it serves.
           </p>
@@ -4268,7 +4448,7 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
       <CSSection title="Flags & Digital Assets" variant="light">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
-            Outdoor flags and social media graphics rounding out the suite — ensuring
+            Outdoor flags and social media graphics rounding out the suite, ensuring
             Spurgeons is visible whether at a street-level event or across an Instagram feed.
           </p>
         </Reveal>
@@ -4305,7 +4485,7 @@ const SPURGEONS_MERCH_CFG = {
   stats: [
     { value: '3+',   label: 'Apparel types: tote bags, t-shirts, running vests' },
     { value: '∞',    label: 'Supporters wearing Spurgeons at events and marathons' },
-    { value: '100%', label: 'On-brand across every piece — nothing generic' },
+    { value: '100%', label: 'On-brand across every piece, nothing generic' },
   ],
 }
 
@@ -4343,12 +4523,12 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
             Everyday carry with purpose. Spurgeons tote bags put the charity's brand in
-            the hands of supporters, volunteers, and families — a simple thing that travels
+            the hands of supporters, volunteers, and families, a simple thing that travels
             far and says a lot about who Spurgeons is in the community.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Tote — Front', 'Tote — Back', 'Tote — Detail'].map((l, i) => (
+          {['Tote, Front', 'Tote, Back', 'Tote, Detail'].map((l, i) => (
             <Reveal key={l} delay={i * 0.08}><MerchPlaceholder label={l} /></Reveal>
           ))}
         </div>
@@ -4359,12 +4539,12 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
             Staff, volunteers, and event crews wearing Spurgeons on their backs. Clean,
-            comfortable, and unmistakably on-brand — designed to work as uniform and as
+            comfortable, and unmistakably on-brand, designed to work as uniform and as
             something people actually want to put on.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['T-Shirt — Front', 'T-Shirt — Back', 'T-Shirt — Detail'].map((l, i) => (
+          {['T-Shirt, Front', 'T-Shirt, Back', 'T-Shirt, Detail'].map((l, i) => (
             <Reveal key={l} delay={i * 0.08}><MerchPlaceholder label={l} /></Reveal>
           ))}
         </div>
@@ -4375,12 +4555,12 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
             Spurgeons fields runners in sponsored marathons to raise funds and awareness.
-            These vests carry the charity's name across the finish line — designed for
+            These vests carry the charity's name across the finish line, designed for
             performance and visibility, keeping supporters proud to race in Spurgeons colours.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Vest — Front', 'Vest — Back', 'Vest — On the Run'].map((l, i) => (
+          {['Vest, Front', 'Vest, Back', 'Vest, On the Run'].map((l, i) => (
             <Reveal key={l} delay={i * 0.08}><MerchPlaceholder label={l} aspect="2 / 3" /></Reveal>
           ))}
         </div>
@@ -4407,7 +4587,7 @@ const SPURGEONS_PORTAL_CFG = {
   stats: [
     { value: '80%',  label: 'Of users found the redesigned sign-on page easier to use in testing' },
     { value: '1',    label: 'Key friction point identified and resolved: the sign-on flow' },
-    { value: '100%', label: 'Custom UI — no off-the-shelf component library' },
+    { value: '100%', label: 'Custom UI, no off-the-shelf component library' },
     { value: '∞',    label: 'Families and professionals now able to access Spurgeons courses with less friction' },
   ],
 }
@@ -4426,7 +4606,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
             Spurgeons' online course portal was generating consistent complaints: users were
             struggling to sign on, losing access to courses they'd already paid for, and
             dropping off before completing registration. The interface was functional but
-            unintuitive — form fields were unclear, error states were unhelpful, and the
+            unintuitive, form fields were unclear, error states were unhelpful, and the
             overall visual design felt cold and clinical for an organisation built on warmth
             and community.
           </p>
@@ -4438,7 +4618,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
             Before touching a single pixel, the studio ran user testing sessions with a
-            representative sample of Spurgeons' actual course users — parents, carers, and
+            representative sample of Spurgeons' actual course users, parents, carers, and
             professionals. Participants were asked to complete common tasks: find a course,
             create an account, and sign back in after a break. The sessions were observed and
             recorded to identify where confusion entered the flow and at what point users gave up.
@@ -4480,7 +4660,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
             Spurgeons' identity rather than feeling like a generic SaaS login form.
           </p>
           <p style={{ lineHeight: 1.8, marginBottom: '2.5rem', maxWidth: 720 }}>
-            The wider portal UI was also refreshed — updated typography, improved colour
+            The wider portal UI was also refreshed, updated typography, improved colour
             contrast for accessibility, clearer course cards with progress indicators, and
             a navigation structure that surfaces the most common tasks immediately.
           </p>
@@ -4494,7 +4674,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
               height="450"
               src="https://embed.figma.com/proto/LZmViGkPxNh7X1w2u8yw7M/Sign-On-Screen?node-id=1-4&embed-host=share"
               allowFullScreen
-              title="Spurgeons Course Portal — Sign On Screen"
+              title="Spurgeons Course Portal, Sign On Screen"
             />
           </div>
         </Reveal>
@@ -4533,7 +4713,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
           <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
             A second round of user testing with the redesigned interface showed that
             <strong style={{ color: '#E0F87D' }}> 80% of participants found the sign-on page
-            easier to use</strong> — a significant improvement from the baseline. The redesign
+            easier to use</strong>, a significant improvement from the baseline. The redesign
             reduced drop-off at the most critical point in the user journey and gave Spurgeons
             a portal that reflects their values: warm, accessible, and built around the people
             who use it.
@@ -4600,12 +4780,12 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
             Single-sheet A5 and A4 flyers promoting Spurgeons' courses and services to
             families and professionals. Designed to live in waiting rooms, community hubs,
-            and GP surgeries — clear enough to read at a glance, warm enough to actually
+            and GP surgeries, clear enough to read at a glance, warm enough to actually
             pick up.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1.25rem' }}>
-          {['Course Flyer — A5', 'Course Flyer — A5', 'Service Flyer — A4', 'Service Flyer — A4'].map((l, i) => (
+          {['Course Flyer, A5', 'Course Flyer, A5', 'Service Flyer, A4', 'Service Flyer, A4'].map((l, i) => (
             <Reveal key={l + i} delay={i * 0.07}>
               <PrintPlaceholder label={l} />
             </Reveal>
@@ -4619,7 +4799,7 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
             Larger-format posters designed for community noticeboards, event spaces, and
             public-facing displays. Campaign work often sits alongside Spurgeons' wider
-            awareness drives — so these need to carry the message independently and hold
+            awareness drives, so these need to carry the message independently and hold
             their own at a distance.
           </p>
         </Reveal>
@@ -4638,12 +4818,12 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
             One-off and seasonal campaign pieces: awareness days, fundraising drives,
             and community initiatives. Each designed to feel timely and relevant while
-            staying unmistakably Spurgeons — consistent enough to be trusted, human enough
+            staying unmistakably Spurgeons, consistent enough to be trusted, human enough
             to be felt.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.25rem' }}>
-          {['Campaign — A4', 'Campaign — A5', 'Campaign — Square', 'Campaign — A4'].map((l, i) => (
+          {['Campaign, A4', 'Campaign, A5', 'Campaign, Square', 'Campaign, A4'].map((l, i) => (
             <Reveal key={l + i} delay={i * 0.07}>
               <PrintPlaceholder label={l} aspect={l.includes('Square') ? '1 / 1' : '3 / 4'} />
             </Reveal>

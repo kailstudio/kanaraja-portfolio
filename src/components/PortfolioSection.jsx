@@ -45,6 +45,45 @@ export const CATEGORIES = [
     ],
     slides: [
       {
+        id: 6, bg: '#D4C7FF', img: 'projects/parents-connect.jpg', label: 'Parents Connect',
+        tags: ['Logo', 'Animated Logo', 'Digital Collateral'],
+        caseStudy: {
+          subtitle: 'Logo · Animated Logo · Digital Collateral',
+          year: '2023',
+          duration: 'Completed',
+          status: 'Live',
+          client: 'Spurgeons',
+          website: 'https://spurgeons.org/resources-and-courses/courses/parents-connect/',
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `Parents Connect is Spurgeons' suite of three ready-to-run parenting courses, equipping church and community volunteers to support families through different life stages, covering primary years, the teenage years, and neurodiversity. Each course comes with complete facilitator materials and expert-led video content.\n\nStudio KAIL designed the Parents Connect identity: a logo that communicates warmth and accessibility, an animated version for use in digital and video contexts, and a suite of digital collateral ensuring the brand carries consistently across course materials, social media, and promotional content.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 3, bg: '#F9D48B', img: 'projects/spurgeons-preschools.jpg', label: 'Spurgeons: Preschools',
+        tags: ['Logo', 'Brand Identity', 'Collateral'],
+        caseStudy: {
+          subtitle: 'Logo · Brand Sheet · Collateral · Signage',
+          year: '2022',
+          duration: 'Ongoing',
+          status: 'Now Closed',
+          client: 'Spurgeons',
+          website: 'https://spurgeons.org/how-we-help/family-life/early-years-and-family-support/buttons-preschools/',
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `Spurgeons runs a family of Ofsted-rated early years settings across Kent. Studio KAIL developed brand identities for two of their preschools: Buttons, with sites in Maidstone and Ramsgate, and Little Lambs, a community setting that has since closed.\n\nBoth brands were built to feel genuinely warm and child-centred without tipping into the generic: a mark, colour system, and collateral suite that parents and carers could trust at first glance.`,
+            },
+          ],
+        },
+      },
+
+      {
         id: 1, bg: '#C4B8F0', img: 'projects/cbs.webp', label: 'Care-Based Safety',
         tags: ['Brand Strategy', 'Visual Identity', 'Tone of Voice'],
         caseStudy: {
@@ -195,20 +234,20 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 3, bg: '#F9D48B', img: 'projects/spurgeons-preschools.jpg', label: 'Spurgeons: Preschools',
-        tags: ['Logo', 'Brand Identity', 'Collateral'],
+        id: 7, bg: '#335CFF', img: 'projects/dfh.png', label: 'Digital Family Hub',
+        tags: ['Logo', 'Animated Logo', 'Digital Collateral'],
         caseStudy: {
-          subtitle: 'Logo · Brand Sheet · Collateral · Signage',
-          year: '2022',
+          subtitle: 'Logo · Animated Logo · Digital Collateral',
+          year: '2026',
           duration: 'Ongoing',
-          status: 'Now Closed',
+          status: 'Live',
           client: 'Spurgeons',
-          website: 'https://spurgeons.org/how-we-help/family-life/early-years-and-family-support/buttons-preschools/',
+          website: 'https://spurgeons.org/resources-and-courses/',
           sections: [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Spurgeons runs a family of Ofsted-rated early years settings across Kent. Studio KAIL developed brand identities for two of their preschools: Buttons, with sites in Maidstone and Ramsgate, and Little Lambs, a community setting that has since closed.\n\nBoth brands were built to feel genuinely warm and child-centred without tipping into the generic: a mark, colour system, and collateral suite that parents and carers could trust at first glance.`,
+              body: `Spurgeons' Digital Family Hub is a free online platform offering courses and downloadable resources for parents and professionals supporting children and young people, covering everything from mental health and additional needs to parenting after separation and the impact of parental imprisonment.\n\nIn 2026, the Digital Family Hub was established as its own team and Studio KAIL moved there full time from Spurgeons' central marketing function. Since conception, Studio KAIL has been the sole design presence within the team, responsible for all design work: conceiving the initial brand and logo, producing custom illustrations and animations, designing handouts and course materials, and managing all print and packaging. From the ground up, the studio designed the DFH identity and continues to lead every creative output the Hub produces.`,
             },
           ],
         },
@@ -232,46 +271,7 @@ export const CATEGORIES = [
             },
           ],
         },
-      },
-      {
-        id: 6, bg: '#D4C7FF', img: null, label: 'Parents Connect',
-        tags: ['Logo', 'Animated Logo', 'Digital Collateral'],
-        caseStudy: {
-          subtitle: 'Logo · Animated Logo · Digital Collateral',
-          year: '2023',
-          duration: 'Completed',
-          status: 'Now Closed',
-          client: 'Spurgeons',
-          website: 'https://spurgeons.org/resources-and-courses/courses/parents-connect/',
-          sections: [
-            {
-              id: 'overview',
-              title: 'Project Overview',
-              body: `Parents Connect is Spurgeons' suite of three ready-to-run parenting courses, equipping church and community volunteers to support families through different life stages — covering primary years, the teenage years, and neurodiversity. Each course comes with complete facilitator materials and expert-led video content.\n\nStudio KAIL designed the Parents Connect identity: a logo that communicates warmth and accessibility, an animated version for use in digital and video contexts, and a suite of digital collateral ensuring the brand carries consistently across course materials, social media, and promotional content.`,
-            },
-          ],
-        },
-      },
-      {
-        id: 7, bg: '#335CFF', img: null, label: 'Digital Family Hub',
-        tags: ['Logo', 'Animated Logo', 'Digital Collateral'],
-        caseStudy: {
-          subtitle: 'Logo · Animated Logo · Digital Collateral',
-          year: '2026',
-          duration: 'Ongoing',
-          status: 'Now Closed',
-          client: 'Spurgeons',
-          website: 'https://spurgeons.org/resources-and-courses/',
-          sections: [
-            {
-              id: 'overview',
-              title: 'Project Overview',
-              body: `Spurgeons' Digital Family Hub is a free online platform offering courses and downloadable resources for parents and professionals supporting children and young people — covering everything from mental health and additional needs to parenting after separation and the impact of parental imprisonment.\n\nIn 2026, the Digital Family Hub was established as its own team and Studio KAIL moved there full time from Spurgeons' central marketing function. From the ground up, the studio designed the DFH identity: logo, animated logo, and a suite of digital materials to launch and sustain the platform. A brand built to feel expert and trustworthy while remaining completely accessible to the families it serves.`,
-            },
-          ],
-        },
-      },
-    ],
+      },    ],
   },
   {
     id: 'motion',
@@ -416,7 +416,7 @@ export const CATEGORIES = [
           sections: [
             {
               id: 'overview',
-              body: "A set of three short-form vertical videos commissioned by Spurgeons, the UK children's charity, to promote their counselling services across social media. Each video features a different voice from within the organisation — a counsellor or specialist speaking candidly about their area of expertise, with custom illustrations and animations bringing their words to life.\n\nThe series spans three of the charity's most significant counselling specialisms: self-harm support, school-based counselling, and the wider therapeutic services Spurgeons offers to children and young people. Designed to reach families, young people, and professionals across Instagram and other social platforms, each piece balances the weight of its subject matter with Spurgeons' signature warmth and accessibility.\n\nCustom illustrations, character design, and animation by Studio KAIL. Voiceover and branding guidelines provided by Spurgeons.",
+              body: "A set of three short-form vertical videos commissioned by Spurgeons, the UK children's charity, to promote their counselling services across social media. Each video features a different voice from within the organisation, a counsellor or specialist speaking candidly about their area of expertise, with custom illustrations and animations bringing their words to life.\n\nThe series spans three of the charity's most significant counselling specialisms: self-harm support, school-based counselling, and the wider therapeutic services Spurgeons offers to children and young people. Designed to reach families, young people, and professionals across Instagram and other social platforms, each piece balances the weight of its subject matter with Spurgeons' signature warmth and accessibility.\n\nCustom illustrations, character design, and animation by Studio KAIL. Voiceover and branding guidelines provided by Spurgeons.",
             },
           ],
         },
@@ -581,7 +581,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Spurgeons is one of the UK's leading children's charities, delivering community-based services to families facing poverty, abuse, and neglect. Over more than three years, Studio KAIL has designed a wide range of print and physical materials for the charity: from large-format festival banners and pull-up banners to building signage, event posters, and social media assets.\n\nThe work spans indoor and outdoor environments, seasonal campaigns, and location-specific installations — each piece designed to communicate Spurgeons' warmth, credibility, and community presence at scale.`,
+              body: `Spurgeons is one of the UK's leading children's charities, delivering community-based services to families facing poverty, abuse, and neglect. Over more than three years, Studio KAIL has designed a wide range of print and physical materials for the charity: from large-format festival banners and pull-up banners to building signage, event posters, and social media assets.\n\nThe work spans indoor and outdoor environments, seasonal campaigns, and location-specific installations, each piece designed to communicate Spurgeons' warmth, credibility, and community presence at scale.`,
             },
           ],
         },
@@ -599,7 +599,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Alongside print and signage, Studio KAIL has designed a range of merchandise for Spurgeons to wear, carry, and share at events and fundraising activities. From tote bags and t-shirts to running vests for marathon participants, each piece extends the charity's brand into the physical world — keeping Spurgeons visible and consistent wherever their people go.\n\nThe challenge with charity merch is always the same: it has to feel like something people actually want to wear. Every piece is designed with that in mind — functional, considered, and proudly Spurgeons.`,
+              body: `Alongside print and signage, Studio KAIL has designed a range of merchandise for Spurgeons to wear, carry, and share at events and fundraising activities. From tote bags and t-shirts to running vests for marathon participants, each piece extends the charity's brand into the physical world, keeping Spurgeons visible and consistent wherever their people go.\n\nThe challenge with charity merch is always the same: it has to feel like something people actually want to wear. Every piece is designed with that in mind, functional, considered, and proudly Spurgeons.`,
             },
           ],
         },
@@ -617,7 +617,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `A broad and ongoing body of print work for Spurgeons: flyers, posters, and campaign materials produced across multiple services, seasons, and audiences. Each piece exists to communicate something essential — a course available, a service to access, a campaign to join — quickly, clearly, and in a voice that feels human rather than institutional.\n\nThe work spans awareness campaigns, course promotion, community outreach, and internal communications. Some pieces live in waiting rooms and community centres; others are handed out at events or mailed to families. Across all of them, the principle is the same: Spurgeons' warmth on a page.`,
+              body: `A broad and ongoing body of print work for Spurgeons: flyers, posters, and campaign materials produced across multiple services, seasons, and audiences. Each piece exists to communicate something essential, a course available, a service to access, a campaign to join, quickly, clearly, and in a voice that feels human rather than institutional.\n\nThe work spans awareness campaigns, course promotion, community outreach, and internal communications. Some pieces live in waiting rooms and community centres; others are handed out at events or mailed to families. Across all of them, the principle is the same: Spurgeons' warmth on a page.`,
             },
           ],
         },
@@ -629,7 +629,7 @@ export const CATEGORIES = [
     name: 'Web, Digital & UX Design',
     tagline: 'A portfolio that practices what it preaches.',
     description:
-      'This portfolio is itself a piece of web work: custom-built with React and Vite, animated with Framer Motion, and styled entirely by hand. No templates, no component libraries — every detail considered from first principles.',
+      'This portfolio is itself a piece of web work: custom-built with React and Vite, animated with Framer Motion, and styled entirely by hand. No templates, no component libraries, every detail considered from first principles.',
     accent: '#335CFF',
     accentDark: '#1A3ACC',
     stats: [
@@ -649,11 +649,11 @@ export const CATEGORIES = [
           sections: [
             {
               id: 'overview',
-              body: "This portfolio is designed and built entirely from scratch: no templates, no component libraries, no shortcuts. Every layout, animation, and interaction is written by hand — a deliberate choice to ensure the site itself is a demonstration of the craft it represents.\n\nThe architecture is built on React 18 and Vite, with Framer Motion handling all scroll-triggered reveals and page transitions. Lenis provides the butter-smooth inertia scrolling. The visual system is built entirely in custom CSS — glass tokens, bento grids, motion curves — defined once and applied consistently across every section.\n\nThe result is a site that loads fast, animates fluidly, and scales cleanly across every device and screen size.",
+              body: "This portfolio is designed and built entirely from scratch: no templates, no component libraries, no shortcuts. Every layout, animation, and interaction is written by hand, a deliberate choice to ensure the site itself is a demonstration of the craft it represents.\n\nThe architecture is built on React 18 and Vite, with Framer Motion handling all scroll-triggered reveals and page transitions. Lenis provides the butter-smooth inertia scrolling. The visual system is built entirely in custom CSS, glass tokens, bento grids, motion curves, defined once and applied consistently across every section.\n\nThe result is a site that loads fast, animates fluidly, and scales cleanly across every device and screen size.",
             },
             {
               id: 'tech',
-              body: 'React 18 provides the component architecture. Vite handles bundling with near-instant hot reload in development and optimised production builds. Framer Motion powers every entrance animation, reveal, and transition. Lenis is wired to a React context for smooth, inertia-based scrolling throughout. Custom CSS tokens handle the entire design system: colours, spacing, type scale, glass effects, and dark/light surface variants — all without a single line of Tailwind or Bootstrap.',
+              body: 'React 18 provides the component architecture. Vite handles bundling with near-instant hot reload in development and optimised production builds. Framer Motion powers every entrance animation, reveal, and transition. Lenis is wired to a React context for smooth, inertia-based scrolling throughout. Custom CSS tokens handle the entire design system: colours, spacing, type scale, glass effects, and dark/light surface variants, all without a single line of Tailwind or Bootstrap.',
             },
           ],
         },
@@ -671,7 +671,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: 'Spurgeons received consistent complaints that their course portal sign-on experience was confusing and difficult to use. Studio KAIL was brought in to audit the existing flow, run user testing sessions, and redesign the interface from the ground up — making it easier, faster, and more welcoming for the families and professionals Spurgeons serves.',
+              body: 'Spurgeons received consistent complaints that their course portal sign-on experience was confusing and difficult to use. Studio KAIL was brought in to audit the existing flow, run user testing sessions, and redesign the interface from the ground up, making it easier, faster, and more welcoming for the families and professionals Spurgeons serves.',
             },
           ],
         },
@@ -945,7 +945,7 @@ export default function PortfolioSection({ onProjectOpen }) {
             </motion.p>
           </motion.div>
 
-          {/* Body copy paragraph formerly lived here (.pf-body-glass) — now
+          {/* Body copy paragraph formerly lived here (.pf-body-glass), now
               moved to the intro card in PortfolioTypes.jsx, see that
               component's INTRO_PANEL. */}
 
