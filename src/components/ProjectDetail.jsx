@@ -124,10 +124,10 @@ function Reveal({ children, delay = 0, className }) {
 }
 
 // Section wrapper — title only (numbering removed)
-function CSSection({ label, title, children, variant = 'light', className }) {
+function CSSection({ label, title, children, variant = 'light', className, style }) {
   const cls = ['cs-section', `cs-section--${variant}`, className].filter(Boolean).join(' ')
   return (
-    <section className={cls}>
+    <section className={cls} style={style}>
       {title && (
         <Reveal>
           <div className="cs-section-header">
@@ -578,6 +578,22 @@ const PGM_GALLERY_COLORS = [
   'rgba(212,199,255,0.10)',
   'rgba(51,92,255,0.12)',
 ]
+const PRESCHOOLS_MERCH_COLORS = [
+  'rgba(255,255,255,0.30)',
+  'rgba(180,155,255,0.25)',
+  'rgba(255,255,255,0.20)',
+  'rgba(180,155,255,0.30)',
+  'rgba(255,255,255,0.25)',
+  'rgba(180,155,255,0.20)',
+]
+const PRESCHOOLS_PRINT_COLORS = [
+  'rgba(249,212,139,0.10)',
+  'rgba(255,255,255,0.07)',
+  'rgba(249,212,139,0.13)',
+  'rgba(255,255,255,0.07)',
+  'rgba(249,212,139,0.09)',
+]
+
 
 // ── Shared: Custom Illustrations & Iconography section ────────────────
 function IllustrationsSection({ label = '05', images = [], colors = [] }) {
@@ -3294,6 +3310,127 @@ function SpurgeonsConnectCaseStudyView({ cat, cs, slide }) {
   )
 }
 
+
+// ── Leaves on a Stream ────────────────────────────────────────────────
+
+const LEAVES_CFG = {
+  accent: '#6BAF92', lightAccent: '#8ECFB0', dark: '#1E3530',
+  specs: [
+    { label: 'Client',   value: 'Spurgeons' },
+    { label: 'Year',     value: '2024' },
+    { label: 'Type',     value: 'Motion Design · Mindfulness' },
+    { label: 'Output',   value: 'Animated Mindfulness Guide' },
+    { label: 'Status',   value: 'Delivered' },
+  ],
+}
+
+function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
+  const cfg = LEAVES_CFG
+  return (
+    <div className="cs-wrap pkg-case-study">
+      <MotionHero cs={cs} slide={slide} cfg={cfg} />
+
+      {/* The Animation */}
+      <CSSection title="The Animation" variant="dark">
+        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, marginBottom: 32, maxWidth: 600, margin: '0 auto 32px' }}>
+            The animated guide lives on the Spurgeons website as part of their mental health resource library, accessible to anyone experiencing stress, anxiety, or overwhelm.
+          </p>
+          <BrandPlaceholder label="Animation · Video coming soon" aspect="16/9" accent={cfg.accent} />
+        </div>
+      </CSSection>
+
+      {/* The Brief */}
+      <CSSection title="The Brief">
+        <div style={{ maxWidth: 740, margin: '0 auto' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 24 }}>
+            Spurgeons approached Studio KAIL to create a calming animated guide based on the Leaves on a Stream technique from Acceptance and Commitment Therapy (ACT). The exercise uses a simple but powerful metaphor: thoughts are leaves floating along a stream, to be observed and released rather than grasped or pushed away.
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 48 }}>
+            The brief called for something warm, gentle, and accessible to anyone encountering the exercise for the first time. The animation needed to guide viewers through the visualisation step by step, using movement and atmosphere to reinforce the therapeutic intent: slowing the mind, reducing anxiety, and building the capacity to sit with difficult thoughts without being overwhelmed by them.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            <div style={{ background: 'rgba(107,175,146,0.08)', border: '1px solid rgba(107,175,146,0.2)', borderRadius: 16, padding: '1.5rem' }}>
+              <h4 style={{ fontFamily: 'Raleway, sans-serif', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: cfg.lightAccent, marginBottom: 12 }}>The Technique</h4>
+              <p style={{ fontSize: 14, lineHeight: 1.75, opacity: 0.8 }}>
+                Leaves on a Stream comes from ACT, a mindfulness-based therapy. Practitioners imagine sitting beside a gently flowing stream, placing each thought that arises onto a leaf and watching it drift by. The goal is not to stop thinking, but to create distance between the person and their thoughts.
+              </p>
+            </div>
+            <div style={{ background: 'rgba(107,175,146,0.08)', border: '1px solid rgba(107,175,146,0.2)', borderRadius: 16, padding: '1.5rem' }}>
+              <h4 style={{ fontFamily: 'Raleway, sans-serif', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: cfg.lightAccent, marginBottom: 12 }}>The Audience</h4>
+              <p style={{ fontSize: 14, lineHeight: 1.75, opacity: 0.8 }}>
+                Designed for anyone experiencing stress, anxiety, or moments of overwhelm. The animation is hosted alongside Spurgeons' broader collection of breathing techniques and mindfulness exercises, aimed at families, young people, and the communities Spurgeons serves.
+              </p>
+            </div>
+          </div>
+        </div>
+      </CSSection>
+
+      {/* The Approach */}
+      <CSSection title="The Approach" variant="dark">
+        <div style={{ maxWidth: 740, margin: '0 auto' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, marginBottom: 24 }}>
+            The visual direction draws on natural, unhurried imagery: soft greens and earthy tones, gentle motion curves, and an atmosphere that feels slow and still. The animation guides viewers through the exercise step by step, with on-screen narration paced to allow time for the visualisation to settle.
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, marginBottom: 40 }}>
+            Every design choice was made in service of the exercise itself. Nothing in the animation competes for attention; the motion supports rather than distracts, creating a container for the viewer to drop into the practice.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
+            {[
+              { label: 'Reduces Anxiety', desc: 'Shifts attention away from intrusive thoughts by anchoring the mind in a gentle visualisation.' },
+              { label: 'Lowers Cortisol', desc: 'The slow pace and natural imagery activate the parasympathetic nervous system.' },
+              { label: 'Builds Awareness', desc: 'Trains the capacity to observe thoughts without becoming caught up in them.' },
+            ].map((item, i) => (
+              <Reveal key={item.label} delay={i * 0.1}>
+                <div className="si-character-card">
+                  <h3 className="si-character-name" style={{ color: cfg.lightAccent, fontSize: 13, marginBottom: 8 }}>{item.label}</h3>
+                  <p className="si-character-bio" style={{ fontSize: 14 }}>{item.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </CSSection>
+
+      {/* Visit the resource */}
+      <CSSection title="The Resource">
+        <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.8, maxWidth: 560, margin: '0 auto 32px' }}>
+            The animation is freely available on the Spurgeons website as part of their mental health resource library.
+          </p>
+          <a
+            href="https://spurgeons.org/resources-and-courses/resources/mental-health-resources/breathing-techniques-and-mindfulness-exercises/leaves-on-a-stream-meditation/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              padding: '14px 36px',
+              borderRadius: 999,
+              background: `linear-gradient(135deg, ${cfg.accent}, ${cfg.lightAccent})`,
+              color: '#fff',
+              fontFamily: 'Raleway, sans-serif',
+              fontWeight: 400,
+              fontSize: 14,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              boxShadow: '0 4px 20px rgba(107,175,146,0.30)',
+              transition: 'opacity 0.2s ease, transform 0.2s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'scale(1.04)' }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'scale(1)' }}
+          >
+            View the Mindfulness Guide
+          </a>
+        </div>
+      </CSSection>
+
+      <MotionOverview cs={cs} cfg={cfg} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
 // ═══════════════════════════════════════════════════════════════════════
 //  CASE STUDY VIEWS — routes to CBS or PGM based on slide.id
 // ═══════════════════════════════════════════════════════════════════════
@@ -3380,6 +3517,72 @@ const PRESCHOOLS_CFG = {
   ],
 }
 
+function InstaCarousel({ images }) {
+  const [idx, setIdx] = useState(0)
+  if (!images || images.length === 0) return null
+  const single = images.length === 1
+  const prev = () => setIdx(i => (i - 1 + images.length) % images.length)
+  const next = () => setIdx(i => (i + 1) % images.length)
+  const btnStyle = {
+    position: 'absolute', top: '50%', transform: 'translateY(-50%)',
+    background: 'rgba(224,248,125,0.75)',
+    backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+    border: '1px solid rgba(224,248,125,0.9)',
+    borderRadius: '50%', width: 32, height: 32,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer', color: '#fff', fontSize: 14, fontWeight: 500,
+    boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
+    transition: 'background 0.2s, transform 0.2s',
+    zIndex: 2, userSelect: 'none',
+  }
+  return (
+    <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', aspectRatio: '1/1', background: 'rgba(0,0,0,0.04)' }}>
+      {/* Image */}
+      <img
+        key={idx}
+        src={images[idx]}
+        alt={`Slide ${idx + 1}`}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'opacity 0.25s ease' }}
+        loading="lazy"
+      />
+      {/* Arrows */}
+      {!single && (
+        <>
+          <button
+            onClick={prev}
+            style={{ ...btnStyle, left: 10 }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(224,248,125,1)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,248,125,0.75)' }}
+          >‹</button>
+          <button
+            onClick={next}
+            style={{ ...btnStyle, right: 10 }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(224,248,125,1)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,248,125,0.75)' }}
+          >›</button>
+        </>
+      )}
+      {/* Dots */}
+      {!single && (
+        <div style={{ position: 'absolute', bottom: 10, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 5, zIndex: 2 }}>
+          {images.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              style={{
+                width: i === idx ? 18 : 6, height: 6,
+                borderRadius: 99, border: 'none', cursor: 'pointer',
+                background: i === idx ? '#E0F87D' : 'rgba(224,248,125,0.45)',
+                transition: 'all 0.25s ease', padding: 0,
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function PreschoolsCaseStudyView({ cat, cs, slide }) {
   const cfg = PRESCHOOLS_CFG
   const B = `${BASE}spurgeons-preschools/`
@@ -3454,28 +3657,23 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <CSSection title="Merch & Collateral" variant="dark">
+      <CSSection title="Merch & Collateral" variant="light" style={{ background: '#D4C7FF', color: '#333333' }}>
         <Reveal>
-          <p style={{ color: 'rgba(255,255,255,0.80)', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
+          <p style={{ color: '#333333', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
             Both schools received a suite of branded merchandise: items designed to feel considered rather than off-the-shelf, giving staff and families something tangible to connect with. Each piece carries the school's identity into everyday life, from tote bags and lanyards to keyrings and water bottles.
           </p>
         </Reveal>
-        <div style={{ columns: '2 200px', columnGap: '1rem' }}>
-          {[
-            { src: `${B}merch.png`,               alt: 'Buttons branded merchandise',       delay: 0 },
-            { src: `${B}merch2.jpg`,              alt: 'Buttons branded merchandise detail', delay: 0.06 },
-            { src: `${B}little-lambs-merch1.jpg`, alt: 'Little Lambs merchandise',           delay: 0.12 },
-            { src: `${B}little-lambs-merch2.jpg`, alt: 'Little Lambs merchandise',           delay: 0.18 },
-            { src: `${B}little-lambs-merch3.jpg`, alt: 'Little Lambs merchandise',           delay: 0.24 },
-            { src: `${B}little-lambs-merch4.jpg`, alt: 'Little Lambs merchandise',           delay: 0.30 },
-          ].map(({ src, alt, delay }) => (
-            <Reveal key={src} delay={delay}>
-              <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
-                <img src={src} alt={alt} style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <ImageGallery
+          images={[
+            `${B}merch.png`,
+            `${B}merch2.jpg`,
+            `${B}little-lambs-merch1.jpg`,
+            `${B}little-lambs-merch2.jpg`,
+            `${B}little-lambs-merch3.jpg`,
+            `${B}little-lambs-merch4.jpg`,
+          ]}
+          colors={PRESCHOOLS_MERCH_COLORS}
+        />
       </CSSection>
 
       <CSSection title="Signage & Print" variant="light">
@@ -3484,31 +3682,37 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
             From A5 handouts to large-format banners, the print suite gave Buttons a consistent presence across waiting room tables, nursery walls, and outdoor spaces. Each piece was designed to work hard in the real world, not just on screen.
           </p>
         </Reveal>
-        <div style={{ columns: '2 200px', columnGap: '1rem', marginBottom: '1rem' }}>
-          <Reveal delay={0}>
-            <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
-              <img src={`${B}Banner_Mockup1.jpg`} alt="Buttons banner mockup" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
-            </div>
-          </Reveal>
-          <Reveal delay={0.07}>
-            <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
-              <img src={`${B}Banner_Mockup2.png`} alt="Buttons banner mockup" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
-            </div>
-          </Reveal>
-          <Reveal delay={0.14}>
-            <div style={{ breakInside: 'avoid', marginBottom: '1rem' }}>
-              <img src={`${B}A5%20flyer.png`} alt="Buttons A5 flyer" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
-            </div>
-          </Reveal>
-          <Reveal delay={0.21}>
-            <div style={{ breakInside: 'avoid', marginBottom: '1rem', borderRadius: 12, overflow: 'hidden', maxHeight: 360 }}>
-              <img src={`${B}A2%20Sign.jpg`} alt="Buttons A2 sign" style={{ width: '100%', height: 'auto', display: 'block' }} />
-            </div>
-          </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
+          {[
+            { src: `${B}Banner_Mockup1.jpg`, alt: 'Buttons banner mockup' },
+            { src: `${B}Banner_Mockup2.png`, alt: 'Buttons banner mockup' },
+            { src: `${B}A5%20flyer.png`,     alt: 'Buttons A5 flyer' },
+            { src: `${B}A2%20Sign.jpg`,       alt: 'Buttons A2 sign' },
+          ].map(({ src, alt }, i) => (
+            <Reveal key={src} delay={i * 0.07}>
+              <img src={src} alt={alt} style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+            </Reveal>
+          ))}
         </div>
-        <Reveal delay={0.28}>
-          <img src={`${B}Banner.png`} alt="Buttons banner design" style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
+      </CSSection>
+
+      <CSSection title="Social Media Posts" variant="light" style={{ background: '#F5F3EF', color: '#333333' }}>
+        <Reveal>
+          <p style={{ lineHeight: 1.7, color: '#555', marginBottom: '2rem', maxWidth: 640, fontSize: '0.95rem' }}>
+            A series of branded social media posts produced for both preschool settings, designed to bring each school's identity to life across Instagram and Facebook.
+          </p>
         </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', maxWidth: 800, margin: '0 auto' }}>
+          <div>
+            <InstaCarousel images={[`${B}N1.png`,`${B}N2.png`,`${B}N3.png`,`${B}N4.png`,`${B}N5.png`]} />
+          </div>
+          <div>
+            <InstaCarousel images={[`${B}C1.jpg`,`${B}C2.jpg`,`${B}C3.jpg`,`${B}C4.jpg`]} />
+          </div>
+          <div>
+            <InstaCarousel images={[`${B}S1.png`]} />
+          </div>
+        </div>
       </CSSection>
 
       <MotionStats cfg={cfg} />
@@ -4388,6 +4592,7 @@ function CaseStudyView({ cat, slide }) {
     if (slide.id === 9)  return <SpurgeonsCounsellingCaseStudyView cat={cat} cs={cs} slide={slide} />
     if (slide.id === 10) return <SpurgeonsPASCaseStudyView     cat={cat} cs={cs} slide={slide} />
     if (slide.id === 11) return <SpurgeonsConnectCaseStudyView cat={cat} cs={cs} slide={slide} />
+    if (slide.id === 12) return <LeavesOnAStreamCaseStudyView      cat={cat} cs={cs} slide={slide} />
   }
   if (cat.id === 'web' && slide.id === 1) return <PortfolioWebsiteCaseStudyView    cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'web' && slide.id === 2) return <SpurgeonsCoursePortalCaseStudyView cat={cat} cs={cs} slide={slide} />

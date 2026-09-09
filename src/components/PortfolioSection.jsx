@@ -453,6 +453,22 @@ export const CATEGORIES = [
           ],
         },
       },
+      {
+        id: 12, bg: '#A8C8B8', img: null, label: 'Spurgeons: Leaves on a Stream',
+        tags: ['Motion Design', 'Mindfulness', 'Animation', 'Charity'],
+        caseStudy: {
+          subtitle: 'Motion Design · Mindfulness Animation · Mental Health',
+          year: '2024',
+          duration: 'Commission',
+          status: 'Delivered',
+          sections: [
+            {
+              id: 'overview',
+              body: "A calming mindfulness animation created for Spurgeons as part of their mental health resource library. Based on the Leaves on a Stream technique from Acceptance and Commitment Therapy (ACT), the piece guides viewers through a gentle visualisation exercise: imagining thoughts as leaves drifting along a stream, observing them without attachment or judgement.\n\nDesigned to reduce anxiety and lower cortisol, the animation provides a tool for moments of stress or overwhelm. Studio KAIL translated the therapeutic technique into a warm, accessible motion piece that lives on the Spurgeons website alongside their broader mindfulness and breathing resources.",
+            },
+          ],
+        },
+      },
     ],
   },
   {
