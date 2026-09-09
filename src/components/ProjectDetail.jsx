@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { motion, useInView, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
 import { PDFFlipbook } from './PDFFlipbook'
 
 // ── Transitions ──────────────────────────────────────────────────────
@@ -1815,7 +1815,7 @@ function PkgImpact({ cfg }) {
   )
 }
 
-function PkgLinks({ cs, cfg }) {
+function PkgLinks({ cs, cfg, bg }) {
   const { linksBody } = cfg
   const links = [
     cs.behance  && { href: cs.behance,  Icon: BehanceSVG,  label: 'Behance'  },
@@ -1827,7 +1827,7 @@ function PkgLinks({ cs, cfg }) {
   ].filter(Boolean)
   if (!links.length) return null
   return (
-    <CSSection title="View the Project" variant="dark">
+    <CSSection title="View the Project" variant="dark" style={bg ? { background: bg } : undefined}>
       {linksBody && (
         <Reveal delay={0.06}>
           <p className="cs-vi-body" style={{ color: 'rgba(255,255,255,0.65)', marginBottom: 28 }}>{linksBody}</p>
@@ -3517,6 +3517,95 @@ const PRESCHOOLS_CFG = {
   ],
 }
 
+// ── Swipe-Stack Carousel (Signage & Print) ───────────────────────────
+const SWIPE_SETTINGS = {
+  width: 360, height: 480, radius: 16,
+  swipeThreshold: 100,
+  stackRotation: 2, stackScale: 0.02,
+  peekOffset: 126, // 35% of 360px card width
+  tiltStrength: 20,
+  springStiffness: 300, springDamping: 30,
+}
+
+function SwipeCard({ children, isFront, zIndex, onSendToBack }) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const rotateX = useTransform(y, [-200, 200], [SWIPE_SETTINGS.tiltStrength, -SWIPE_SETTINGS.tiltStrength])
+  const rotateY = useTransform(x, [-200, 200], [-SWIPE_SETTINGS.tiltStrength, SWIPE_SETTINGS.tiltStrength])
+
+  function handleDragEnd(_, info) {
+    const farEnough = Math.abs(info.offset.x) > SWIPE_SETTINGS.swipeThreshold || Math.abs(info.offset.y) > SWIPE_SETTINGS.swipeThreshold
+    if (farEnough) { onSendToBack() } else { x.set(0); y.set(0) }
+  }
+
+  return (
+    <motion.div
+      style={{
+        position: 'absolute', width: SWIPE_SETTINGS.width, height: SWIPE_SETTINGS.height,
+        x: isFront ? x : 0, y: isFront ? y : 0,
+        rotateX: isFront ? rotateX : 0, rotateY: isFront ? rotateY : 0,
+        zIndex, cursor: isFront ? 'grab' : 'default', userSelect: 'none',
+      }}
+      drag={isFront}
+      dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+      dragElastic={0.5}
+      onDragEnd={handleDragEnd}
+      whileHover={isFront ? { scale: 1.03 } : {}}
+      transition={{ type: 'spring', stiffness: SWIPE_SETTINGS.springStiffness, damping: SWIPE_SETTINGS.springDamping }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function SwipeStackCarousel({ images }) {
+  const [cards, setCards] = useState(() => images.map((img, i) => ({ id: i, img })))
+  const moveToBack = (id) => setCards(prev => {
+    const updated = [...prev]
+    const idx = updated.findIndex(c => c.id === id)
+    if (idx !== -1) { const [moved] = updated.splice(idx, 1); updated.push(moved) }
+    return updated
+  })
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem 3rem' }}>
+      <div style={{ position: 'relative', width: SWIPE_SETTINGS.width + SWIPE_SETTINGS.peekOffset * 3, height: SWIPE_SETTINGS.height, perspective: 1200, margin: '0 auto', overflow: 'visible' }}>
+        {cards.map((card, index) => {
+          const isFront = index === 0
+          return (
+            <SwipeCard key={card.id} isFront={isFront} zIndex={cards.length - index} onSendToBack={() => moveToBack(card.id)}>
+              <motion.div
+                style={{
+                  position: 'relative', width: '100%', height: '100%', overflow: 'hidden',
+                  borderRadius: SWIPE_SETTINGS.radius, boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+                }}
+                animate={{
+                  x: index * SWIPE_SETTINGS.peekOffset,
+                  rotateZ: index * SWIPE_SETTINGS.stackRotation,
+                  scale: 1 - index * SWIPE_SETTINGS.stackScale,
+                }}
+                initial={false}
+                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+              >
+                <img src={card.img} alt={`Slide ${card.id + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }} loading="lazy" />
+                {index > 0 && (
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: '#E0F87D',
+                    opacity: index > 0 ? 0.7 : 0,
+                    pointerEvents: 'none',
+                    borderRadius: SWIPE_SETTINGS.radius,
+                  }} />
+                )}
+              </motion.div>
+            </SwipeCard>
+          )
+        })}
+      </div>
+      <p style={{ position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 8 }}>Drag to browse</p>
+    </div>
+  )
+}
+
 function InstaCarousel({ images }) {
   const [idx, setIdx] = useState(0)
   if (!images || images.length === 0) return null
@@ -3525,14 +3614,14 @@ function InstaCarousel({ images }) {
   const next = () => setIdx(i => (i + 1) % images.length)
   const btnStyle = {
     position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-    background: 'rgba(224,248,125,0.75)',
-    backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
-    border: '1px solid rgba(224,248,125,0.9)',
-    borderRadius: '50%', width: 32, height: 32,
+    background: 'rgba(255,255,255,0.65)',
+    backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+    border: '1px solid rgba(255,255,255,0.4)',
+    borderRadius: '50%', width: 30, height: 30,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    cursor: 'pointer', color: '#fff', fontSize: 14, fontWeight: 500,
-    boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
-    transition: 'background 0.2s, transform 0.2s',
+    cursor: 'pointer', color: '#335CFF', fontSize: 15, fontWeight: 700,
+    boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+    transition: 'background 0.2s, transform 0.15s',
     zIndex: 2, userSelect: 'none',
   }
   return (
@@ -3551,14 +3640,14 @@ function InstaCarousel({ images }) {
           <button
             onClick={prev}
             style={{ ...btnStyle, left: 10 }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(224,248,125,1)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,248,125,0.75)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(224,248,125,0.85)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,248,125,0.55)' }}
           >‹</button>
           <button
             onClick={next}
             style={{ ...btnStyle, right: 10 }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(224,248,125,1)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,248,125,0.75)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.90)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(224,248,125,0.55)' }}
           >›</button>
         </>
       )}
@@ -3572,7 +3661,7 @@ function InstaCarousel({ images }) {
               style={{
                 width: i === idx ? 18 : 6, height: 6,
                 borderRadius: 99, border: 'none', cursor: 'pointer',
-                background: i === idx ? '#E0F87D' : 'rgba(224,248,125,0.45)',
+                background: i === idx ? '#335CFF' : 'rgba(51,92,255,0.30)',
                 transition: 'all 0.25s ease', padding: 0,
               }}
             />
@@ -3682,21 +3771,19 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
             From A5 handouts to large-format banners, the print suite gave Buttons a consistent presence across waiting room tables, nursery walls, and outdoor spaces. Each piece was designed to work hard in the real world, not just on screen.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '6px' }}>
-          {[
-            { src: `${B}Banner_Mockup1.jpg`, alt: 'Buttons banner mockup' },
-            { src: `${B}Banner_Mockup2.png`, alt: 'Buttons banner mockup' },
-            { src: `${B}A5%20flyer.png`,     alt: 'Buttons A5 flyer' },
-            { src: `${B}A2%20Sign.jpg`,       alt: 'Buttons A2 sign' },
-          ].map(({ src, alt }, i) => (
-            <Reveal key={src} delay={i * 0.07}>
-              <img src={src} alt={alt} style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 12 }} />
-            </Reveal>
-          ))}
+        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+          <SwipeStackCarousel images={[
+            `${B}Banner_Mockup1.jpg`,
+            `${B}Banner_Mockup2.png`,
+            `${B}A5%20flyer.jpg`,
+            `${B}A2%20Sign.jpg`,
+            `${B}A2%20Sign%202.jpg`,
+          ]} />
+          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8 }}>Drag to browse</p>
         </div>
       </CSSection>
 
-      <CSSection title="Social Media Posts" variant="light" style={{ background: '#F5F3EF', color: '#333333' }}>
+      <CSSection title="Social Media Posts" variant="light" style={{ background: '#335CFF', color: '#ffffff' }}>
         <Reveal>
           <p style={{ lineHeight: 1.7, color: '#555', marginBottom: '2rem', maxWidth: 640, fontSize: '0.95rem' }}>
             A series of branded social media posts produced for both preschool settings, designed to bring each school's identity to life across Instagram and Facebook.
@@ -3716,7 +3803,7 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       <MotionStats cfg={cfg} />
-      <PkgLinks cs={cs} cfg={cfg} />
+      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
       <CSCTA cat={cat} />
     </div>
   )
@@ -3990,7 +4077,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
                   <span style={{ fontSize: 22, lineHeight: 1 }}>{item.icon}</span>
                 </div>
                 <h3 className="si-character-name" style={{ color: '#E0F87D' }}>{item.name}</h3>
-                <p className="si-character-bio" style={{ color: 'rgba(224,248,125,0.75)' }}>{item.body}</p>
+                <p className="si-character-bio" style={{ color: 'rgba(224,248,125,0.55)' }}>{item.body}</p>
               </div>
             </Reveal>
           ))}
