@@ -2990,7 +2990,7 @@ function SpurgeonsCounsellingCaseStudyView({ cat, cs, slide }) {
 // ── Spurgeons: PAS Advert ─────────────────────────────────────────────
 
 const SPURGEONS_PAS_CFG = {
-  accent: '#335CFF', lightAccent: '#E0F87D', dark: '#333333',
+  accent: '#335CFF', lightAccent: '#335CFF', dark: '#333333',
   specs: [
     { label: 'Client',   value: 'Spurgeons'             },
     { label: 'Sector',   value: 'Charity / Family'      },
@@ -3032,6 +3032,9 @@ function SpurgeonsPASCaseStudyView({ cat, cs, slide }) {
     <div className="cs-wrap pkg-case-study">
       <MotionHero cs={cs} slide={slide} cfg={cfg} />
 
+      {/* Project Overview */}
+      <MotionOverview cs={cs} cfg={cfg} />
+
       {/* The advert */}
       <CSSection title="The Advert" variant="dark">
         <div style={{ maxWidth: 360, margin: '0 auto' }}>
@@ -3051,8 +3054,8 @@ function SpurgeonsPASCaseStudyView({ cat, cs, slide }) {
           <div className="si-characters-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
             {PAS_COURSE_DETAILS.map((item, i) => (
               <Reveal key={item.heading} delay={i * 0.08}>
-                <div className="si-character-card">
-                  <h3 className="si-character-name" style={{ color: cfg.lightAccent, fontSize: 14, marginBottom: 8 }}>{item.heading}</h3>
+                <div className="si-character-card" style={{ border: '1px solid #fff', borderRadius: 16, padding: '1.5rem' }}>
+                  <h3 className="si-character-name" style={{ color: cfg.accent, fontSize: 14, marginBottom: 8 }}>{item.heading}</h3>
                   <p className="si-character-bio">{item.body}</p>
                 </div>
               </Reveal>
@@ -3064,7 +3067,7 @@ function SpurgeonsPASCaseStudyView({ cat, cs, slide }) {
       {/* Link to course */}
       <CSSection title="The Course" variant="dark">
         <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
-          <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.8, maxWidth: 560, margin: '0 auto 32px' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.75, color: '#fff', opacity: 0.85, maxWidth: 560, margin: '0 auto 32px' }}>
             Developed by Spurgeons' parenting and counselling experts, the Parenting After Separation course is available online and free to access for all separated parents.
           </p>
           <a
@@ -3094,7 +3097,6 @@ function SpurgeonsPASCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <MotionOverview cs={cs} cfg={cfg} />
       <MotionStats cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
@@ -3211,8 +3213,8 @@ const SPURGEONS_CONNECT_CFG = {
 }
 
 const SPURGEONS_CONNECT_VIDEOS = {
-  tc3: `${BASE}spurgeons-tc/TC Animation 3 Full.mp4`,
-  tc4: `${BASE}spurgeons-tc/TC Animation 4 Full.mp4`,
+  tc3: `${BASE}spurgeons-PCanimations/tc3.mp4`,
+  tc4: `${BASE}spurgeons-PCanimations/tc4.mp4`,
 }
 
 const CONNECT_COURSE_URL = 'https://spurgeons.org/support-us/spurgeons-connect/'
@@ -3239,6 +3241,9 @@ function SpurgeonsConnectCaseStudyView({ cat, cs, slide }) {
     <div className="cs-wrap pkg-case-study">
       <MotionHero cs={cs} slide={slide} cfg={cfg} />
 
+      {/* Project Overview */}
+      <MotionOverview cs={cs} cfg={cfg} />
+
       {/* Featured videos */}
       <CSSection title="From the Teen Course" variant="dark">
         <div className="scp-grid-2">
@@ -3260,9 +3265,9 @@ function SpurgeonsConnectCaseStudyView({ cat, cs, slide }) {
           <div className="si-characters-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
             {CONNECT_TRACKS.map((track, i) => (
               <Reveal key={track.name} delay={i * 0.08}>
-                <div className="si-character-card">
-                  <h3 className="si-character-name" style={{ color: cfg.lightAccent, fontSize: 14, marginBottom: 8 }}>{track.name}</h3>
-                  <p className="si-character-bio">{track.description}</p>
+                <div className="si-character-card" style={{ background: '#fff', borderRadius: 16, padding: '1.5rem' }}>
+                  <h3 className="si-character-name" style={{ color: cfg.accent, fontSize: 14, marginBottom: 8 }}>{track.name}</h3>
+                  <p className="si-character-bio" style={{ color: '#333', opacity: 0.85 }}>{track.description}</p>
                 </div>
               </Reveal>
             ))}
@@ -3271,7 +3276,7 @@ function SpurgeonsConnectCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       {/* Link */}
-      <CSSection title="Spurgeons Connect" variant="dark">
+      <CSSection title="View Course Page Online" variant="dark">
         <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
           <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.8, maxWidth: 560, margin: '0 auto 32px' }}>
             Spurgeons Connect equips churches and communities to become safe, relational spaces where families can access practical help and emotional support. Find out more about the programme and the courses behind these videos.
@@ -3303,7 +3308,6 @@ function SpurgeonsConnectCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <MotionOverview cs={cs} cfg={cfg} />
       <MotionStats cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
@@ -3324,19 +3328,158 @@ const LEAVES_CFG = {
   ],
 }
 
+const LEAVES_VIDEO_SRC    = `${import.meta.env.BASE_URL}leaves/leaves-animation.mp4`
+const LEAVES_MOODBOARD_URL = `${import.meta.env.BASE_URL}leaves/Leaves%20on%20a%20Stream%20Moodboard.pdf`
+const LEAVES_THUMB_SRC    = `${import.meta.env.BASE_URL}leaves/leaves-thumb.webp`
+
+function LeavesVideoPlayer() {
+  const videoRef  = useRef(null)
+  const [playing, setPlaying]   = useState(false)
+  const [muted,   setMuted]     = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [current,  setCurrent]  = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [showCtrl, setShowCtrl] = useState(true)
+  const hideTimer = useRef(null)
+
+  const fmt = (s) => {
+    if (!s || isNaN(s)) return '0:00'
+    const m = Math.floor(s / 60)
+    const sec = Math.floor(s % 60).toString().padStart(2, '0')
+    return `${m}:${sec}`
+  }
+
+  const togglePlay = () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) { v.play(); setPlaying(true) }
+    else          { v.pause(); setPlaying(false) }
+  }
+
+  const toggleMute = () => {
+    const v = videoRef.current
+    if (!v) return
+    v.muted = !v.muted
+    setMuted(v.muted)
+  }
+
+  const onTimeUpdate = () => {
+    const v = videoRef.current
+    if (!v || !v.duration) return
+    setCurrent(v.currentTime)
+    setProgress((v.currentTime / v.duration) * 100)
+  }
+
+  const onLoadedMetadata = () => {
+    setDuration(videoRef.current?.duration ?? 0)
+  }
+
+  const onEnded = () => setPlaying(false)
+
+  const seek = (e) => {
+    const v = videoRef.current
+    if (!v) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const pct  = (e.clientX - rect.left) / rect.width
+    v.currentTime = pct * v.duration
+  }
+
+  const revealControls = () => {
+    setShowCtrl(true)
+    clearTimeout(hideTimer.current)
+    if (playing) {
+      hideTimer.current = setTimeout(() => setShowCtrl(false), 2800)
+    }
+  }
+
+  useEffect(() => () => clearTimeout(hideTimer.current), [])
+
+  const toggleFullscreen = () => {
+    const el = videoRef.current
+    if (!el) return
+    if (!document.fullscreenElement) el.requestFullscreen?.()
+    else document.exitFullscreen?.()
+  }
+
+  return (
+    <div className="wlp-outer" onMouseMove={revealControls} onMouseLeave={() => playing && setShowCtrl(false)}>
+      <div className="wlp-shell">
+        <video
+          ref={videoRef}
+          className="wlp-video"
+          src={LEAVES_VIDEO_SRC}
+          playsInline
+          onTimeUpdate={onTimeUpdate}
+          onLoadedMetadata={onLoadedMetadata}
+          onEnded={onEnded}
+        />
+        <button
+          className={`wlp-centre-btn${playing ? ' wlp-centre-btn--hidden' : ''}`}
+          onClick={togglePlay}
+          aria-label="Play"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div className={`wlp-bar${showCtrl ? ' wlp-bar--visible' : ''}`}>
+          <button className="wlp-btn" onClick={togglePlay} aria-label={playing ? 'Pause' : 'Play'}>
+            {playing
+              ? <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              : <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>}
+          </button>
+          <span className="wlp-time">{fmt(current)} / {fmt(duration)}</span>
+          <div className="wlp-track" onClick={seek} role="slider" aria-label="Seek">
+            <div className="wlp-fill" style={{ width: `${progress}%` }} />
+            <div className="wlp-thumb" style={{ left: `${progress}%` }} />
+          </div>
+          <button className="wlp-btn" onClick={toggleMute} aria-label={muted ? 'Unmute' : 'Mute'}>
+            {muted
+              ? <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.73 18L19 19.27 20.27 18 5.27 3 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              : <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>}
+          </button>
+          <button className="wlp-btn" onClick={toggleFullscreen} aria-label="Fullscreen">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
   const cfg = LEAVES_CFG
   return (
     <div className="cs-wrap pkg-case-study">
       <MotionHero cs={cs} slide={slide} cfg={cfg} />
 
+      {/* Project Overview — moved to top */}
+      <MotionOverview cs={cs} cfg={cfg} />
+
       {/* The Animation */}
       <CSSection title="The Animation" variant="dark">
-        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
-          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, marginBottom: 32, maxWidth: 600, margin: '0 auto 32px' }}>
+        <div style={{ maxWidth: 800, margin: '0 auto' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, marginBottom: 32, maxWidth: 640, margin: '0 auto 40px' }}>
             The animated guide lives on the Spurgeons website as part of their mental health resource library, accessible to anyone experiencing stress, anxiety, or overwhelm.
           </p>
-          <BrandPlaceholder label="Animation · Video coming soon" aspect="16/9" accent={cfg.accent} />
+          <LeavesVideoPlayer />
+        </div>
+      </CSSection>
+
+      {/* Style Exploration — moodboard */}
+      <CSSection title="Style Exploration">
+        <div style={{ maxWidth: 740, margin: '0 auto' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 16 }}>
+            This was the first Spurgeons animation to step outside our established visual style — a deliberate choice to explore what a new chapter could look like for the brand.
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 40 }}>
+            To make sure we were genuinely honing in on the right audience and tone, we explored a wide range of visual styles and moods before committing to a direction. The moodboard below captures that early exploration — the range of references, textures, and atmospheres we worked through across many iterations before arriving at the final piece.
+          </p>
+          <div className="cs-flipbook-wrap">
+            <PDFFlipbook
+              pdfUrl={LEAVES_MOODBOARD_URL}
+              accentColor="#6BAF92"
+              title="Moodboard"
+            />
+          </div>
         </div>
       </CSSection>
 
@@ -3384,7 +3527,7 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
               <Reveal key={item.label} delay={i * 0.1}>
                 <div className="si-character-card">
                   <h3 className="si-character-name" style={{ color: cfg.lightAccent, fontSize: 13, marginBottom: 8 }}>{item.label}</h3>
-                  <p className="si-character-bio" style={{ fontSize: 14 }}>{item.desc}</p>
+                  <p className="si-character-bio" style={{ fontSize: 14, color: '#fff', opacity: 0.85 }}>{item.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -3393,9 +3536,9 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       {/* Visit the resource */}
-      <CSSection title="The Resource">
+      <CSSection title="The Resource" variant="dark">
         <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
-          <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.8, maxWidth: 560, margin: '0 auto 32px' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.75, color: '#fff', opacity: 0.85, maxWidth: 560, margin: '0 auto 32px' }}>
             The animation is freely available on the Spurgeons website as part of their mental health resource library.
           </p>
           <a
@@ -3406,7 +3549,7 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
               display: 'inline-block',
               padding: '14px 36px',
               borderRadius: 999,
-              background: `linear-gradient(135deg, ${cfg.accent}, ${cfg.lightAccent})`,
+              background: `linear-gradient(135deg, #6BAF92, #8ECFB0)`,
               color: '#fff',
               fontFamily: 'Raleway, sans-serif',
               fontWeight: 400,
@@ -3425,7 +3568,6 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <MotionOverview cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
   )

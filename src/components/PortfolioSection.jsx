@@ -288,6 +288,22 @@ export const CATEGORIES = [
     ],
     slides: [
       {
+        id: 12, bg: '#A8C8B8', img: 'leaves/leaves-thumb.webp', label: 'Spurgeons: Leaves on a Stream',
+        tags: ['Motion Design', 'Mindfulness', 'Animation', 'Charity'],
+        caseStudy: {
+          subtitle: 'Motion Design · Mindfulness Animation · Mental Health',
+          year: '2024',
+          duration: 'Commission',
+          status: 'Delivered',
+          sections: [
+            {
+              id: 'overview',
+              body: "A calming mindfulness animation created for Spurgeons as part of their mental health resource library. Based on the Leaves on a Stream technique from Acceptance and Commitment Therapy (ACT), the piece guides viewers through a gentle visualisation exercise: imagining thoughts as leaves drifting along a stream, observing them without attachment or judgement.\n\nDesigned to reduce anxiety and lower cortisol, the animation provides a tool for moments of stress or overwhelm. Studio KAIL translated the therapeutic technique into a warm, accessible motion piece that lives on the Spurgeons website alongside their broader mindfulness and breathing resources.",
+            },
+          ],
+        },
+      },
+      {
         id: 1, bg: '#B8D4EC', img: 'projects/studio-intro.webp', label: 'Studio Intro',
         tags: ['Motion Design', '3D Animation', 'Studio Rebrand'],
         caseStudy: {
@@ -299,6 +315,104 @@ export const CATEGORIES = [
             {
               id: 'overview',
               body: "Studio Intro marks the launch of the Studio KAIL 2026 rebrand, a complete visual refresh built around a new cast of 3D characters that embody the studio's identity, values, and creative direction.\n\nThe animation introduces these characters for the first time, following their journey through a world that reflects the studio's evolved visual language: dimensional, expressive, and deliberately crafted. Each character is designed to carry the studio's personality: curious, purposeful, and never predictable.\n\nA companion brand book documents the characters' design system, the new studio aesthetic, and the creative decisions behind the rebrand. Together, the film and the book form the studio's visual manifesto for 2026 and beyond.",
+            },
+          ],
+        },
+      },
+      {
+        id: 5, bg: '#A8C0E4', img: 'projects/steps.webp', label: 'STEPS',
+        tags: ['Motion Design', 'Experimental', 'Self-Initiated'],
+        caseStudy: {
+          subtitle: 'Motion Design · Experimental Animation · Self-Initiated',
+          year: '2022',
+          duration: 'Self-Initiated',
+          status: 'Published',
+          youtube: 'B47H1UDrQcc',
+          sections: [
+            {
+              id: 'overview',
+              body: "Steps is a self-initiated motion study exploring the foundations of character animation through a simple walk cycle. Created using abstract shapes to represent people and animals, the project focuses on how even the most minimal forms can communicate personality, weight, and movement.\n\nThe animation demonstrates the core principles of motion design, including timing, spacing, easing, balance, and simple physics. By stripping the character back to its most essential forms, the project highlights how thoughtful movement alone can create life, rhythm, and expression.\n\nSince its release, Steps has become one of Studio KAIL's signature pieces, receiving over 10,000 views on YouTube. It continues to serve as a showcase of the studio's approach to motion craft, demonstrating how strong animation is built on mastering the fundamentals.",
+            },
+          ],
+        },
+      },
+      {
+        id: 11, bg: '#B8C8E8', img: 'projects/pc-animations.webp', label: 'PC Course Animations',
+        tags: ['Motion Design', 'Animation', 'Educational', 'Charity'],
+        caseStudy: {
+          subtitle: 'Motion Design · Educational Animation · Parenting Series',
+          year: '2025',
+          duration: 'Ongoing Commission',
+          status: 'In Production',
+          sections: [
+            {
+              id: 'overview',
+              body: "An ongoing series of educational animated videos produced for Spurgeons Connect, equipping parents and carers with practical tools and emotional support across three specialist tracks: Primary, Teens, and Neurodiverse Children.\n\nOver 8 videos have been produced to date, with 4 more planned for release in the coming year. The two featured here are from the Teen course, addressing the unique challenges parents face when supporting teenagers through difficult periods.\n\nAnimation and character design by Studio KAIL, developed in close collaboration with Spurgeons' family support practitioners.",
+            },
+          ],
+        },
+      },
+      {
+        id: 8, bg: '#C8D8CC', img: 'projects/well-lab.webp', label: 'Well Lab',
+        tags: ['Motion Design', 'Explainer Video', 'Brand Animation'],
+        caseStudy: {
+          subtitle: 'Motion Design · Brand Animation · Client Commission',
+          year: '2023',
+          duration: 'Commission',
+          status: 'Delivered',
+          sections: [
+            {
+              id: 'overview',
+              body: "An introductory video for UK-based organisation Well Lab, a consultancy tackling burnout in the workplace. Well Lab works with employers and organisations including the NHS and UCL to support employees' mental health and wellbeing, helping them build sustainable approaches to work.\n\nFollowing the organisation's brand guidelines, the studio translated their shapes and colour palette into a series of whimsical and dynamic movements, with workers and scientists represented as coloured circles falling in and out of balance. The video aims to capture the interest of potential partners by differentiating Well Lab from other firms through sleek, modern design and an abstract approach to human representation.\n\nVoiceover and branding guidelines including shapes and colour palette provided by Well Lab.",
+            },
+          ],
+        },
+      },
+      {
+        id: 7, bg: '#D4CCE8', img: 'projects/bloom.webp', label: 'BLOOM',
+        tags: ['Motion Design', 'Organic', 'Experimental'],
+        caseStudy: {
+          subtitle: 'Motion Design · Organic Animation · Self-Initiated',
+          year: '2022',
+          duration: 'Self-Initiated',
+          status: 'Published',
+          youtube: 'Yjuj-ODZfPY',
+          sections: [
+            {
+              id: 'overview',
+              body: "Bloom is a self-initiated motion study following the simple lifecycle of a flower as it blooms. Designed with a playful, cartoon-inspired aesthetic, the project explores how colour, timing, and movement can transform a simple illustration into a warm, expressive animation.\n\nThe piece begins with a sepia-toned palette, evoking a nostalgic, vintage feel before gradually transitioning into a vibrant blue colour scheme as the flower comes to life. Through subtle easing, organic motion, and thoughtful colour progression, Bloom demonstrates how animation can create emotion and tell a visual story using the simplest of subjects.\n\nWith its softer, vintage-inspired art direction, Bloom showcases a different side of Studio KAIL's motion work while highlighting the studio's ability to combine expressive illustration, colour, and animation into charming, characterful pieces.",
+            },
+          ],
+        },
+      },
+      {
+        id: 10, bg: '#E8C4A0', img: 'projects/pas-advert.webp', label: 'Spurgeons: PAS Advert',
+        tags: ['Motion Design', 'Animated Characters', 'Social Content', 'Charity'],
+        caseStudy: {
+          subtitle: 'Motion Design · Animated Characters · Social Media Advert',
+          year: '2025',
+          duration: 'Commission',
+          status: 'Delivered',
+          sections: [
+            {
+              id: 'overview',
+              body: "A short-form vertical social media advert commissioned by Spurgeons to promote their Parenting After Separation (PAS) course. The course was developed by Spurgeons' parenting and counselling experts to support parents navigating family breakdown, helping them prioritise their children's wellbeing through one of the most challenging transitions a family can face.\n\nThe advert uses animated characters to bring warmth, accessibility, and emotional resonance to a sensitive subject. Custom character design and animation by Studio KAIL, working within Spurgeons' brand guidelines.",
+            },
+          ],
+        },
+      },
+      {
+        id: 9, bg: '#B8D4C8', img: 'spurgeons-counselling/thumbnail.jpg', label: 'Spurgeons: Counselling',
+        tags: ['Motion Design', 'Illustration', 'Social Content', 'Charity'],
+        caseStudy: {
+          subtitle: 'Motion Design · Custom Illustration · Social Media Campaign',
+          year: '2025',
+          duration: 'Commission',
+          status: 'Delivered',
+          sections: [
+            {
+              id: 'overview',
+              body: "A set of three short-form vertical videos commissioned by Spurgeons, the UK children's charity, to promote their counselling services across social media. Each video features a different voice from within the organisation, a counsellor or specialist speaking candidly about their area of expertise, with custom illustrations and animations bringing their words to life.\n\nThe series spans three of the charity's most significant counselling specialisms: self-harm support, school-based counselling, and the wider therapeutic services Spurgeons offers to children and young people. Designed to reach families, young people, and professionals across Instagram and other social platforms, each piece balances the weight of its subject matter with Spurgeons' signature warmth and accessibility.\n\nCustom illustrations, character design, and animation by Studio KAIL. Voiceover and branding guidelines provided by Spurgeons.",
             },
           ],
         },
@@ -339,23 +453,6 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 5, bg: '#A8C0E4', img: 'projects/steps.webp', label: 'STEPS',
-        tags: ['Motion Design', 'Experimental', 'Self-Initiated'],
-        caseStudy: {
-          subtitle: 'Motion Design · Experimental Animation · Self-Initiated',
-          year: '2022',
-          duration: 'Self-Initiated',
-          status: 'Published',
-          youtube: 'B47H1UDrQcc',
-          sections: [
-            {
-              id: 'overview',
-              body: "Steps is a self-initiated motion study exploring the foundations of character animation through a simple walk cycle. Created using abstract shapes to represent people and animals, the project focuses on how even the most minimal forms can communicate personality, weight, and movement.\n\nThe animation demonstrates the core principles of motion design, including timing, spacing, easing, balance, and simple physics. By stripping the character back to its most essential forms, the project highlights how thoughtful movement alone can create life, rhythm, and expression.\n\nSince its release, Steps has become one of Studio KAIL's signature pieces, receiving over 10,000 views on YouTube. It continues to serve as a showcase of the studio's approach to motion craft, demonstrating how strong animation is built on mastering the fundamentals.",
-            },
-          ],
-        },
-      },
-      {
         id: 6, bg: '#B4D0A8', img: 'projects/atoz.webp', label: 'A to Z',
         tags: ['Motion Design', 'Typography', 'Experimental'],
         caseStudy: {
@@ -371,104 +468,7 @@ export const CATEGORIES = [
             },
           ],
         },
-      },
-      {
-        id: 7, bg: '#D4CCE8', img: 'projects/bloom.webp', label: 'BLOOM',
-        tags: ['Motion Design', 'Organic', 'Experimental'],
-        caseStudy: {
-          subtitle: 'Motion Design · Organic Animation · Self-Initiated',
-          year: '2022',
-          duration: 'Self-Initiated',
-          status: 'Published',
-          youtube: 'Yjuj-ODZfPY',
-          sections: [
-            {
-              id: 'overview',
-              body: "Bloom is a self-initiated motion study following the simple lifecycle of a flower as it blooms. Designed with a playful, cartoon-inspired aesthetic, the project explores how colour, timing, and movement can transform a simple illustration into a warm, expressive animation.\n\nThe piece begins with a sepia-toned palette, evoking a nostalgic, vintage feel before gradually transitioning into a vibrant blue colour scheme as the flower comes to life. Through subtle easing, organic motion, and thoughtful colour progression, Bloom demonstrates how animation can create emotion and tell a visual story using the simplest of subjects.\n\nWith its softer, vintage-inspired art direction, Bloom showcases a different side of Studio KAIL's motion work while highlighting the studio's ability to combine expressive illustration, colour, and animation into charming, characterful pieces.",
-            },
-          ],
-        },
-      },
-      {
-        id: 8, bg: '#C8D8CC', img: 'projects/well-lab.webp', label: 'Well Lab',
-        tags: ['Motion Design', 'Explainer Video', 'Brand Animation'],
-        caseStudy: {
-          subtitle: 'Motion Design · Brand Animation · Client Commission',
-          year: '2023',
-          duration: 'Commission',
-          status: 'Delivered',
-          sections: [
-            {
-              id: 'overview',
-              body: "An introductory video for UK-based organisation Well Lab, a consultancy tackling burnout in the workplace. Well Lab works with employers and organisations including the NHS and UCL to support employees' mental health and wellbeing, helping them build sustainable approaches to work.\n\nFollowing the organisation's brand guidelines, the studio translated their shapes and colour palette into a series of whimsical and dynamic movements, with workers and scientists represented as coloured circles falling in and out of balance. The video aims to capture the interest of potential partners by differentiating Well Lab from other firms through sleek, modern design and an abstract approach to human representation.\n\nVoiceover and branding guidelines including shapes and colour palette provided by Well Lab.",
-            },
-          ],
-        },
-      },
-      {
-        id: 9, bg: '#B8D4C8', img: 'spurgeons-counselling/thumbnail.jpg', label: 'Spurgeons: Counselling',
-        tags: ['Motion Design', 'Illustration', 'Social Content', 'Charity'],
-        caseStudy: {
-          subtitle: 'Motion Design · Custom Illustration · Social Media Campaign',
-          year: '2025',
-          duration: 'Commission',
-          status: 'Delivered',
-          sections: [
-            {
-              id: 'overview',
-              body: "A set of three short-form vertical videos commissioned by Spurgeons, the UK children's charity, to promote their counselling services across social media. Each video features a different voice from within the organisation, a counsellor or specialist speaking candidly about their area of expertise, with custom illustrations and animations bringing their words to life.\n\nThe series spans three of the charity's most significant counselling specialisms: self-harm support, school-based counselling, and the wider therapeutic services Spurgeons offers to children and young people. Designed to reach families, young people, and professionals across Instagram and other social platforms, each piece balances the weight of its subject matter with Spurgeons' signature warmth and accessibility.\n\nCustom illustrations, character design, and animation by Studio KAIL. Voiceover and branding guidelines provided by Spurgeons.",
-            },
-          ],
-        },
-      },
-      {
-        id: 11, bg: '#B8C8E8', img: 'projects/spurgeons-tc.webp', label: 'Spurgeons Connect',
-        tags: ['Motion Design', 'Animation', 'Educational', 'Charity'],
-        caseStudy: {
-          subtitle: 'Motion Design · Educational Animation · Parenting Series',
-          year: '2025',
-          duration: 'Ongoing Commission',
-          status: 'In Production',
-          sections: [
-            {
-              id: 'overview',
-              body: "An ongoing series of educational animated videos produced for Spurgeons Connect, equipping parents and carers with practical tools and emotional support across three specialist tracks: Primary, Teens, and Neurodiverse Children.\n\nOver 8 videos have been produced to date, with 4 more planned for release in the coming year. The two featured here are from the Teen course, addressing the unique challenges parents face when supporting teenagers through difficult periods.\n\nAnimation and character design by Studio KAIL, developed in close collaboration with Spurgeons' family support practitioners.",
-            },
-          ],
-        },
-      },
-      {
-        id: 10, bg: '#E8C4A0', img: 'projects/spurgeons-pas.webp', label: 'Spurgeons: PAS Advert',
-        tags: ['Motion Design', 'Animated Characters', 'Social Content', 'Charity'],
-        caseStudy: {
-          subtitle: 'Motion Design · Animated Characters · Social Media Advert',
-          year: '2025',
-          duration: 'Commission',
-          status: 'Delivered',
-          sections: [
-            {
-              id: 'overview',
-              body: "A short-form vertical social media advert commissioned by Spurgeons to promote their Parenting After Separation (PAS) course. The course was developed by Spurgeons' parenting and counselling experts to support parents navigating family breakdown, helping them prioritise their children's wellbeing through one of the most challenging transitions a family can face.\n\nThe advert uses animated characters to bring warmth, accessibility, and emotional resonance to a sensitive subject. Custom character design and animation by Studio KAIL, working within Spurgeons' brand guidelines.",
-            },
-          ],
-        },
-      },
-      {
-        id: 12, bg: '#A8C8B8', img: null, label: 'Spurgeons: Leaves on a Stream',
-        tags: ['Motion Design', 'Mindfulness', 'Animation', 'Charity'],
-        caseStudy: {
-          subtitle: 'Motion Design · Mindfulness Animation · Mental Health',
-          year: '2024',
-          duration: 'Commission',
-          status: 'Delivered',
-          sections: [
-            {
-              id: 'overview',
-              body: "A calming mindfulness animation created for Spurgeons as part of their mental health resource library. Based on the Leaves on a Stream technique from Acceptance and Commitment Therapy (ACT), the piece guides viewers through a gentle visualisation exercise: imagining thoughts as leaves drifting along a stream, observing them without attachment or judgement.\n\nDesigned to reduce anxiety and lower cortisol, the animation provides a tool for moments of stress or overwhelm. Studio KAIL translated the therapeutic technique into a warm, accessible motion piece that lives on the Spurgeons website alongside their broader mindfulness and breathing resources.",
-            },
-          ],
-        },
-      },
+      }
     ],
   },
   {
