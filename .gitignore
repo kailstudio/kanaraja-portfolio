@@ -6,8 +6,3 @@ dist/
 .env
 vite.config.js.timestamp-*.mjs
 
-# Large original source files — compressed versions committed instead
-public/spurgeons-PCanimations/TC Animation 3 Full.mp4
-public/spurgeons-PCanimations/TC Animation 4 Full.mov
-public/leaves/Leaves on a Stream 2026 V1 20260612.mp4
-public/leaves/Leaves on a Stream Moodboard.pdf
