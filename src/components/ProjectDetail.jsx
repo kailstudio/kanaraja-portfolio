@@ -2774,9 +2774,9 @@ const SPURGEONS_COUNSELLING_CFG = {
 }
 
 const SPURGEONS_COUNSELLING_VIDEOS = {
-  james:    `${BASE}spurgeons-counselling/CounsellingVideo_James.mp4`,
-  lizzie:   `${BASE}spurgeons-counselling/Lizzie_CounsellingVideoPortrait_with%20sound.mp4`,
-  selfharm: `${BASE}spurgeons-counselling/SelfHarmAnimation_V3_20250902.mp4`,
+  james:    `${BASE}spurgeons-counselling/james.mp4`,
+  lizzie:   `${BASE}spurgeons-counselling/lizzie.mp4`,
+  selfharm: `${BASE}spurgeons-counselling/nadine.mp4`,
 }
 
 const SPURGEONS_COUNSELLING_NARRATORS = [
@@ -2804,7 +2804,9 @@ const SPURGEONS_COUNSELLING_NARRATORS = [
 ]
 
 function CounsellingVideoPlayer({ src, label }) {
-  const videoRef  = useRef(null)
+  const videoRef   = useRef(null)
+  const trackRef   = useRef(null)
+  const isDragging = useRef(false)
   const [playing,  setPlaying]  = useState(false)
   const [muted,    setMuted]    = useState(false)
   const [progress, setProgress] = useState(0)
@@ -2836,7 +2838,7 @@ function CounsellingVideoPlayer({ src, label }) {
 
   const onTimeUpdate = () => {
     const v = videoRef.current
-    if (!v || !v.duration) return
+    if (!v || !v.duration || isDragging.current) return
     setCurrent(v.currentTime)
     setProgress((v.currentTime / v.duration) * 100)
   }
@@ -2847,13 +2849,33 @@ function CounsellingVideoPlayer({ src, label }) {
 
   const onEnded = () => setPlaying(false)
 
-  const seek = (e) => {
+  const seekTo = useCallback((clientX) => {
     const v = videoRef.current
-    if (!v) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const pct  = (e.clientX - rect.left) / rect.width
+    const track = trackRef.current
+    if (!v || !track || !v.duration) return
+    const rect = track.getBoundingClientRect()
+    const pct  = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
     v.currentTime = pct * v.duration
+    setProgress(pct * 100)
+    setCurrent(v.currentTime)
+  }, [])
+
+  const onTrackMouseDown = (e) => {
+    isDragging.current = true
+    seekTo(e.clientX)
   }
+
+  useEffect(() => {
+    const onMouseMove = (e) => { if (isDragging.current) seekTo(e.clientX) }
+    const onMouseUp   = ()  => { isDragging.current = false }
+    document.addEventListener('mousemove', onMouseMove)
+    document.addEventListener('mouseup',   onMouseUp)
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove)
+      document.removeEventListener('mouseup',   onMouseUp)
+      clearTimeout(hideTimer.current)
+    }
+  }, [seekTo])
 
   const revealControls = () => {
     setShowCtrl(true)
@@ -2862,8 +2884,6 @@ function CounsellingVideoPlayer({ src, label }) {
       hideTimer.current = setTimeout(() => setShowCtrl(false), 2800)
     }
   }
-
-  useEffect(() => () => clearTimeout(hideTimer.current), [])
 
   const toggleFullscreen = () => {
     const el = videoRef.current
@@ -2912,7 +2932,7 @@ function CounsellingVideoPlayer({ src, label }) {
 
           <span className="cvp-time">{fmt(current)} / {fmt(duration)}</span>
 
-          <div className="cvp-track" onClick={seek} role="slider" aria-label="Seek">
+          <div className="cvp-track" ref={trackRef} onMouseDown={onTrackMouseDown} role="slider" aria-label="Seek">
             <div className="cvp-fill" style={{ width: `${progress}%` }} />
             <div className="cvp-thumb" style={{ left: `${progress}%` }} />
           </div>
@@ -4352,7 +4372,7 @@ const PORTFOLIO_WEB_CFG = {
     { value: 'Raleway', label: 'Single typeface, three weights, all the range needed'    },
     { value: 'Glass',   label: 'Glassmorphism token system across every surface'          },
     { value: 'GitHub',  label: 'Version controlled and deployed via GitHub Pages'         },
-    { value: '∞',       label: 'Iterations, and still going'                            },
+    { value: '7★+',    label: 'Awwwards rating — nominated and currently under evaluation'  },
   ],
 }
 
@@ -4389,8 +4409,81 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       {/* Project Overview */}
       <MotionOverview cs={cs} cfg={PORTFOLIO_WEB_CFG} />
 
+      {/* Awwwards Nomination */}
+      <CSSection title="Awwwards Nomination" variant="dark" style={{ background: '#335CFF' }}>
+        <Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
+            {/* Left: image */}
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <img src={`${BASE}portfolio-showcase/award.png`} alt="Awwwards" style={{ width: '100%', maxWidth: 400, objectFit: 'contain' }} />
+            </div>
+            {/* Right: content */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div>
+                <h3 style={{ color: '#E0F87D', fontSize: '1.5rem', fontWeight: 700, margin: '0 0 12px', letterSpacing: '-0.01em' }}>
+                  Nominated for an Awwward
+                </h3>
+                <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, margin: 0 }}>
+                  This portfolio has been submitted to and nominated by{' '}
+                  <strong style={{ color: '#fff' }}>Awwwards</strong> — the design industry's
+                  most respected recognition for web design and development excellence. Sites
+                  are judged by a jury of leading designers, developers, and creatives worldwide
+                  on Design, Usability, Creativity, and Content.
+                </p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, textAlign: 'center' }}>
+                {[
+                  { label: 'Design',     stars: '★★★★' },
+                  { label: 'Usability',  stars: '★★★★' },
+                  { label: 'Creativity', stars: '★★★★' },
+                  { label: 'Content',    stars: '★★★★' },
+                ].map(({ label, stars }) => (
+                  <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <span style={{ color: '#E0F87D', fontSize: '1rem', letterSpacing: 2 }}>{stars}</span>
+                    <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{
+                background: 'rgba(224,248,125,0.08)', border: '1px solid rgba(224,248,125,0.25)',
+                borderRadius: 14, padding: '1rem 1.5rem', textAlign: 'center',
+              }}>
+                <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 6px' }}>
+                  Current Jury Rating
+                </p>
+                <p style={{ color: '#E0F87D', fontSize: '2rem', fontWeight: 800, margin: '0 0 4px', letterSpacing: '-0.02em' }}>
+                  7+ Stars
+                </p>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.72rem', margin: 0 }}>
+                  Currently under evaluation by the Awwwards jury
+                </p>
+              </div>
+
+              <a
+                href="https://www.awwwards.com/sites/studio-ka-il"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8, alignSelf: 'flex-start',
+                  background: '#E0F87D', color: '#111', fontWeight: 700,
+                  fontSize: '0.85rem', padding: '0.75rem 1.5rem',
+                  borderRadius: 999, textDecoration: 'none', letterSpacing: '0.02em',
+                  transition: 'opacity 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                View on Awwwards ↗
+              </a>
+            </div>
+          </div>
+        </Reveal>
+      </CSSection>
+
       {/* The Stack */}
-      <CSSection title="The Stack" variant="dark">
+      <CSSection title="The Stack" variant="dark" style={{ background: "#E0F87D" }}>
         <div className="si-characters-grid">
           {PORTFOLIO_WEB_STACK.map((item, i) => (
             <Reveal key={item.name} delay={i * 0.08}>
@@ -4420,7 +4513,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       {/* Custom Illustrations, the six characters */}
-      <CSSection title="Custom Illustrations">
+      <CSSection title="Custom Illustrations" style={{ background: "#D4C7FF" }}>
         <Reveal delay={0.06}>
           <p style={{ color: 'rgba(51,51,51,0.7)', lineHeight: 1.85, marginBottom: 28, maxWidth: 600 }}>
             Six original characters were created as part of the Studio KAIL 2026 rebrand and are woven through the entire site. They orbit the studio mark in the animated hero section, each appearing in turn as an introduction to the studio and its values. They reappear in the footer, anchoring the navigation links with the same warmth and personality. Together they give the portfolio a sense of continuity, the same cast, in different moments, across every page.
@@ -4470,7 +4563,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       {/* Logo */}
-      <CSSection title="The Studio Mark">
+      <CSSection title="The Studio Mark" style={{ background: "#E0F87D" }}>
         <Reveal delay={0.08}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, padding: '32px 0' }}>
             <img
@@ -4484,6 +4577,29 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
             </p>
           </div>
         </Reveal>
+      </CSSection>
+
+      {/* Site Showcase */}
+      <CSSection title="The Site in Detail">
+        <Reveal>
+          <p style={{ color: 'rgba(51,51,51,0.7)', lineHeight: 1.85, marginBottom: 28, maxWidth: 600 }}>
+            A closer look at the portfolio across sections — from the animated hero to the
+            project carousels and case study layouts. Every screen designed and built
+            by hand, no templates.
+          </p>
+        </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
+          {['3.png', '4.png', '8.png', '9.png'].map((f, i) => (
+            <Reveal key={f} delay={i * 0.08}>
+              <img
+                src={`${BASE}portfolio-showcase/${f}`}
+                alt={`Portfolio screenshot ${i + 1}`}
+                style={{ width: '100%', display: 'block', borderRadius: 14, boxShadow: '0 4px 32px rgba(0,0,0,0.10)' }}
+                loading="lazy"
+              />
+            </Reveal>
+          ))}
+        </div>
       </CSSection>
 
       <MotionStats cfg={PORTFOLIO_WEB_CFG} />
@@ -4505,106 +4621,80 @@ const SPURGEONS_SIGNAGE_CFG = {
     { label: 'Status',    value: 'Ongoing'         },
   ],
   stats: [
-    { value: '3.5',   label: 'Years of ongoing signage and print output for Spurgeons' },
-    { value: '12+',   label: 'Individual assets across banners, posters, flags and signage' },
-    { value: '4',     label: 'Distinct material types: festival banners, pull-ups, building signage, posters' },
-    { value: '∞',     label: 'Community events supported through visible, on-brand presence' },
+    { value: '3+',      label: 'Years of ongoing signage output'  },
+    { value: '40+',     label: 'Signage pieces produced'          },
+    { value: '12+',     label: 'Festivals showcasing our work'    },
+    { value: '10,000+', label: 'Prints'                           },
+    { value: '30+',     label: 'Community events supported'       },
   ],
 }
 
 function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
   const cfg = SPURGEONS_SIGNAGE_CFG
-  const BASE_S = `${BASE}spurgeons-signage/`
+  const B = `${BASE}spurgeons-signage/`
   return (
     <div className="cs-wrap pkg-case-study">
       <PkgHero cs={cs} slide={slide} cfg={cfg} />
       <PkgOverview cs={cs} cfg={cfg} />
 
-      {/* Festival & Event Banners */}
-      <CSSection title="Festival & Event Banners" variant="dark">
+      {/* Festival & Event */}
+      <CSSection title="Festival & Event" variant="dark">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
             Spurgeons attends community festivals and public events throughout the year.
-            These large-format banners serve as the charity's visible presence at those moments,
+            These large-format banners serve as the charity's visible presence at those moments —
             bold enough to cut through a busy outdoor environment, warm enough to invite approach.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
-          {['banner1.png','banner2.png','banner3.png','banner4.png'].map((f, i) => (
-            <Reveal key={f} delay={i * 0.08}>
-              <img
-                src={`${BASE_S}${f}`}
-                alt={`Festival banner ${i + 1}`}
-                style={{ width: '100%', borderRadius: 12, display: 'block' }}
-              />
-            </Reveal>
-          ))}
-        </div>
-      </CSSection>
-
-      {/* Posters & Pull-ups */}
-      <CSSection title="Posters & Pull-up Banners" variant="light">
-        <Reveal>
-          <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
-            Pull-up banners and large format posters designed for indoor events, community spaces,
-            and reception areas, carrying Spurgeons' brand with clarity and confidence whether
-            displayed solo or alongside other materials.
-          </p>
-        </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['bigposter.png','bigposter_1.png','squarepull1.png'].map((f, i) => (
-            <Reveal key={f} delay={i * 0.08}>
-              <img
-                src={`${BASE_S}${f}`}
-                alt={`Poster ${i + 1}`}
-                style={{ width: '100%', borderRadius: 12, display: 'block' }}
-              />
-            </Reveal>
-          ))}
-        </div>
+        <ImageGallery
+          images={[
+            `${B}festival1.png`,
+            `${B}festival2.png`,
+            `${B}festival3.png`,
+            `${B}festival4.jpg`,
+            `${B}festival5.png`,
+          ]}
+        />
       </CSSection>
 
       {/* Building & Location Signage */}
       <CSSection title="Building & Location Signage" variant="dark">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
-            Permanent and semi-permanent signage for Spurgeons' physical locations, from
+            Permanent and semi-permanent signage for Spurgeons' physical locations — from
             neighbourhood-specific banners to large building-mounted graphics that establish
             the charity's presence in the communities it serves.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem' }}>
-          {['HodgeHillBanner.png','WaltonSignage_8x25.png'].map((f, i) => (
-            <Reveal key={f} delay={i * 0.08}>
-              <img
-                src={`${BASE_S}${f}`}
-                alt={`Location signage ${i + 1}`}
-                style={{ width: '100%', borderRadius: 12, display: 'block' }}
-              />
-            </Reveal>
-          ))}
+        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+          <SwipeStackCarousel images={[
+            `${B}building1.png`,
+            `${B}building2.jpg`,
+            `${B}building3.jpg`,
+            `${B}building4.jpg`,
+            `${B}building5.png`,
+          ]} />
+          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8, color: '#fff' }}>Drag to browse</p>
         </div>
       </CSSection>
 
-      {/* Flags & Digital */}
-      <CSSection title="Flags & Digital Assets" variant="light">
+      {/* Posters & Pull-up Banners */}
+      <CSSection title="Posters & Pull-up Banners" variant="light">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
-            Outdoor flags and social media graphics rounding out the suite, ensuring
-            Spurgeons is visible whether at a street-level event or across an Instagram feed.
+            Pull-up banners and large-format posters designed for indoor events, community spaces,
+            and reception areas — carrying Spurgeons' brand with clarity and confidence whether
+            displayed solo or alongside other materials.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['flag1.png','flag2.png','ig.png'].map((f, i) => (
-            <Reveal key={f} delay={i * 0.08}>
-              <img
-                src={`${BASE_S}${f}`}
-                alt={`Flag / digital asset ${i + 1}`}
-                style={{ width: '100%', borderRadius: 12, display: 'block' }}
-              />
-            </Reveal>
-          ))}
-        </div>
+        <ImageGallery
+          images={[
+            `${B}poster1.png`,
+            `${B}poster2.png`,
+            `${B}poster3.jpg`,
+            `${B}poster4.png`,
+          ]}
+        />
       </CSSection>
 
       <MotionStats cfg={cfg} />
@@ -4625,86 +4715,61 @@ const SPURGEONS_MERCH_CFG = {
     { label: 'Status',   value: 'Ongoing'                },
   ],
   stats: [
-    { value: '3+',   label: 'Apparel types: tote bags, t-shirts, running vests' },
-    { value: '∞',    label: 'Supporters wearing Spurgeons at events and marathons' },
-    { value: '100%', label: 'On-brand across every piece, nothing generic' },
+    { value: '50+',     label: 'Merch types designed'                        },
+    { value: '1,000+',  label: 'Pieces ordered across all merch types'       },
+    { value: 'Monthly', label: 'Team feedback sessions on new merch'         },
+    { value: '2 weeks', label: 'Turnaround for new merch request designs'    },
   ],
-}
-
-// Placeholder tile component
-function MerchPlaceholder({ label, aspect = '1 / 1' }) {
-  return (
-    <div style={{
-      aspectRatio: aspect,
-      background: 'rgba(212,199,255,0.18)',
-      border: '1.5px dashed rgba(212,199,255,0.45)',
-      borderRadius: 12,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      gap: 8,
-      padding: '1.5rem',
-      textAlign: 'center',
-    }}>
-      <span style={{ fontSize: '2rem', opacity: 0.4 }}>📷</span>
-      <span style={{ fontSize: '0.8rem', opacity: 0.55, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{label}</span>
-    </div>
-  )
 }
 
 function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
   const cfg = SPURGEONS_MERCH_CFG
+  const B = `${BASE}spurgeons-merch/`
   return (
     <div className="cs-wrap pkg-case-study">
       <PkgHero cs={cs} slide={slide} cfg={cfg} />
       <PkgOverview cs={cs} cfg={cfg} />
 
-      {/* Tote Bags */}
-      <CSSection title="Tote Bags" variant="light">
+      {/* Stationery */}
+      <CSSection title="Stationery" variant="light">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
-            Everyday carry with purpose. Spurgeons tote bags put the charity's brand in
-            the hands of supporters, volunteers, and families, a simple thing that travels
-            far and says a lot about who Spurgeons is in the community.
+            Branded stationery that keeps Spurgeons' identity consistent across every desk,
+            meeting, and mailing — from notepads and pens to folders and lanyards. Designed
+            to feel considered rather than off-the-shelf, giving staff and families something
+            tangible that reflects the care behind the charity.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Tote, Front', 'Tote, Back', 'Tote, Detail'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.08}><MerchPlaceholder label={l} /></Reveal>
-          ))}
+        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+          <SwipeStackCarousel images={[
+            `${B}stationary1.jpg`,
+            `${B}stationary2.jpg`,
+            `${B}stationary3.jpg`,
+            `${B}stationary4.png`,
+          ]} />
+          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8 }}>Drag to browse</p>
         </div>
       </CSSection>
 
-      {/* T-Shirts */}
-      <CSSection title="T-Shirts" variant="dark">
+      {/* Clothing */}
+      <CSSection title="Clothing" variant="dark">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
-            Staff, volunteers, and event crews wearing Spurgeons on their backs. Clean,
-            comfortable, and unmistakably on-brand, designed to work as uniform and as
-            something people actually want to put on.
+            From tote bags and t-shirts to running vests for marathon participants, each
+            piece extends Spurgeons' brand into the physical world — keeping the charity
+            visible and consistent wherever their people go. Designed with one rule:
+            it has to feel like something people actually want to wear.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['T-Shirt, Front', 'T-Shirt, Back', 'T-Shirt, Detail'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.08}><MerchPlaceholder label={l} /></Reveal>
-          ))}
-        </div>
-      </CSSection>
-
-      {/* Marathon Vests */}
-      <CSSection title="Marathon Running Vests" variant="light">
-        <Reveal>
-          <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
-            Spurgeons fields runners in sponsored marathons to raise funds and awareness.
-            These vests carry the charity's name across the finish line, designed for
-            performance and visibility, keeping supporters proud to race in Spurgeons colours.
-          </p>
-        </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['Vest, Front', 'Vest, Back', 'Vest, On the Run'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.08}><MerchPlaceholder label={l} aspect="2 / 3" /></Reveal>
-          ))}
+        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+          <SwipeStackCarousel images={[
+            `${B}clothing1.png`,
+            `${B}clothing2.jpg`,
+            `${B}clothing3.png`,
+            `${B}clothing4.jpg`,
+            `${B}clothing5.jpg`,
+          ]} />
+          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8 }}>Drag to browse</p>
         </div>
       </CSSection>
 
@@ -4714,23 +4779,23 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
   )
 }
 
-// ── Spurgeons: Course Portal ──────────────────────────────────────────
+// ── Parents Connect: Course Portal ──────────────────────────────────
 
 const SPURGEONS_PORTAL_CFG = {
-  accent: '#335CFF', lightAccent: '#335CFF', dark: '#333333',
+  accent: '#D4C7FF', lightAccent: '#D4C7FF', dark: '#333333',
   specs: [
-    { label: 'Client',    value: 'Spurgeons'       },
-    { label: 'Year',      value: '2024'            },
-    { label: 'Type',      value: 'UX / UI Redesign' },
-    { label: 'Tool',      value: 'Figma'           },
-    { label: 'Testing',   value: 'User Testing'    },
-    { label: 'Status',    value: 'Delivered'       },
+    { label: 'Client',    value: 'Spurgeons'              },
+    { label: 'Product',   value: 'Parents Connect Portal'  },
+    { label: 'Year',      value: '2024'                   },
+    { label: 'Type',      value: 'UX / UI Redesign'        },
+    { label: 'Tool',      value: 'Figma'                  },
+    { label: 'Status',    value: 'Delivered'              },
   ],
   stats: [
-    { value: '80%',  label: 'Of users found the redesigned sign-on page easier to use in testing' },
-    { value: '1',    label: 'Key friction point identified and resolved: the sign-on flow' },
-    { value: '100%', label: 'Custom UI, no off-the-shelf component library' },
-    { value: '∞',    label: 'Families and professionals now able to access Spurgeons courses with less friction' },
+    { value: '80%',  label: 'Of users found the redesigned portal easier to use in testing'         },
+    { value: '3+',   label: 'Rounds of user testing run before a single pixel changed'              },
+    { value: '1',    label: 'Critical friction point identified: the course sign-on flow'            },
+    { value: '100%', label: 'Custom UI — no off-the-shelf component library'                        },
   ],
 }
 
@@ -4745,12 +4810,19 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
       <CSSection title="The Problem" variant="dark">
         <Reveal>
           <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
-            Spurgeons' online course portal was generating consistent complaints: users were
-            struggling to sign on, losing access to courses they'd already paid for, and
-            dropping off before completing registration. The interface was functional but
-            unintuitive, form fields were unclear, error states were unhelpful, and the
-            overall visual design felt cold and clinical for an organisation built on warmth
-            and community.
+            The Parents Connect course portal — Spurgeons' online learning platform for
+            facilitators and families — was generating a steady stream of support requests.
+            Users were struggling to sign in, losing access to courses they had already
+            enrolled in, and dropping out of the registration flow before completing it.
+            The interface worked in theory, but in practice it was letting people down at
+            exactly the moment they needed it to be seamless.
+          </p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <p style={{ lineHeight: 1.8, maxWidth: 720, marginTop: '1.25rem' }}>
+            For Spurgeons, whose users include parents and carers who may not be digitally
+            confident, these friction points were more than inconvenient — they were a barrier
+            to accessing support the charity had built for them. Something had to change.
           </p>
         </Reveal>
       </CSSection>
@@ -4758,33 +4830,40 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
       {/* User Testing */}
       <CSSection title="User Testing" variant="light">
         <Reveal>
-          <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
-            Before touching a single pixel, the studio ran user testing sessions with a
-            representative sample of Spurgeons' actual course users, parents, carers, and
-            professionals. Participants were asked to complete common tasks: find a course,
-            create an account, and sign back in after a break. The sessions were observed and
-            recorded to identify where confusion entered the flow and at what point users gave up.
-          </p>
-          <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
-            The findings were clear: the sign-on screen was the single biggest source of
-            friction. Users were unsure whether they needed to create an account or had one
-            already, the password requirements were hidden until after submission, and the
-            visual hierarchy gave no indication of where to start.
+          <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '1.5rem', maxWidth: 720 }}>
+            Before touching a single pixel, multiple rounds of user testing were run with
+            real Parents Connect users — parents, carers, and facilitators who use the
+            portal in their day-to-day. Participants were observed completing common tasks:
+            finding a course, creating an account, and signing back in after a break.
+            Every session was recorded and mapped to identify where confusion entered the
+            flow, and at exactly what point users gave up.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginTop: '1rem' }}>
-          {['Testing Session Notes', 'User Flow Map', 'Drop-off Points'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.08}>
+        <Reveal delay={0.06}>
+          <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
+            The findings from each round sharpened the picture. Across all sessions, one
+            screen came up again and again as the single biggest source of friction: the
+            course sign-on screen. Users were uncertain whether they needed to create a
+            new account or already had one, password requirements were hidden until after
+            an error was triggered, and the visual hierarchy gave no clear signal of where
+            to begin. Multiple tests, one consistent answer.
+          </p>
+        </Reveal>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginTop: '0.5rem' }}>
+          {[
+            { icon: '🎙', label: 'Session Observations', note: 'Recorded & mapped across 3+ rounds' },
+            { icon: '🗺', label: 'User Flow Mapping',     note: 'End-to-end journey charted' },
+            { icon: '📉', label: 'Drop-off Analysis',    note: 'Sign-on identified as #1 exit point' },
+          ].map(({ icon, label, note }, i) => (
+            <Reveal key={label} delay={i * 0.08}>
               <div style={{
-                aspectRatio: '4/3',
-                background: 'rgba(51,92,255,0.08)',
-                border: '1.5px dashed rgba(51,92,255,0.3)',
-                borderRadius: 12,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexDirection: 'column', gap: 8, padding: '1.5rem', textAlign: 'center',
+                background: 'rgba(212,199,255,0.12)', border: '1.5px solid rgba(212,199,255,0.3)',
+                borderRadius: 14, padding: '1.5rem', textAlign: 'center',
+                display: 'flex', flexDirection: 'column', gap: 8,
               }}>
-                <span style={{ fontSize: '1.8rem', opacity: 0.35 }}>📋</span>
-                <span style={{ fontSize: '0.78rem', opacity: 0.5, letterSpacing: '0.06em', textTransform: 'uppercase', color: cfg.dark }}>{l}</span>
+                <span style={{ fontSize: '2rem' }}>{icon}</span>
+                <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#333' }}>{label}</span>
+                <span style={{ fontSize: '0.75rem', color: 'rgba(51,51,51,0.55)', lineHeight: 1.5 }}>{note}</span>
               </div>
             </Reveal>
           ))}
@@ -4794,17 +4873,21 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
       {/* The Redesign */}
       <CSSection title="The Redesign" variant="dark">
         <Reveal>
-          <p style={{ lineHeight: 1.8, marginBottom: '2rem', maxWidth: 720 }}>
-            With the pain points mapped, the interface was redesigned from scratch in Figma.
-            The sign-on screen received the most attention: a clear visual split between
-            "new user" and "returning user" journeys, inline validation with helpful (not
-            punishing) error messages, and a warmer visual language that aligned with
-            Spurgeons' identity rather than feeling like a generic SaaS login form.
+          <p style={{ lineHeight: 1.8, marginBottom: '1.5rem', maxWidth: 720 }}>
+            With the pain points mapped across multiple test rounds, the sign-on screen was
+            redesigned from scratch in Figma. The focus was ruthlessly on the one thing that
+            kept breaking: helping users understand where they were in the flow, and what
+            they needed to do next.
           </p>
+        </Reveal>
+        <Reveal delay={0.06}>
           <p style={{ lineHeight: 1.8, marginBottom: '2.5rem', maxWidth: 720 }}>
-            The wider portal UI was also refreshed, updated typography, improved colour
-            contrast for accessibility, clearer course cards with progress indicators, and
-            a navigation structure that surfaces the most common tasks immediately.
+            The redesign introduced a clear visual split between new and returning user journeys,
+            inline validation with helpful error states, and a warmer visual language aligned
+            with the Parents Connect brand. The wider portal UI was refreshed too — improved
+            typography, better colour contrast for accessibility, clearer course cards with
+            progress indicators, and a navigation structure that puts the most common tasks
+            front and centre.
           </p>
         </Reveal>
         {/* Figma Embed */}
@@ -4816,49 +4899,25 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
               height="450"
               src="https://embed.figma.com/proto/LZmViGkPxNh7X1w2u8yw7M/Sign-On-Screen?node-id=1-4&embed-host=share"
               allowFullScreen
-              title="Spurgeons Course Portal, Sign On Screen"
+              title="Parents Connect Course Portal — Sign On Screen Redesign"
             />
           </div>
-        </Reveal>
-      </CSSection>
-
-      {/* Before / After placeholders */}
-      <CSSection title="Before & After" variant="light">
-        <Reveal>
-          <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
-            Side-by-side comparison of the original sign-on screen versus the redesigned version,
-            highlighting the hierarchy, label clarity, and visual warmth changes.
+          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.35, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 10, color: '#fff' }}>
+            Interactive Figma prototype — explore the redesigned sign-on flow
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-          {['Before', 'After'].map((l, i) => (
-            <Reveal key={l} delay={i * 0.1}>
-              <div style={{
-                aspectRatio: '4/3',
-                background: i === 0 ? 'rgba(51,92,255,0.06)' : 'rgba(51,92,255,0.14)',
-                border: `1.5px dashed rgba(51,92,255,${i === 0 ? 0.2 : 0.4})`,
-                borderRadius: 12,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexDirection: 'column', gap: 8,
-              }}>
-                <span style={{ fontSize: '1.8rem', opacity: 0.35 }}>🖥</span>
-                <span style={{ fontSize: '0.9rem', opacity: 0.55, letterSpacing: '0.05em', textTransform: 'uppercase', color: cfg.dark }}>{l}</span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </CSSection>
 
-      {/* Result */}
-      <CSSection title="The Result" variant="dark">
+      {/* The Result */}
+      <CSSection title="The Result" variant="light">
         <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
-            A second round of user testing with the redesigned interface showed that
-            <strong style={{ color: '#E0F87D' }}> 80% of participants found the sign-on page
-            easier to use</strong>, a significant improvement from the baseline. The redesign
-            reduced drop-off at the most critical point in the user journey and gave Spurgeons
-            a portal that reflects their values: warm, accessible, and built around the people
-            who use it.
+          <p style={{ lineHeight: 1.8, maxWidth: 720, color: cfg.dark }}>
+            A final round of testing with the redesigned interface showed that
+            <strong style={{ color: '#335CFF' }}> 80% of participants found the sign-on
+            experience easier to navigate</strong> — a significant shift from the baseline
+            sessions. Drop-off at the most critical point in the user journey was reduced,
+            and the Parents Connect portal now reflects the warmth and accessibility that
+            Spurgeons puts into everything it builds for families.
           </p>
         </Reveal>
       </CSSection>
@@ -4869,7 +4928,8 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
   )
 }
 
-// ── Spurgeons: Flyers & Posters ──────────────────────────────────────
+
+// ── Spurgeons: Flyers & Posters ───────────────────────────────────────
 
 const SPURGEONS_FLYERS_CFG = {
   accent: '#335CFF', lightAccent: '#335CFF', dark: '#333333',
@@ -4882,95 +4942,59 @@ const SPURGEONS_FLYERS_CFG = {
   ],
   stats: [
     { value: '3+',  label: 'Years of ongoing flyer and poster output for Spurgeons' },
-    { value: '∞',   label: 'Families, carers and professionals reached through print' },
-    { value: '100%', label: 'On-brand across every format and campaign' },
+    { value: '100+', label: 'Handouts ordered' },
+    { value: '2 weeks', label: 'Turnaround from request to printing for the digital team' },
     { value: '4',   label: 'Distinct audiences addressed: families, professionals, communities, funders' },
   ],
 }
 
-function PrintPlaceholder({ label, aspect = '3 / 4' }) {
-  return (
-    <div style={{
-      aspectRatio: aspect,
-      background: 'rgba(240,228,200,0.18)',
-      border: '1.5px dashed rgba(240,228,200,0.45)',
-      borderRadius: 12,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      gap: 8,
-      padding: '1.5rem',
-      textAlign: 'center',
-    }}>
-      <span style={{ fontSize: '2rem', opacity: 0.4 }}>🖨</span>
-      <span style={{ fontSize: '0.75rem', opacity: 0.5, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{label}</span>
-    </div>
-  )
-}
-
 function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
   const cfg = SPURGEONS_FLYERS_CFG
+  const courseImgs    = ['course2.png','course3.png','course4.png','course5.png']
+    .map(f => `${BASE}spurgeons-flyers/${f}`)
+  const awarenessImgs = ['awareness1.png','awareness2.png','awareness3.png','awareness4.jpg']
+    .map(f => `${BASE}spurgeons-flyers/${f}`)
+  const bookletImgs   = ['booklet1.png','booklet2.jpg','booklet3.png']
+    .map(f => `${BASE}spurgeons-flyers/${f}`)
   return (
     <div className="cs-wrap pkg-case-study">
       <PkgHero cs={cs} slide={slide} cfg={cfg} />
       <PkgOverview cs={cs} cfg={cfg} />
 
-      {/* Course & Service Flyers */}
-      <CSSection title="Course & Service Flyers" variant="dark">
+      {/* Course & Digital Product Printouts */}
+      <CSSection title="Course & Digital Product Printouts" variant="dark">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
-            Single-sheet A5 and A4 flyers promoting Spurgeons' courses and services to
-            families and professionals. Designed to live in waiting rooms, community hubs,
-            and GP surgeries, clear enough to read at a glance, warm enough to actually
-            pick up.
+            Flyers and handouts for Spurgeons' courses and digital products — A5 and A4
+            sheets designed for waiting rooms, community hubs, and GP surgeries.
+            Clear enough to read at a glance, warm enough to actually pick up.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1.25rem' }}>
-          {['Course Flyer, A5', 'Course Flyer, A5', 'Service Flyer, A4', 'Service Flyer, A4'].map((l, i) => (
-            <Reveal key={l + i} delay={i * 0.07}>
-              <PrintPlaceholder label={l} />
-            </Reveal>
-          ))}
-        </div>
+        <SwipeStackCarousel images={courseImgs} />
       </CSSection>
 
-      {/* Campaign Posters */}
-      <CSSection title="Campaign Posters" variant="light">
+      {/* Campaign & Awareness Material */}
+      <CSSection title="Campaign & Awareness Material" variant="light">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
-            Larger-format posters designed for community noticeboards, event spaces, and
-            public-facing displays. Campaign work often sits alongside Spurgeons' wider
-            awareness drives, so these need to carry the message independently and hold
-            their own at a distance.
+            Posters and flyers for awareness days, fundraising drives, and community
+            initiatives. Each piece stays unmistakably Spurgeons — consistent enough to
+            be trusted, human enough to be felt.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-          {['A3 Poster', 'A3 Poster', 'A2 Poster'].map((l, i) => (
-            <Reveal key={l + i} delay={i * 0.08}>
-              <PrintPlaceholder label={l} aspect="2 / 3" />
-            </Reveal>
-          ))}
-        </div>
+        <SwipeStackCarousel images={awarenessImgs} />
       </CSSection>
 
-      {/* Awareness & Campaign Materials */}
-      <CSSection title="Awareness & Campaign Materials" variant="dark">
+      {/* Informational Booklets & Leaflets */}
+      <CSSection title="Informational Booklets & Leaflets" variant="dark">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
-            One-off and seasonal campaign pieces: awareness days, fundraising drives,
-            and community initiatives. Each designed to feel timely and relevant while
-            staying unmistakably Spurgeons, consistent enough to be trusted, human enough
-            to be felt.
+            Multi-page booklets and folded leaflets carrying Spurgeons' guidance to
+            families and professionals. Designed for longevity — pieces people keep,
+            refer back to, and share.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.25rem' }}>
-          {['Campaign, A4', 'Campaign, A5', 'Campaign, Square', 'Campaign, A4'].map((l, i) => (
-            <Reveal key={l + i} delay={i * 0.07}>
-              <PrintPlaceholder label={l} aspect={l.includes('Square') ? '1 / 1' : '3 / 4'} />
-            </Reveal>
-          ))}
-        </div>
+        <ImageGallery images={bookletImgs} />
       </CSSection>
 
       <MotionStats cfg={cfg} />
@@ -4978,6 +5002,7 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
     </div>
   )
 }
+
 
 function CaseStudyView({ cat, slide }) {
   const cs = slide.caseStudy
