@@ -3329,7 +3329,7 @@ const LEAVES_CFG = {
 }
 
 const LEAVES_VIDEO_SRC    = `${import.meta.env.BASE_URL}leaves/leaves-animation.mp4`
-const LEAVES_MOODBOARD_URL = `${import.meta.env.BASE_URL}leaves/Leaves%20on%20a%20Stream%20Moodboard.pdf`
+const LEAVES_MOODBOARD_URL = `${import.meta.env.BASE_URL}leaves/moodboard.pdf`
 const LEAVES_THUMB_SRC    = `${import.meta.env.BASE_URL}leaves/leaves-thumb.webp`
 
 function LeavesVideoPlayer() {
