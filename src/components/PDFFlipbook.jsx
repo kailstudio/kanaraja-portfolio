@@ -73,7 +73,7 @@ function getPdfJs() {
   return pdfJsPromise
 }
 
-export function PDFFlipbook({ pdfUrl, title = 'Brand Guidelines', accentColor = '#2C365E', totalHint }) {
+export function PDFFlipbook({ pdfUrl, title = 'Brand Guidelines', accentColor = '#2C365E', totalHint, minimal = false }) {
   const [pdf,         setPdf]         = useState(null)
   const [pageNum,     setPageNum]     = useState(1)
   const [totalPages,  setTotalPages]  = useState(totalHint ?? 0)
@@ -340,7 +340,7 @@ export function PDFFlipbook({ pdfUrl, title = 'Brand Guidelines', accentColor = 
     <>
     <div className={`pdff${isFullscreen ? ' pdff--fullscreen' : ''}`} ref={containerRef}>
       {/* Header */}
-      <div className="pdff-header">
+      {!minimal && <div className="pdff-header">
         {title && <span className="pdff-title">{title}</span>}
         <div className="pdff-header-right">
           <span className="pdff-count" style={{ color: accentColor }}>
@@ -366,7 +366,7 @@ export function PDFFlipbook({ pdfUrl, title = 'Brand Guidelines', accentColor = 
             )}
           </button>
         </div>
-      </div>
+      </div>}
 
       {/* Viewer */}
       <div className="pdff-viewer">
@@ -415,7 +415,7 @@ export function PDFFlipbook({ pdfUrl, title = 'Brand Guidelines', accentColor = 
       </div>
 
       {/* Footer — dot strip */}
-      <div className="pdff-footer">
+      {!minimal && <div className="pdff-footer">
         <button className="pdff-nav-btn" onClick={() => go(-1)} disabled={pageNum <= 1}>
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="10 12 6 8 10 4" /></svg>
           Prev
@@ -440,8 +440,8 @@ export function PDFFlipbook({ pdfUrl, title = 'Brand Guidelines', accentColor = 
           Next
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 4 10 8 6 12" /></svg>
         </button>
-      </div>
-    </div>
+      </div>}
+    </div>>
 
     {/* Mobile fullscreen viewer — portaled to <body> so it truly covers the
         viewport regardless of any transformed ancestors, and rotated 90°

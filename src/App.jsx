@@ -184,6 +184,7 @@ export default function App() {
             cat={detailProject.cat}
             slide={detailProject.slide}
             onClose={() => setDetailProject(null)}
+            onProjectOpen={openProject}
           />
         )}
       </AnimatePresence>

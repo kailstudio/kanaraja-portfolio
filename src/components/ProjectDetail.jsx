@@ -9,12 +9,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useInView, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
 import { PDFFlipbook } from './PDFFlipbook'
+import { CATEGORIES } from './PortfolioSection'
 
 // ── Transitions ──────────────────────────────────────────────────────
 const OVERLAY = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.32, ease: [0.4, 0, 0.2, 1] } },
-  exit:    { opacity: 0, transition: { duration: 0.26, ease: [0.4, 0, 0.2, 1] } },
+  initial: { opacity: 0, pointerEvents: 'none' },
+  animate: { opacity: 1, pointerEvents: 'auto', transition: { duration: 0.32, ease: [0.4, 0, 0.2, 1] } },
+  exit:    { opacity: 0, pointerEvents: 'none', transition: { duration: 0.26, ease: [0.4, 0, 0.2, 1] } },
 }
 
 const CONTENT = {
@@ -311,7 +312,7 @@ function CSOverview({ cs }) {
           <p className="cs-bc-body cs-bc-body--light">
             A community-rooted organisation in Washtenaw County, Michigan: building and advocating for non-police crisis response, prevention-first systems, and community-led approaches to public safety grounded in abolitionist principles.
           </p>
-          <div className="cs-bc-tag">Abolitionist · Community-led · Prevention-first</div>
+          <div className="cs-bc-tag" style={{ background: "rgba(224,248,125,0.15)", color: "#e0f87d", borderColor: "rgba(224,248,125,0.3)" }}>Abolitionist · Community-led · Prevention-first</div>
         </Reveal>
 
       </div>
@@ -610,7 +611,7 @@ const IMPACT_STATS = [
   { to: '5',   suffix: '',     label: 'Brand colours',          desc: 'Earthy & natural palette' },
   { to: '16',  suffix: ' ray', label: 'Sunburst mark',          desc: 'Precision geometry' },
   { to: '3',   suffix: '',     label: 'Audience tiers',         desc: 'Community · Funders · Govt' },
-  { to: '120', suffix: '+',    label: 'Brand assets delivered', desc: 'Ready for immediate use' },
+  { to: '80', suffix: '+',    label: 'Brand assets delivered', desc: 'Logo variations, icons & illustrations' },
   { to: '1',   suffix: ' mo',  label: 'Timeline',               desc: 'Concept to guidelines' },
 ]
 
@@ -943,8 +944,8 @@ const CTA_CONTACTS = [
     ),
   },
   {
-    name: 'Phone',
-    href: 'tel:+00000000000',
+    name: 'WhatsApp',
+    href: 'https://wa.me/447388032542',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
@@ -1438,7 +1439,7 @@ function PGMStrategy({ cs }) {
       <Reveal delay={0.32}>
         <div className="pgm-audience-tiers">
           {[
-            { audience: 'Community Leaders',         tone: 'Affirming · Solidarity-driven', color: '#335CFF' },
+            { audience: 'Community Leaders',         tone: 'Affirming · Solidarity-driven', color: '#ffffff' },
             { audience: 'Philanthropy Professionals', tone: 'Practical · Peer-to-peer',      color: '#D4C7FF' },
             { audience: 'Industry Newcomers',         tone: 'Clear · Encouraging',           color: '#E0F87D' },
           ].map(({ audience, tone, color }) => (
@@ -2037,7 +2038,6 @@ function LTRCaseStudyView({ cat, cs, slide }) {
       <PkgHero cs={cs} slide={slide} cfg={LTR_CFG} />
       <PkgOverview cs={cs} cfg={LTR_CFG} />
       <PkgGallery cfg={LTR_CFG} />
-      <PkgImpact cfg={LTR_CFG} />
       <PkgLinks cs={cs} cfg={LTR_CFG} />
       <CSCTA cat={cat} />
     </div>
@@ -3152,7 +3152,6 @@ function SpurgeonsPASCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <MotionStats cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
   )
@@ -3333,7 +3332,7 @@ function SpurgeonsConnectCaseStudyView({ cat, cs, slide }) {
       {/* Link */}
       <CSSection title="View Course Page Online" variant="dark">
         <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
-          <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.8, maxWidth: 560, margin: '0 auto 32px' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.75, color: '#fff', opacity: 0.9, maxWidth: 560, margin: '0 auto 32px' }}>
             Spurgeons Connect equips churches and communities to become safe, relational spaces where families can access practical help and emotional support. Find out more about the programme and the courses behind these videos.
           </p>
           <a
@@ -3557,22 +3556,15 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
       {/* Style Exploration — moodboard */}
       <CSSection title="Style Exploration">
         <div style={{ maxWidth: 740, margin: '0 auto' }}>
-          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 16 }}>
-            This was the first Spurgeons animation to step outside our established visual style — a deliberate choice to explore what a new chapter could look like for the brand.
+          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 24 }}>
+            Before committing to a direction, I explored a wide range of visual styles and references. I ultimately landed on a fabric and felt aesthetic: tactile, handcrafted, and warm, rendered throughout in Spurgeons' brand colours.
           </p>
-          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 40 }}>
-            To make sure we were genuinely honing in on the right audience and tone, we explored a wide range of visual styles and moods before committing to a direction. The moodboard below captures that early exploration — the range of references, textures, and atmospheres we worked through across many iterations before arriving at the final piece.
-          </p>
-          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 40 }}>
-            We ultimately landed on a fabric and felt aesthetic — tactile, handcrafted, and warm. It felt homely in a way that matched the gentleness the exercise called for, while still feeling intentional and considered. To keep the piece rooted in the Spurgeons brand, every element was rendered in our brand colours, so audiences would feel a sense of familiarity even as they were experiencing something new.
-          </p>
-          <div className="cs-flipbook-wrap">
-            <PDFFlipbook
-              pdfUrl={LEAVES_MOODBOARD_URL}
-              accentColor="#6BAF92"
-              title="Moodboard"
-            />
-          </div>
+          <PDFFlipbook
+            pdfUrl={LEAVES_MOODBOARD_URL}
+            accentColor="#6BAF92"
+            title="Moodboard"
+            minimal
+          />
         </div>
       </CSSection>
 
@@ -3580,7 +3572,7 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
       <CSSection title="The Brief">
         <div style={{ maxWidth: 740, margin: '0 auto' }}>
           <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 24 }}>
-            Spurgeons approached Studio KAIL to create a calming animated guide based on the Leaves on a Stream technique from Acceptance and Commitment Therapy (ACT). The exercise uses a simple but powerful metaphor: thoughts are leaves floating along a stream, to be observed and released rather than grasped or pushed away.
+            I was commissioned by Spurgeons to create a calming animated guide based on the Leaves on a Stream technique from Acceptance and Commitment Therapy (ACT). The exercise uses a simple but powerful metaphor: thoughts are leaves floating along a stream, to be observed and released rather than grasped or pushed away.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 48 }}>
             The brief called for something warm, gentle, and accessible to anyone encountering the exercise for the first time. The animation needed to guide viewers through the visualisation step by step, using movement and atmosphere to reinforce the therapeutic intent: slowing the mind, reducing anxiety, and building the capacity to sit with difficult thoughts without being overwhelmed by them.
@@ -3762,7 +3754,7 @@ const SWIPE_SETTINGS = {
   springStiffness: 300, springDamping: 30,
 }
 
-function SwipeCard({ children, isFront, zIndex, onSendToBack }) {
+function SwipeCard({ children, isFront, zIndex, onSendToBack, onBringToFront }) {
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const rotateX = useTransform(y, [-200, 200], [SWIPE_SETTINGS.tiltStrength, -SWIPE_SETTINGS.tiltStrength])
@@ -3779,13 +3771,14 @@ function SwipeCard({ children, isFront, zIndex, onSendToBack }) {
         position: 'absolute', width: SWIPE_SETTINGS.width, height: SWIPE_SETTINGS.height,
         x: isFront ? x : 0, y: isFront ? y : 0,
         rotateX: isFront ? rotateX : 0, rotateY: isFront ? rotateY : 0,
-        zIndex, cursor: isFront ? 'grab' : 'default', userSelect: 'none',
+        zIndex, cursor: isFront ? 'grab' : 'pointer', userSelect: 'none',
       }}
       drag={isFront}
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
       dragElastic={0.5}
       onDragEnd={handleDragEnd}
-      whileHover={isFront ? { scale: 1.03 } : {}}
+      onClick={!isFront ? onBringToFront : undefined}
+      whileHover={{ scale: 1.03 }}
       transition={{ type: 'spring', stiffness: SWIPE_SETTINGS.springStiffness, damping: SWIPE_SETTINGS.springDamping }}
     >
       {children}
@@ -3801,13 +3794,19 @@ function SwipeStackCarousel({ images }) {
     if (idx !== -1) { const [moved] = updated.splice(idx, 1); updated.push(moved) }
     return updated
   })
+  const moveToFront = (id) => setCards(prev => {
+    const updated = [...prev]
+    const idx = updated.findIndex(c => c.id === id)
+    if (idx !== -1) { const [moved] = updated.splice(idx, 1); updated.unshift(moved) }
+    return updated
+  })
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem 3rem' }}>
       <div style={{ position: 'relative', width: SWIPE_SETTINGS.width + SWIPE_SETTINGS.peekOffset * 3, height: SWIPE_SETTINGS.height, perspective: 1200, margin: '0 auto', overflow: 'visible' }}>
         {cards.map((card, index) => {
           const isFront = index === 0
           return (
-            <SwipeCard key={card.id} isFront={isFront} zIndex={cards.length - index} onSendToBack={() => moveToBack(card.id)}>
+            <SwipeCard key={card.id} isFront={isFront} zIndex={cards.length - index} onSendToBack={() => moveToBack(card.id)} onBringToFront={() => moveToFront(card.id)}>
               <motion.div
                 style={{
                   position: 'relative', width: '100%', height: '100%', overflow: 'hidden',
@@ -3919,14 +3918,14 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
       <CSSection title="The Brief" variant="dark">
         <Reveal>
           <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff', marginBottom: '2rem' }}>
-            Spurgeons commissioned Studio KAIL to develop brand identities for two of their early years settings across Kent. Each had its own character, audience, and tone, but both shared a commitment to warmth, safety, and professional care.
+            Working as an in-house designer within the Spurgeons team, I developed brand identities for two of their early years settings across Kent. Each had its own character, audience, and tone, but both shared a commitment to warmth, safety, and professional care.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2rem' }}>
           <Reveal delay={0.08}>
             <h4 style={{ color: cfg.accent, marginBottom: '0.5rem', fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Buttons Preschool</h4>
             <p style={{ lineHeight: 1.7, color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem' }}>
-              With sites in Maidstone and Ramsgate, Buttons needed a brand parents could trust at first glance: warm, playful, and professional in equal measure. Studio KAIL ran close feedback loops with the Buttons team throughout, ensuring the final system genuinely reflected how they wanted to show up for families across Kent.
+              With sites in Maidstone and Ramsgate, Buttons needed a brand parents could trust at first glance: warm, playful, and professional in equal measure. I ran close feedback loops with the Buttons team throughout, ensuring the final system genuinely reflected how they wanted to show up for families across Kent.
             </p>
           </Reveal>
           <Reveal delay={0.14}>
@@ -4035,6 +4034,9 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
             <InstaCarousel images={[`${B}S1.png`]} />
           </div>
         </div>
+        <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.5, letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '1.5rem', fontWeight: 600, color: '#1a1a2e' }}>
+          ← Click arrows to view full social media carousel →
+        </p>
       </CSSection>
 
       <MotionStats cfg={cfg} />
@@ -4059,7 +4061,6 @@ const INVISIBLE_WALLS_CFG = {
   stats: [
     { value: '11+', label: 'Years Invisible Walls has operated at HMP Winchester' },
     { value: '1',   label: 'Unifying brand identity built to serve a sensitive, complex environment' },
-    { value: '∞',   label: 'Families supported in maintaining bonds across the prison divide' },
   ],
 }
 const INVISIBLE_WALLS_MERCH_COLORS = [
@@ -4238,6 +4239,55 @@ function ParentsConnectCaseStudyView({ cat, cs, slide }) {
             <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.88rem', marginTop: '1rem', opacity: 0.6 }}>
               The full range of animations produced for this project can be viewed in the Motion section.
             </p>
+            <button
+              onClick={() => {
+                const motionCat = CATEGORIES.find(c => c.id === 'motion')
+                const pcSlide   = motionCat?.slides?.find(s => s.id === 11)
+                if (motionCat && pcSlide && onProjectOpen) onProjectOpen(motionCat, pcSlide)
+              }}
+              style={{
+                marginTop: '1.25rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '13px 22px',
+                background: '#C4B8F0',
+                color: '#2a2350',
+                border: '1px solid #b0a3e8',
+                borderRadius: 100,
+                fontSize: '0.92rem',
+                fontWeight: 500,
+                cursor: 'pointer',
+                boxShadow: '0 2px 16px rgba(196,184,240,0.25)',
+                transition: 'background 0.2s, transform 0.2s, border-color 0.2s',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#b5a7ec'
+                e.currentTarget.style.borderColor = '#a096e0'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#C4B8F0'
+                e.currentTarget.style.borderColor = '#b0a3e8'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
+            >
+              <span style={{
+                width: 34, height: 34,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(42,35,80,0.10)',
+                border: '1px solid rgba(42,35,80,0.15)',
+                borderRadius: '50%',
+                flexShrink: 0,
+              }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </span>
+              <span style={{ flex: 1 }}>View PC Course Animations</span>
+              <span style={{ fontSize: '1rem', opacity: 0.55 }}>↗</span>
+            </button>
           </Reveal>
         </div>
       </CSSection>
@@ -4300,10 +4350,9 @@ const DFH_CFG = {
   ],
   stats: [
     { value: '2026', label: 'Year the Digital Family Hub launched as its own team' },
-    { value: '1',    label: 'Full-time studio presence, embedded from day one' },
+    { value: '1',    label: 'In-house designer, embedded in the DFH team from day one' },
     { value: '3',    label: 'Breathing technique animations produced for course content' },
     { value: '40+',  label: 'Resources designed and produced for the platform' },
-    { value: '∞',    label: 'Families accessing free expert support through the Hub' },
   ],
 }
 
@@ -4318,15 +4367,9 @@ function DFHCaseStudyView({ cat, cs, slide }) {
       <CSSection title="The Brief" variant="dark">
         <Reveal>
           <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff' }}>
-            In 2026, Spurgeons established the Digital Family Hub as a standalone team,
-            and Studio KAIL moved there full time from Spurgeons' central marketing function.
-            Since conception, Studio KAIL has been the sole designer within the DFH team,
-            responsible for all creative output: conceiving the initial brand and logo,
-            producing custom illustrations and animations, designing handouts and course materials,
-            and managing all print and packaging. The brief was to build the DFH identity from scratch,
-            a mark that communicated expert, trusted, and genuinely accessible, capable of representing
-            a free online platform serving parents, carers, and professionals across a wide range of
-            complex family circumstances.
+            When the Digital Family Hub launched as its own team in 2026, I moved across from Spurgeons’ central marketing function to become its sole in-house designer.
+            The brief was clear: build the DFH identity from scratch — a mark that felt expert and trusted, yet genuinely accessible for the parents, carers, and professionals the platform serves.
+            Since then I have led all creative output: from the initial brand and logo through to custom illustrations, animations, course handouts, and print and packaging.
           </p>
         </Reveal>
       </CSSection>
@@ -4391,7 +4434,7 @@ function DFHCaseStudyView({ cat, cs, slide }) {
       <CSSection title="Handout Samples" variant="light" style={{ background: '#f5f8ff' }}>
         <Reveal>
           <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem', maxWidth: 680, marginBottom: '2rem' }}>
-            Every course on the platform comes with its own set of handouts, each designed with custom illustrations to make the content feel engaging and accessible. All handout design is produced in-house by Studio KAIL as part of the embedded team.
+            Every course on the platform comes with its own set of handouts, each designed with custom illustrations to make the content feel engaging and accessible. All handout design is produced in-house as part of the embedded team.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
@@ -4438,13 +4481,7 @@ const PORTFOLIO_WEB_CFG = {
     { value: '17+',     label: 'Projects showcased across four disciplines'                },
     { value: '16',      label: 'Full case studies with custom-built views'                 },
     { value: '4',       label: 'Disciplines: Brand, Motion, Packaging, Web'               },
-    { value: '100%',    label: 'Custom CSS, not a single UI framework used'              },
     { value: '5',       label: 'Brand colours in the complete system'                      },
-    { value: '0',       label: 'External component libraries'                              },
-    { value: '1',       label: 'Designer and developer, built solo, start to finish'     },
-    { value: 'Raleway', label: 'Single typeface, three weights, all the range needed'    },
-    { value: 'Glass',   label: 'Glassmorphism token system across every surface'          },
-    { value: 'GitHub',  label: 'Version controlled and deployed via GitHub Pages'         },
     { value: '7★+',    label: 'Awwwards rating — nominated and currently under evaluation'  },
   ],
 }
@@ -4468,7 +4505,7 @@ const PORTFOLIO_WEB_STACK = [
   {
     icon: '✦',
     name: 'Custom CSS',
-    body: 'Every layout, surface, and effect is written from first principles: glass tokens, bento grids, motion curves, dark/light variants, and responsive breakpoints, no Tailwind, no Bootstrap.',
+    body: 'Every layout, surface, and effect is written from first principles: glass tokens, bento grids, motion curves, dark/light variants, and responsive breakpoints throughout.',
   },
 ]
 
@@ -4564,8 +4601,8 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
                 <div className="si-character-avatar" style={{ background: 'rgba(51,92,255,0.25)', borderColor: 'rgba(51,92,255,0.4)' }}>
                   <span style={{ fontSize: 22, lineHeight: 1 }}>{item.icon}</span>
                 </div>
-                <h3 className="si-character-name" style={{ color: '#E0F87D' }}>{item.name}</h3>
-                <p className="si-character-bio" style={{ color: 'rgba(224,248,125,0.55)' }}>{item.body}</p>
+                <h3 className="si-character-name" style={{ color: '#333333' }}>{item.name}</h3>
+                <p className="si-character-bio" style={{ color: 'rgba(51,51,51,0.75)' }}>{item.body}</p>
               </div>
             </Reveal>
           ))}
@@ -4619,16 +4656,9 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
             </Reveal>
           ))}
         </div>
-      </CSSection>
 
-      {/* In the Site, footer images */}
-      <CSSection title="In the Site" variant="dark">
-        <Reveal delay={0.06}>
-          <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 13, marginBottom: 24, lineHeight: 1.7, maxWidth: 560 }}>
-            The characters carry through to the footer, each appearing alongside a different navigation link, portfolio, contact, socials, so that the base of every page feels like an extension of the same world introduced at the top.
-          </p>
-        </Reveal>
-        <div className="wl-grid-3">
+        {/* Footer appearances */}
+        <div className="wl-grid-3" style={{ marginTop: 24 }}>
           <Reveal delay={0.06}><WLMedia src={`${BASE}footer/footer-portfolio.webp`} alt="Footer · Portfolio" /></Reveal>
           <Reveal delay={0.12}><WLMedia src={`${BASE}footer/footer-contact.webp`}   alt="Footer · Contact"   /></Reveal>
           <Reveal delay={0.18}><WLMedia src={`${BASE}footer/footer-socials.webp`}   alt="Footer · Socials"   /></Reveal>
@@ -4656,9 +4686,8 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       <CSSection title="The Site in Detail">
         <Reveal>
           <p style={{ color: 'rgba(51,51,51,0.7)', lineHeight: 1.85, marginBottom: 28, maxWidth: 600 }}>
-            A closer look at the portfolio across sections — from the animated hero to the
-            project carousels and case study layouts. Every screen designed and built
-            by hand, no templates.
+            A closer look at the portfolio across sections, from the animated hero to the
+            project carousels and case study layouts.
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
@@ -4697,7 +4726,6 @@ const SPURGEONS_SIGNAGE_CFG = {
     { value: '3+',      label: 'Years of ongoing signage output'  },
     { value: '40+',     label: 'Signage pieces produced'          },
     { value: '12+',     label: 'Festivals showcasing our work'    },
-    { value: '10,000+', label: 'Prints'                           },
     { value: '30+',     label: 'Community events supported'       },
   ],
 }
@@ -4713,9 +4741,9 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
       {/* Festival & Event */}
       <CSSection title="Festival & Event" variant="dark">
         <Reveal>
-          <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
+          <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: '#fff' }}>
             Spurgeons attends community festivals and public events throughout the year.
-            These large-format banners serve as the charity's visible presence at those moments —
+            These large-format banners serve as the charity's visible presence at those moments,
             bold enough to cut through a busy outdoor environment, warm enough to invite approach.
           </p>
         </Reveal>
@@ -4733,8 +4761,8 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
       {/* Building & Location Signage */}
       <CSSection title="Building & Location Signage" variant="dark">
         <Reveal>
-          <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
-            Permanent and semi-permanent signage for Spurgeons' physical locations — from
+          <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: '#fff' }}>
+            Permanent and semi-permanent signage for Spurgeons' physical locations, from
             neighbourhood-specific banners to large building-mounted graphics that establish
             the charity's presence in the communities it serves.
           </p>
@@ -4756,7 +4784,7 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
             Pull-up banners and large-format posters designed for indoor events, community spaces,
-            and reception areas — carrying Spurgeons' brand with clarity and confidence whether
+            and reception areas, carrying Spurgeons' brand with clarity and confidence whether
             displayed solo or alongside other materials.
           </p>
         </Reveal>
@@ -4808,20 +4836,19 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
             Branded stationery that keeps Spurgeons' identity consistent across every desk,
-            meeting, and mailing — from notepads and pens to folders and lanyards. Designed
+            meeting, and mailing: from notepads and pens to folders and lanyards. Designed
             to feel considered rather than off-the-shelf, giving staff and families something
             tangible that reflects the care behind the charity.
           </p>
         </Reveal>
-        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
-          <SwipeStackCarousel images={[
+        <ImageGallery
+          images={[
             `${B}stationary1.jpg`,
             `${B}stationary2.jpg`,
             `${B}stationary3.jpg`,
             `${B}stationary4.png`,
-          ]} />
-          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8 }}>Drag to browse</p>
-        </div>
+          ]}
+        />
       </CSSection>
 
       {/* Clothing */}
@@ -4829,21 +4856,20 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
             From tote bags and t-shirts to running vests for marathon participants, each
-            piece extends Spurgeons' brand into the physical world — keeping the charity
+            piece extends Spurgeons' brand into the physical world, keeping the charity
             visible and consistent wherever their people go. Designed with one rule:
             it has to feel like something people actually want to wear.
           </p>
         </Reveal>
-        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
-          <SwipeStackCarousel images={[
+        <ImageGallery
+          images={[
             `${B}clothing1.png`,
             `${B}clothing2.jpg`,
             `${B}clothing3.png`,
             `${B}clothing4.jpg`,
             `${B}clothing5.jpg`,
-          ]} />
-          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8 }}>Drag to browse</p>
-        </div>
+          ]}
+        />
       </CSSection>
 
       <MotionStats cfg={cfg} />
@@ -4868,7 +4894,7 @@ const SPURGEONS_PORTAL_CFG = {
     { value: '80%',  label: 'Of users found the redesigned portal easier to use in testing'         },
     { value: '3+',   label: 'Rounds of user testing run before a single pixel changed'              },
     { value: '1',    label: 'Critical friction point identified: the course sign-on flow'            },
-    { value: '100%', label: 'Custom UI — no off-the-shelf component library'                        },
+    { value: '100%', label: 'Custom UI, no off-the-shelf component library'                        },
   ],
 }
 
@@ -4882,9 +4908,9 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
       {/* The Problem */}
       <CSSection title="The Problem" variant="dark">
         <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720 }}>
-            The Parents Connect course portal — Spurgeons' online learning platform for
-            facilitators and families — was generating a steady stream of support requests.
+          <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff' }}>
+            The Parents Connect course portal, Spurgeons' online learning platform for
+            facilitators and families, was generating a steady stream of support requests.
             Users were struggling to sign in, losing access to courses they had already
             enrolled in, and dropping out of the registration flow before completing it.
             The interface worked in theory, but in practice it was letting people down at
@@ -4892,9 +4918,9 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
           </p>
         </Reveal>
         <Reveal delay={0.08}>
-          <p style={{ lineHeight: 1.8, maxWidth: 720, marginTop: '1.25rem' }}>
+          <p style={{ lineHeight: 1.8, maxWidth: 720, marginTop: '1.25rem', color: '#fff' }}>
             For Spurgeons, whose users include parents and carers who may not be digitally
-            confident, these friction points were more than inconvenient — they were a barrier
+            confident, these friction points were more than inconvenient. They were a barrier
             to accessing support the charity had built for them. Something had to change.
           </p>
         </Reveal>
@@ -4905,7 +4931,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '1.5rem', maxWidth: 720 }}>
             Before touching a single pixel, multiple rounds of user testing were run with
-            real Parents Connect users — parents, carers, and facilitators who use the
+            real Parents Connect users: parents, carers, and facilitators who use the
             portal in their day-to-day. Participants were observed completing common tasks:
             finding a course, creating an account, and signing back in after a break.
             Every session was recorded and mapped to identify where confusion entered the
@@ -4946,7 +4972,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
       {/* The Redesign */}
       <CSSection title="The Redesign" variant="dark">
         <Reveal>
-          <p style={{ lineHeight: 1.8, marginBottom: '1.5rem', maxWidth: 720 }}>
+          <p style={{ lineHeight: 1.8, marginBottom: '1.5rem', maxWidth: 720, color: '#fff' }}>
             With the pain points mapped across multiple test rounds, the sign-on screen was
             redesigned from scratch in Figma. The focus was ruthlessly on the one thing that
             kept breaking: helping users understand where they were in the flow, and what
@@ -4954,10 +4980,10 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
           </p>
         </Reveal>
         <Reveal delay={0.06}>
-          <p style={{ lineHeight: 1.8, marginBottom: '2.5rem', maxWidth: 720 }}>
+          <p style={{ lineHeight: 1.8, marginBottom: '2.5rem', maxWidth: 720, color: '#fff' }}>
             The redesign introduced a clear visual split between new and returning user journeys,
             inline validation with helpful error states, and a warmer visual language aligned
-            with the Parents Connect brand. The wider portal UI was refreshed too — improved
+            with the Parents Connect brand. The wider portal UI was refreshed too, with improved
             typography, better colour contrast for accessibility, clearer course cards with
             progress indicators, and a navigation structure that puts the most common tasks
             front and centre.
@@ -4972,11 +4998,11 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
               height="450"
               src="https://embed.figma.com/proto/LZmViGkPxNh7X1w2u8yw7M/Sign-On-Screen?node-id=1-4&embed-host=share"
               allowFullScreen
-              title="Parents Connect Course Portal — Sign On Screen Redesign"
+              title="Parents Connect Course Portal: Sign On Screen Redesign"
             />
           </div>
           <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.35, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 10, color: '#fff' }}>
-            Interactive Figma prototype — explore the redesigned sign-on flow
+            Interactive Figma prototype: explore the redesigned sign-on flow
           </p>
         </Reveal>
       </CSSection>
@@ -4987,7 +5013,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
           <p style={{ lineHeight: 1.8, maxWidth: 720, color: cfg.dark }}>
             A final round of testing with the redesigned interface showed that
             <strong style={{ color: '#335CFF' }}> 80% of participants found the sign-on
-            experience easier to navigate</strong> — a significant shift from the baseline
+            experience easier to navigate,</strong> a significant shift from the baseline
             sessions. Drop-off at the most critical point in the user journey was reduced,
             and the Parents Connect portal now reflects the warmth and accessibility that
             Spurgeons puts into everything it builds for families.
@@ -5038,7 +5064,7 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
       <CSSection title="Course & Digital Product Printouts" variant="dark">
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
-            Flyers and handouts for Spurgeons' courses and digital products — A5 and A4
+            Flyers and handouts for Spurgeons' courses and digital products: A5 and A4
             sheets designed for waiting rooms, community hubs, and GP surgeries.
             Clear enough to read at a glance, warm enough to actually pick up.
           </p>
@@ -5051,7 +5077,7 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
             Posters and flyers for awareness days, fundraising drives, and community
-            initiatives. Each piece stays unmistakably Spurgeons — consistent enough to
+            initiatives. Each piece stays unmistakably Spurgeons, consistent enough to
             be trusted, human enough to be felt.
           </p>
         </Reveal>
@@ -5063,7 +5089,7 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
         <Reveal>
           <p style={{ marginBottom: '2rem', lineHeight: 1.7 }}>
             Multi-page booklets and folded leaflets carrying Spurgeons' guidance to
-            families and professionals. Designed for longevity — pieces people keep,
+            families and professionals. Designed for longevity, pieces people keep,
             refer back to, and share.
           </p>
         </Reveal>
@@ -5115,7 +5141,7 @@ function CaseStudyView({ cat, slide }) {
 //  MAIN OVERLAY EXPORT
 // ═══════════════════════════════════════════════════════════════════════
 
-export default function ProjectDetail({ cat, slide: initialSlide, onClose }) {
+export default function ProjectDetail({ cat, slide: initialSlide, onClose, onProjectOpen }) {
   const csSlides = cat.slides.filter(s => s.caseStudy)
   const [currentSlide, setCurrentSlide] = useState(initialSlide)
   const hasCaseStudy = Boolean(currentSlide?.caseStudy)
