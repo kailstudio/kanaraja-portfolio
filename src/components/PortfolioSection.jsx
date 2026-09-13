@@ -569,7 +569,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 5, bg: '#B8C8D8', img: null, label: 'Spurgeons: Signage',
+        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-signage.png', label: 'Spurgeons: Signage',
         tags: ['Print', 'Signage', 'Charity'],
         caseStudy: {
           subtitle: 'Print Design · Signage · Festival & Event Materials',
@@ -587,7 +587,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 6, bg: '#D4C7FF', img: null, label: 'Spurgeons: Merch',
+        id: 6, bg: '#D4C7FF', img: 'projects/spurgeons-merch.png', label: 'Spurgeons: Merch',
         tags: ['Merch', 'Apparel', 'Charity'],
         caseStudy: {
           subtitle: 'Merchandise Design · Apparel · Charity Fundraising',
@@ -605,7 +605,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 7, bg: '#F0E4C8', img: null, label: 'Spurgeons: Flyers & Posters',
+        id: 7, bg: '#F0E4C8', img: 'projects/spurgeons-flyers.png', label: 'Spurgeons: Flyers & Posters',
         tags: ['Print', 'Editorial', 'Charity'],
         caseStudy: {
           subtitle: 'Print Design · Flyers · Posters · Campaign Materials',
@@ -639,7 +639,7 @@ export const CATEGORIES = [
     ],
     slides: [
       {
-        id: 1, bg: '#335CFF', img: null, label: 'Portfolio Website',
+        id: 1, bg: '#335CFF', img: 'projects/portfolio-showcase.png', label: 'Portfolio Website',
         tags: ['React', 'Vite', 'Framer Motion', 'Custom CSS'],
         caseStudy: {
           subtitle: 'React 18 + Vite · Framer Motion · Lenis · Custom CSS · GitHub Pages',
@@ -659,7 +659,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 2, bg: '#E0F87D', img: null, label: 'Spurgeons: Course Portal',
+        id: 2, bg: '#E0F87D', img: 'projects/spurgeons-courseportal.png', label: 'Spurgeons: Course Portal',
         tags: ['UX Design', 'UI Redesign', 'User Testing', 'Charity'],
         caseStudy: {
           subtitle: 'UX Design · UI Redesign · User Testing · Figma',

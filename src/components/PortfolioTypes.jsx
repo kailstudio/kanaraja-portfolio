@@ -112,7 +112,7 @@ const PANEL_VIDEOS = {
 const INTRO_PANEL = {
   id: 'intro',
   eyebrow: 'Portfolio',
-  name: 'We specialise in 4 distinct areas of design.',
+  name: 'London-based multi-disciplinary creative specialising in 4 distinct areas of design.',
   tagline: 'A closer look at how Studio KAIL works, discipline by discipline.',
   body: 'We design strategic brand foundations across identity, websites, animation, print, and packaging: building cohesive systems that work seamlessly across digital and physical spaces.',
   accent: '#C4B8F0',
@@ -134,7 +134,7 @@ const OUTRO_PANEL = {
   id: 'outro',
   cta: true,
   eyebrow: 'Explore',
-  name: 'See Our Work',
+  name: 'See My Work',
   tagline: 'Every discipline above, in practice. Browse the individual projects.',
   accent: '#e0f87d',
   accentDark: '#9aab52',
@@ -385,7 +385,7 @@ function PortfolioTypeCard({ cat, index, total, deckProgress, isMobile }) {
       {/* Glass label strip pinned to the bottom of the card */}
       <div className="ptypes-card-label">
         <span className="ptypes-card-label-eyebrow">
-          {String(index + 1).padStart(2, '0')} · {cat.eyebrow}
+          {cat.eyebrow}
           {cat.comingSoon && <span className="pf-coming-soon-label" style={{ marginLeft: 8 }}>Coming soon</span>}
         </span>
         <h2 className="ptypes-card-label-name">{cat.name}</h2>

@@ -222,12 +222,12 @@ const MAIL = {
     </svg>
   ),
 }
-const UPWORK = {
-  name: 'Upwork',
-  href: 'https://www.upwork.com/freelancers/~01c78193322f89a4a7?mp_source=share',
+const PHONE = {
+  name: 'Phone',
+  href: 'tel:+00000000000',
   icon: (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.546-1.405 0-2.543-1.14-2.543-2.546V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/>
+      <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
     </svg>
   ),
 }
@@ -247,7 +247,7 @@ const UPWORK = {
 const CARDS = [
   { id: 'socials',    title: 'Socials',    items: [YOUTUBE, INSTAGRAM], image: `${BASE}footer/footer-socials.webp`,  video: `${BASE}footer/footercard-socials.webm`,  accent: 'lilac' },
   { id: 'portfolios', title: 'Portfolios', items: [BEHANCE, DRIBBBLE],  image: `${BASE}footer/footer-portfolio.webp`, video: `${BASE}footer/footercard-portfolio.webm`, accent: 'lime' },
-  { id: 'contact',    title: 'Contact',    items: [UPWORK, MAIL],       image: `${BASE}footer/footer-contact.webp`,  video: `${BASE}footer/footercard-contact.webm`,   accent: 'lilac' },
+  { id: 'contact',    title: 'Contact',    items: [PHONE, MAIL],       image: `${BASE}footer/footer-contact.webp`,  video: `${BASE}footer/footercard-contact.webm`,   accent: 'lilac' },
 ]
 
 // How long to go with NO load progress before giving up and dropping back

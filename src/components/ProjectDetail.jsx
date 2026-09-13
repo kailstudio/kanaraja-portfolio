@@ -943,11 +943,11 @@ const CTA_CONTACTS = [
     ),
   },
   {
-    name: 'Upwork',
-    href: 'https://www.upwork.com/freelancers/~01c78193322f89a4a7?mp_source=share',
+    name: 'Phone',
+    href: 'tel:+00000000000',
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.546-1.405 0-2.543-1.14-2.543-2.546V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/>
+        <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/>
       </svg>
     ),
   },
@@ -2604,12 +2604,47 @@ function WellLabPlayer() {
 
   const onEnded = () => setPlaying(false)
 
-  const seek = (e) => {
+  const trackRef = useRef(null)
+  const isDragging = useRef(false)
+
+  const getSeekPct = (clientX) => {
+    const track = trackRef.current
+    if (!track) return 0
+    const rect = track.getBoundingClientRect()
+    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+  }
+
+  const applySeek = (pct) => {
     const v = videoRef.current
     if (!v) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const pct  = (e.clientX - rect.left) / rect.width
     v.currentTime = pct * v.duration
+  }
+
+  const onTrackMouseDown = (e) => {
+    e.preventDefault()
+    isDragging.current = true
+    applySeek(getSeekPct(e.clientX))
+    const onMove = (ev) => { if (isDragging.current) applySeek(getSeekPct(ev.clientX)) }
+    const onUp   = ()   => {
+      isDragging.current = false
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup',   onUp)
+    }
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup',   onUp)
+  }
+
+  const onTrackTouchStart = (e) => {
+    isDragging.current = true
+    applySeek(getSeekPct(e.touches[0].clientX))
+    const onMove = (ev) => { if (isDragging.current) applySeek(getSeekPct(ev.touches[0].clientX)) }
+    const onEnd  = ()   => {
+      isDragging.current = false
+      document.removeEventListener('touchmove', onMove)
+      document.removeEventListener('touchend',  onEnd)
+    }
+    document.addEventListener('touchmove', onMove, { passive: true })
+    document.addEventListener('touchend',  onEnd)
   }
 
   const revealControls = () => {
@@ -2673,7 +2708,7 @@ function WellLabPlayer() {
           <span className="wlp-time">{fmt(current)} / {fmt(duration)}</span>
 
           {/* scrubber */}
-          <div className="wlp-track" onClick={seek} role="slider" aria-label="Seek">
+          <div className="wlp-track" ref={trackRef} onMouseDown={onTrackMouseDown} onTouchStart={onTrackTouchStart} role="slider" aria-label="Seek">
             <div className="wlp-fill" style={{ width: `${progress}%` }} />
             <div className="wlp-thumb" style={{ left: `${progress}%` }} />
           </div>
@@ -3396,12 +3431,47 @@ function LeavesVideoPlayer() {
 
   const onEnded = () => setPlaying(false)
 
-  const seek = (e) => {
+  const trackRef = useRef(null)
+  const isDragging = useRef(false)
+
+  const getSeekPct = (clientX) => {
+    const track = trackRef.current
+    if (!track) return 0
+    const rect = track.getBoundingClientRect()
+    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+  }
+
+  const applySeek = (pct) => {
     const v = videoRef.current
     if (!v) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const pct  = (e.clientX - rect.left) / rect.width
     v.currentTime = pct * v.duration
+  }
+
+  const onTrackMouseDown = (e) => {
+    e.preventDefault()
+    isDragging.current = true
+    applySeek(getSeekPct(e.clientX))
+    const onMove = (ev) => { if (isDragging.current) applySeek(getSeekPct(ev.clientX)) }
+    const onUp   = ()   => {
+      isDragging.current = false
+      document.removeEventListener('mousemove', onMove)
+      document.removeEventListener('mouseup',   onUp)
+    }
+    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mouseup',   onUp)
+  }
+
+  const onTrackTouchStart = (e) => {
+    isDragging.current = true
+    applySeek(getSeekPct(e.touches[0].clientX))
+    const onMove = (ev) => { if (isDragging.current) applySeek(getSeekPct(ev.touches[0].clientX)) }
+    const onEnd  = ()   => {
+      isDragging.current = false
+      document.removeEventListener('touchmove', onMove)
+      document.removeEventListener('touchend',  onEnd)
+    }
+    document.addEventListener('touchmove', onMove, { passive: true })
+    document.addEventListener('touchend',  onEnd)
   }
 
   const revealControls = () => {
@@ -3447,7 +3517,7 @@ function LeavesVideoPlayer() {
               : <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>}
           </button>
           <span className="wlp-time">{fmt(current)} / {fmt(duration)}</span>
-          <div className="wlp-track" onClick={seek} role="slider" aria-label="Seek">
+          <div className="wlp-track" ref={trackRef} onMouseDown={onTrackMouseDown} onTouchStart={onTrackTouchStart} role="slider" aria-label="Seek">
             <div className="wlp-fill" style={{ width: `${progress}%` }} />
             <div className="wlp-thumb" style={{ left: `${progress}%` }} />
           </div>
@@ -3492,6 +3562,9 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 40 }}>
             To make sure we were genuinely honing in on the right audience and tone, we explored a wide range of visual styles and moods before committing to a direction. The moodboard below captures that early exploration — the range of references, textures, and atmospheres we worked through across many iterations before arriving at the final piece.
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 40 }}>
+            We ultimately landed on a fabric and felt aesthetic — tactile, handcrafted, and warm. It felt homely in a way that matched the gentleness the exercise called for, while still feeling intentional and considered. To keep the piece rooted in the Spurgeons brand, every element was rendered in our brand colours, so audiences would feel a sense of familiarity even as they were experiencing something new.
           </p>
           <div className="cs-flipbook-wrap">
             <PDFFlipbook
