@@ -5225,8 +5225,8 @@ body {
 .pgm-illus-card p { font-size: 14px; color: rgba(51,51,51,0.67); line-height: 1.65; margin-top: 8px; }
 
 @media (max-width: 620px) {
-  .pgm-logo-showcase { flex-direction: column; }
-  .pgm-logo-ring { width: 200px; height: 200px; }
+  .pgm-logo-showcase { flex-direction: column; align-items: center; }
+  .pgm-logo-ring { width: 200px; height: 200px; background: none; border: none; box-shadow: none; padding: 0; }
   .pgm-palette { flex-wrap: wrap; }
   .pgm-swatch-col { min-width: 60px; }
 }
@@ -6481,6 +6481,9 @@ body {
 @media (max-width: 767px) {
   .img-gallery-row { height: 260px; gap: 5px; }
   .img-gallery-item { border-radius: 10px; flex-basis: 52px; min-width: 30px; }
+  /* Stronger expand/collapse on touch screens */
+  .img-gallery-item--active    { flex-grow: 8; flex-basis: clamp(180px, 55vw, 300px); }
+  .img-gallery-item--collapsed { flex-grow: 0; flex-basis: clamp(14px, 4vw, 28px); min-width: 12px; }
 }
 
 .cs-gal-item {
@@ -7193,4 +7196,46 @@ body {
 .pg-btn:hover {
   background: rgba(180, 160, 255, 0.38);
   transform: scale(1.02);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE-ONLY LAYOUT FIXES  (max-width: 767px)
+   Applied via className props in ProjectDetail.jsx — do not remove.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Preschools: social media grid — each carousel on its own row */
+  .mob-social-grid {
+    grid-template-columns: 1fr !important;
+    max-width: 320px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* Generic 2-col / 3-col inline grids → single column on mobile */
+  .mob-1col { grid-template-columns: 1fr !important; }
+
+  /* Portfolio — Awwwards section: stack the two halves */
+  .mob-awwwards-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+
+  /* Portfolio — Custom Illustrations footer row: keep 3 side-by-side */
+  .mob-footer-illus { grid-template-columns: repeat(3, 1fr) !important; }
+
+  /* Course Portal — User Testing: each card in its own row */
+  .mob-user-testing { grid-template-columns: 1fr !important; }
+
+  /* SwipeStackCarousel mobile fallback grid */
+  .mob-swipe-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0.5rem 0 1rem;
+  }
+  .mob-swipe-grid img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+  }
 }

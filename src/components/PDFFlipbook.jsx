@@ -441,7 +441,7 @@ export function PDFFlipbook({ pdfUrl, title = 'Brand Guidelines', accentColor = 
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 4 10 8 6 12" /></svg>
         </button>
       </div>}
-    </div>>
+    </div>
 
     {/* Mobile fullscreen viewer — portaled to <body> so it truly covers the
         viewport regardless of any transformed ancestors, and rotated 90°

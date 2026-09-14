@@ -499,9 +499,9 @@ function CSTimeline() {
 const BASE = import.meta.env.BASE_URL
 
 const GALLERY_ITEMS = [
-  { label: 'Brand Photography',    cls: 'wide', src: `${BASE}cbs/imagery/CBS1.jpg` },
-  { label: 'Community in Action',  cls: 'std',  src: `${BASE}cbs/imagery/CBS2.jpg` },
-  { label: 'People & Place',       cls: 'std',  src: `${BASE}cbs/imagery/CBS3.jpg` },
+  { label: 'Brand Photography',    cls: 'wide', src: `${BASE}cbs/imagery/CBS1.webp` },
+  { label: 'Community in Action',  cls: 'std',  src: `${BASE}cbs/imagery/CBS2.webp` },
+  { label: 'People & Place',       cls: 'std',  src: `${BASE}cbs/imagery/CBS3.webp` },
   { label: 'Social Media Content', cls: 'std',  src: `${BASE}cbs/social/1.webp` },
   { label: 'Social Media Content', cls: 'std',  src: `${BASE}cbs/social/2.webp` },
   { label: 'Illustration System',  cls: 'wide', src: `${BASE}cbs/illustrations/Illustration1.webp` },
@@ -881,9 +881,9 @@ function PhotoStack({ items, title, accentColor }) {
 // ── 10 Applications ──────────────────────────────────────────────────
 const CBS_STACK_ITEMS = [
   { src: `${BASE}cbs/social/1.webp`,      name: 'Social Campaign'     },
-  { src: `${BASE}cbs/imagery/CBS4.jpg`,  name: 'Brand Photography'   },
+  { src: `${BASE}cbs/imagery/CBS4.webp`,  name: 'Brand Photography'   },
   { src: `${BASE}cbs/social/4.webp`,      name: 'Digital Content'     },
-  { src: `${BASE}cbs/imagery/CBS6.jpg`,  name: 'Community'           },
+  { src: `${BASE}cbs/imagery/CBS6.webp`,  name: 'Community'           },
   { src: `${BASE}cbs/social/7.webp`,      name: 'Campaign Materials'  },
 ]
 
@@ -2205,32 +2205,32 @@ const BASE_CHARS = import.meta.env.BASE_URL
 const STUDIO_INTRO_CHARACTERS = [
   {
     name: 'Kiko',
-    img: `${BASE_CHARS}studio-intro/kiko.jpg`,
+    img: `${BASE_CHARS}studio-intro/kiko.webp`,
     bio: 'A curious dreamer at the beginning of something new. Full of ideas but unsure where to begin, Kiko carries the spark and looks for guidance to shape it into something real.',
   },
   {
     name: 'Poppy',
-    img: `${BASE_CHARS}studio-intro/poppy.jpg`,
+    img: `${BASE_CHARS}studio-intro/poppy.webp`,
     bio: 'A quiet and intuitive presence who stays close without asking for attention. Poppy senses what is missing and brings balance to every idea, adding the final touch that makes things feel complete.',
   },
   {
     name: 'Ila',
-    img: `${BASE_CHARS}studio-intro/ila.jpg`,
+    img: `${BASE_CHARS}studio-intro/ila.webp`,
     bio: 'Always by Ika\'s side, a small and curious wanderer who notices what others overlook. Ily explores gently and gathers details that bring depth, care, and meaning to each idea.',
   },
   {
     name: 'Doti',
-    img: `${BASE_CHARS}studio-intro/doty.jpg`,
+    img: `${BASE_CHARS}studio-intro/doty.webp`,
     bio: 'Doti may not always understand the plan, but their warmth and unwavering support makes them impossible not to love. Always there, nodding along and listening, cheerful and steady when it matters.',
   },
   {
     name: 'Ika',
-    img: `${BASE_CHARS}studio-intro/ika.jpg`,
+    img: `${BASE_CHARS}studio-intro/ika.webp`,
     bio: 'A bright spark that appears at just the right moment. Ika helps organise scattered thoughts and guides ideas into form, turning imagination into something tangible.',
   },
   {
     name: 'Bexley',
-    img: `${BASE_CHARS}studio-intro/bexley.jpg`,
+    img: `${BASE_CHARS}studio-intro/bexley.webp`,
     bio: 'Composed, exacting, and not easily impressed. Bexley holds a high standard and expects work to be thoughtful, refined, and considered. Their approval is hard to earn, but when it comes, it truly means something.',
   },
 ]
@@ -2556,7 +2556,7 @@ const WELL_LAB_CFG = {
 const WL = {
   vids:    [1, 3, 4].map(n => `${BASE}well-lab/well-lab${n}.webm`),
   statics: [2, 3, 4].map(n => `${BASE}well-lab/well-lab-static${n}.webp`),
-  full:    `${BASE}well-lab/well%20lab%20full%20video.mp4`,
+  full:    `${BASE}well-lab/well%20lab%20full%20video.webm`,
 }
 
 // ── Pill-shaped glassmorphism video player ───────────────────────────
@@ -2733,7 +2733,7 @@ function WellLabPlayer() {
 }
 
 function WLMedia({ src, alt, className = '' }) {
-  const isVideo = src.endsWith('.webm') || src.endsWith('.mp4')
+  const isVideo = src.endsWith('.webm') || src.endsWith('.webm')
   return (
     <div className={`wl-media-wrap ${className}`}>
       {isVideo ? (
@@ -2809,9 +2809,9 @@ const SPURGEONS_COUNSELLING_CFG = {
 }
 
 const SPURGEONS_COUNSELLING_VIDEOS = {
-  james:    `${BASE}spurgeons-counselling/james.mp4`,
-  lizzie:   `${BASE}spurgeons-counselling/lizzie.mp4`,
-  selfharm: `${BASE}spurgeons-counselling/nadine.mp4`,
+  james:    `${BASE}spurgeons-counselling/james.webm`,
+  lizzie:   `${BASE}spurgeons-counselling/lizzie.webm`,
+  selfharm: `${BASE}spurgeons-counselling/nadine.webm`,
 }
 
 const SPURGEONS_COUNSELLING_NARRATORS = [
@@ -2820,21 +2820,21 @@ const SPURGEONS_COUNSELLING_NARRATORS = [
     topic: 'School-Based Counselling',
     description: 'James, a school-based counsellor at Spurgeons, speaks about the importance of accessible mental health support for children and young people within school settings, meeting them where they already are.',
     video: 'james',
-    avatar: 'james.jpg',
+    avatar: 'james.webp',
   },
   {
     name: 'Lizzie',
     topic: 'Counselling Services',
     description: "Lizzie shares her perspective on Spurgeons' therapeutic approach, reflecting on the depth and range of support the charity provides to children, families, and young people navigating difficult circumstances.",
     video: 'lizzie',
-    avatar: 'lizzie.jpg',
+    avatar: 'lizzie.webp',
   },
   {
     name: 'Nadine',
     topic: 'Self-Harm Support',
     description: "Nadine talks about the charity's work supporting children and young people affected by self-harm, one of the most challenging topics in children's mental health. Custom illustrations guide viewers through the subject with care, clarity, and compassion.",
     video: 'selfharm',
-    avatar: 'nadine.jpg',
+    avatar: 'nadine.webp',
   },
 ]
 
@@ -3062,7 +3062,7 @@ const SPURGEONS_PAS_CFG = {
   ],
 }
 
-const SPURGEONS_PAS_VIDEO = `${BASE}spurgeons-pas/PAS_Advert.mp4`
+const SPURGEONS_PAS_VIDEO = `${BASE}spurgeons-pas/PAS_Advert.webm`
 
 const PAS_COURSE_URL = 'https://spurgeons.org/resources-and-courses/courses/parenting-after-separation/'
 
@@ -3106,7 +3106,7 @@ function SpurgeonsPASCaseStudyView({ cat, cs, slide }) {
           <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.85, marginBottom: 48 }}>
             The goal was to communicate warmth, accessibility, and hope. Animated characters were designed and built specifically for this piece, giving a human face to a course that deals with very real and sensitive family circumstances.
           </p>
-          <div className="si-characters-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
+          <div className="si-characters-grid">
             {PAS_COURSE_DETAILS.map((item, i) => (
               <Reveal key={item.heading} delay={i * 0.08}>
                 <div className="si-character-card" style={{ border: '1px solid #fff', borderRadius: 16, padding: '1.5rem' }}>
@@ -3267,8 +3267,8 @@ const SPURGEONS_CONNECT_CFG = {
 }
 
 const SPURGEONS_CONNECT_VIDEOS = {
-  tc3: `${BASE}spurgeons-PCanimations/tc3.mp4`,
-  tc4: `${BASE}spurgeons-PCanimations/tc4.mp4`,
+  tc3: `${BASE}spurgeons-PCanimations/tc3.webm`,
+  tc4: `${BASE}spurgeons-PCanimations/tc4.webm`,
 }
 
 const CONNECT_COURSE_URL = 'https://spurgeons.org/support-us/spurgeons-connect/'
@@ -3316,7 +3316,7 @@ function SpurgeonsConnectCaseStudyView({ cat, cs, slide }) {
           <p style={{ fontSize: 16, lineHeight: 1.75, opacity: 0.85, marginBottom: 48 }}>
             Spurgeons Connect is an ongoing animated series produced to equip parents and carers with practical tools and emotional support. The series spans three specialist course tracks, each developed by Spurgeons' family support practitioners.
           </p>
-          <div className="si-characters-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
+          <div className="si-characters-grid">
             {CONNECT_TRACKS.map((track, i) => (
               <Reveal key={track.name} delay={i * 0.08}>
                 <div className="si-character-card" style={{ background: '#fff', borderRadius: 16, padding: '1.5rem' }}>
@@ -3382,7 +3382,7 @@ const LEAVES_CFG = {
   ],
 }
 
-const LEAVES_VIDEO_SRC    = `${import.meta.env.BASE_URL}leaves/leaves-animation.mp4`
+const LEAVES_VIDEO_SRC    = `${import.meta.env.BASE_URL}leaves/leaves-animation.webm`
 const LEAVES_MOODBOARD_URL = `${import.meta.env.BASE_URL}leaves/moodboard.pdf`
 const LEAVES_THUMB_SRC    = `${import.meta.env.BASE_URL}leaves/leaves-thumb.webp`
 
@@ -3577,7 +3577,7 @@ function LeavesOnAStreamCaseStudyView({ cat, cs, slide }) {
           <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, marginBottom: 48 }}>
             The brief called for something warm, gentle, and accessible to anyone encountering the exercise for the first time. The animation needed to guide viewers through the visualisation step by step, using movement and atmosphere to reinforce the therapeutic intent: slowing the mind, reducing anxiety, and building the capacity to sit with difficult thoughts without being overwhelmed by them.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+          <div className="mob-1col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             <div style={{ background: 'rgba(107,175,146,0.08)', border: '1px solid rgba(107,175,146,0.2)', borderRadius: 16, padding: '1.5rem' }}>
               <h4 style={{ fontFamily: 'Raleway, sans-serif', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: cfg.lightAccent, marginBottom: 12 }}>The Technique</h4>
               <p style={{ fontSize: 14, lineHeight: 1.75, opacity: 0.8 }}>
@@ -3745,6 +3745,18 @@ const PRESCHOOLS_CFG = {
 }
 
 // ── Swipe-Stack Carousel (Signage & Print) ───────────────────────────
+// Detects mobile viewport (≤767px) — used by SwipeStackCarousel to render
+// a plain image grid instead of the drag carousel on touch screens.
+function useIsMobile(bp = 767) {
+  const [m, setM] = useState(() => typeof window !== 'undefined' && window.innerWidth <= bp)
+  useEffect(() => {
+    const h = () => setM(window.innerWidth <= bp)
+    window.addEventListener('resize', h, { passive: true })
+    return () => window.removeEventListener('resize', h)
+  }, [bp])
+  return m
+}
+
 const SWIPE_SETTINGS = {
   width: 360, height: 480, radius: 16,
   swipeThreshold: 100,
@@ -3787,6 +3799,7 @@ function SwipeCard({ children, isFront, zIndex, onSendToBack, onBringToFront }) 
 }
 
 function SwipeStackCarousel({ images }) {
+  const isMobile = useIsMobile()
   const [cards, setCards] = useState(() => images.map((img, i) => ({ id: i, img })))
   const moveToBack = (id) => setCards(prev => {
     const updated = [...prev]
@@ -3800,6 +3813,16 @@ function SwipeStackCarousel({ images }) {
     if (idx !== -1) { const [moved] = updated.splice(idx, 1); updated.unshift(moved) }
     return updated
   })
+  if (isMobile) {
+    return (
+      <div className="mob-swipe-grid">
+        {images.map((src, i) => (
+          <img key={i} src={src} alt={`Slide ${i + 1}`} loading="lazy" />
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem 3rem' }}>
       <div style={{ position: 'relative', width: SWIPE_SETTINGS.width + SWIPE_SETTINGS.peekOffset * 3, height: SWIPE_SETTINGS.height, perspective: 1200, margin: '0 auto', overflow: 'visible' }}>
@@ -3958,21 +3981,21 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
           <Reveal delay={0}>
             <div>
-              <img src={`${B}Buttons%20LOGO.png`} alt="Buttons Preschool primary logo" style={logoStyle} />
+              <img src={`${B}Buttons%20LOGO.webp`} alt="Buttons Preschool primary logo" style={logoStyle} />
               <h4 style={{ marginTop: '1rem', marginBottom: '0.4rem', fontSize: '0.9rem', fontWeight: 600, color: cfg.dark }}>Buttons: Primary Mark</h4>
               <p style={{ lineHeight: 1.6, fontSize: '0.9rem', color: '#555' }}>The main Buttons logo, used across all printed material, signage, and digital communication for the Maidstone and Ramsgate sites. The mark incorporates a playful button motif that gives the identity its name and personality, sitting naturally on uniforms, tote bags, and stationery without feeling forced at any size.</p>
             </div>
           </Reveal>
           <Reveal delay={0.08}>
             <div>
-              <img src={`${B}Buttons%20ABC%20Logo.png`} alt="Buttons ABC variant logo" style={logoStyle} />
+              <img src={`${B}Buttons%20ABC%20Logo.webp`} alt="Buttons ABC variant logo" style={logoStyle} />
               <h4 style={{ marginTop: '1rem', marginBottom: '0.4rem', fontSize: '0.9rem', fontWeight: 600, color: cfg.dark }}>Buttons ABC: Secondary Mark</h4>
               <p style={{ lineHeight: 1.6, fontSize: '0.9rem', color: '#555' }}>A secondary variant built for classroom materials, letterheads, and stationery where a more educational tone was needed. The ABC lockup reinforces the early years learning focus and gives teachers a logo that feels at home on worksheets, welcome packs, and room signage without competing with the primary mark.</p>
             </div>
           </Reveal>
           <Reveal delay={0.16}>
             <div>
-              <img src={`${B}LittleLambs%20Logo.png`} alt="Little Lambs logo" style={logoStyle} />
+              <img src={`${B}LittleLambs%20Logo.webp`} alt="Little Lambs logo" style={logoStyle} />
               <h4 style={{ marginTop: '1rem', marginBottom: '0.4rem', fontSize: '0.9rem', fontWeight: 600, color: cfg.dark }}>Little Lambs: Logo</h4>
               <p style={{ lineHeight: 1.6, fontSize: '0.9rem', color: '#555' }}>A gentler, more intimate mark built around a playful lamb illustration. The character is soft and expressive without tipping into clip-art territory, giving the setting a face that felt genuinely welcoming to young children and their families. Where Buttons is bright and confident, Little Lambs is warm and reassuring, a visual language centred on comfort and care.</p>
             </div>
@@ -3988,12 +4011,12 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <ImageGallery
           images={[
-            `${B}merch.png`,
-            `${B}merch2.jpg`,
-            `${B}little-lambs-merch1.jpg`,
-            `${B}little-lambs-merch2.jpg`,
-            `${B}little-lambs-merch3.jpg`,
-            `${B}little-lambs-merch4.jpg`,
+            `${B}merch.webp`,
+            `${B}merch2.webp`,
+            `${B}little-lambs-merch1.webp`,
+            `${B}little-lambs-merch2.webp`,
+            `${B}little-lambs-merch3.webp`,
+            `${B}little-lambs-merch4.webp`,
           ]}
           colors={PRESCHOOLS_MERCH_COLORS}
         />
@@ -4007,11 +4030,11 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
           <SwipeStackCarousel images={[
-            `${B}Banner_Mockup1.jpg`,
-            `${B}Banner_Mockup2.png`,
-            `${B}A5%20flyer.jpg`,
-            `${B}A2%20Sign.jpg`,
-            `${B}A2%20Sign%202.jpg`,
+            `${B}Banner_Mockup1.webp`,
+            `${B}Banner_Mockup2.webp`,
+            `${B}A5%20flyer.webp`,
+            `${B}A2%20Sign.webp`,
+            `${B}A2%20Sign%202.webp`,
           ]} />
           <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8 }}>Drag to browse</p>
         </div>
@@ -4023,15 +4046,15 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
             A series of branded social media posts produced for both preschool settings, designed to bring each school's identity to life across Instagram and Facebook.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', maxWidth: 800, margin: '0 auto' }}>
+        <div className="mob-social-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', maxWidth: 800, margin: '0 auto' }}>
           <div>
-            <InstaCarousel images={[`${B}N1.png`,`${B}N2.png`,`${B}N3.png`,`${B}N4.png`,`${B}N5.png`]} />
+            <InstaCarousel images={[`${B}N1.webp`,`${B}N2.webp`,`${B}N3.webp`,`${B}N4.webp`,`${B}N5.webp`]} />
           </div>
           <div>
-            <InstaCarousel images={[`${B}C1.jpg`,`${B}C2.jpg`,`${B}C3.jpg`,`${B}C4.jpg`]} />
+            <InstaCarousel images={[`${B}C1.webp`,`${B}C2.webp`,`${B}C3.webp`,`${B}C4.webp`]} />
           </div>
           <div>
-            <InstaCarousel images={[`${B}S1.png`]} />
+            <InstaCarousel images={[`${B}S1.webp`]} />
           </div>
         </div>
         <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.5, letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '1.5rem', fontWeight: 600, color: '#1a1a2e' }}>
@@ -4093,7 +4116,7 @@ function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
 
       <CSSection title="The Logo" variant="light">
         <Reveal delay={0}>
-          <img src={`${IW}IW%20logo.png`} alt="Invisible Walls logo" style={{ ...logoStyle, height: '320px', maxWidth: 600, margin: '0 auto', display: 'block' }} />
+          <img src={`${IW}IW%20logo.webp`} alt="Invisible Walls logo" style={{ ...logoStyle, height: '320px', maxWidth: 600, margin: '0 auto', display: 'block' }} />
         </Reveal>
         <Reveal delay={0.08}>
           <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem', maxWidth: 680, margin: '2rem auto 0' }}>
@@ -4110,10 +4133,10 @@ function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <ImageGallery
           images={[
-            `${IW}merch1.jpg`,
-            `${IW}merch2.jpg`,
-            `${IW}merch3.jpg`,
-            `${IW}merch4.jpg`,
+            `${IW}merch1.webp`,
+            `${IW}merch2.webp`,
+            `${IW}merch3.webp`,
+            `${IW}merch4.webp`,
           ]}
           colors={INVISIBLE_WALLS_MERCH_COLORS}
         />
@@ -4167,7 +4190,7 @@ function ParentsConnectCaseStudyView({ cat, cs, slide }) {
           padding: '1rem',
         }}>
           <img
-            src={`${PC}header%20image.png`}
+            src={`${PC}header%20image.webp`}
             alt="Parents Connect header"
             style={{ width: '100%', display: 'block', borderRadius: 16 }}
           />
@@ -4223,7 +4246,7 @@ function ParentsConnectCaseStudyView({ cat, cs, slide }) {
           <Reveal delay={0}>
             <div style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.10)' }}>
               <video
-                src={`${PC}PC%20logo%20animation.mp4`}
+                src={`${PC}PC%20logo%20animation.webm`}
                 autoPlay
                 loop
                 muted
@@ -4300,10 +4323,10 @@ function ParentsConnectCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
           <SwipeStackCarousel images={[
-            `${PC}print1.jpg`,
-            `${PC}print2.jpg`,
-            `${PC}print3.jpg`,
-            `${PC}print4.png`,
+            `${PC}print1.webp`,
+            `${PC}print2.webp`,
+            `${PC}print3.webp`,
+            `${PC}print4.webp`,
           ]} />
           <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8, color: '#fff' }}>Drag to browse</p>
         </div>
@@ -4320,7 +4343,7 @@ function ParentsConnectCaseStudyView({ cat, cs, slide }) {
             <Reveal key={n} delay={i * 0.06}>
               <div style={{ borderRadius: 12, overflow: 'hidden', background: '#f8f8f8', border: '1px solid rgba(0,0,0,0.06)' }}>
                 <img
-                  src={`${PC}handout${n}.png`}
+                  src={`${PC}handout${n}.webp`}
                   alt={`Handout ${n}`}
                   style={{ width: '100%', height: 'auto', display: 'block', imageRendering: 'auto' }}
                 />
@@ -4442,7 +4465,7 @@ function DFHCaseStudyView({ cat, cs, slide }) {
             <Reveal key={n} delay={i * 0.06}>
               <div style={{ borderRadius: 12, overflow: 'hidden', background: '#f8f8f8', border: '1px solid rgba(0,0,0,0.06)' }}>
                 <img
-                  src={`${DFH}handout${n}.png`}
+                  src={`${DFH}handout${n}.webp`}
                   alt={`DFH handout ${n}`}
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
@@ -4522,10 +4545,10 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       {/* Awwwards Nomination */}
       <CSSection title="Awwwards Nomination" variant="dark" style={{ background: '#335CFF' }}>
         <Reveal>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
+          <div className="mob-awwwards-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
             {/* Left: image */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src={`${BASE}portfolio-showcase/award.png`} alt="Awwwards" style={{ width: '100%', maxWidth: 400, objectFit: 'contain' }} />
+              <img src={`${BASE}portfolio-showcase/award.webp`} alt="Awwwards" style={{ width: '100%', maxWidth: 400, objectFit: 'contain' }} />
             </div>
             {/* Right: content */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -4658,7 +4681,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
         </div>
 
         {/* Footer appearances */}
-        <div className="wl-grid-3" style={{ marginTop: 24 }}>
+        <div className="wl-grid-3 mob-footer-illus" style={{ marginTop: 24 }}>
           <Reveal delay={0.06}><WLMedia src={`${BASE}footer/footer-portfolio.webp`} alt="Footer · Portfolio" /></Reveal>
           <Reveal delay={0.12}><WLMedia src={`${BASE}footer/footer-contact.webp`}   alt="Footer · Contact"   /></Reveal>
           <Reveal delay={0.18}><WLMedia src={`${BASE}footer/footer-socials.webp`}   alt="Footer · Socials"   /></Reveal>
@@ -4691,7 +4714,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
           </p>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
-          {['3.png', '4.png', '8.png', '9.png'].map((f, i) => (
+          {['3.webp', '4.webp', '8.webp', '9.webp'].map((f, i) => (
             <Reveal key={f} delay={i * 0.08}>
               <img
                 src={`${BASE}portfolio-showcase/${f}`}
@@ -4749,11 +4772,11 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <ImageGallery
           images={[
-            `${B}festival1.png`,
-            `${B}festival2.png`,
-            `${B}festival3.png`,
-            `${B}festival4.jpg`,
-            `${B}festival5.png`,
+            `${B}festival1.webp`,
+            `${B}festival2.webp`,
+            `${B}festival3.webp`,
+            `${B}festival4.webp`,
+            `${B}festival5.webp`,
           ]}
         />
       </CSSection>
@@ -4769,11 +4792,11 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
           <SwipeStackCarousel images={[
-            `${B}building1.png`,
-            `${B}building2.jpg`,
-            `${B}building3.jpg`,
-            `${B}building4.jpg`,
-            `${B}building5.png`,
+            `${B}building1.webp`,
+            `${B}building2.webp`,
+            `${B}building3.webp`,
+            `${B}building4.webp`,
+            `${B}building5.webp`,
           ]} />
           <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8, color: '#fff' }}>Drag to browse</p>
         </div>
@@ -4790,10 +4813,10 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <ImageGallery
           images={[
-            `${B}poster1.png`,
-            `${B}poster2.png`,
-            `${B}poster3.jpg`,
-            `${B}poster4.png`,
+            `${B}poster1.webp`,
+            `${B}poster2.webp`,
+            `${B}poster3.webp`,
+            `${B}poster4.webp`,
           ]}
         />
       </CSSection>
@@ -4843,10 +4866,10 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <ImageGallery
           images={[
-            `${B}stationary1.jpg`,
-            `${B}stationary2.jpg`,
-            `${B}stationary3.jpg`,
-            `${B}stationary4.png`,
+            `${B}stationary1.webp`,
+            `${B}stationary2.webp`,
+            `${B}stationary3.webp`,
+            `${B}stationary4.webp`,
           ]}
         />
       </CSSection>
@@ -4863,11 +4886,11 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
         </Reveal>
         <ImageGallery
           images={[
-            `${B}clothing1.png`,
-            `${B}clothing2.jpg`,
-            `${B}clothing3.png`,
-            `${B}clothing4.jpg`,
-            `${B}clothing5.jpg`,
+            `${B}clothing1.webp`,
+            `${B}clothing2.webp`,
+            `${B}clothing3.webp`,
+            `${B}clothing4.webp`,
+            `${B}clothing5.webp`,
           ]}
         />
       </CSSection>
@@ -4948,7 +4971,7 @@ function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
             to begin. Multiple tests, one consistent answer.
           </p>
         </Reveal>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginTop: '0.5rem' }}>
+        <div className="mob-user-testing" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginTop: '0.5rem' }}>
           {[
             { icon: '🎙', label: 'Session Observations', note: 'Recorded & mapped across 3+ rounds' },
             { icon: '🗺', label: 'User Flow Mapping',     note: 'End-to-end journey charted' },
@@ -5049,11 +5072,11 @@ const SPURGEONS_FLYERS_CFG = {
 
 function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
   const cfg = SPURGEONS_FLYERS_CFG
-  const courseImgs    = ['course2.png','course3.png','course4.png','course5.png']
+  const courseImgs    = ['course2.webp','course3.webp','course4.webp','course5.webp']
     .map(f => `${BASE}spurgeons-flyers/${f}`)
-  const awarenessImgs = ['awareness1.png','awareness2.png','awareness3.png','awareness4.jpg']
+  const awarenessImgs = ['awareness1.webp','awareness2.webp','awareness3.webp','awareness4.webp']
     .map(f => `${BASE}spurgeons-flyers/${f}`)
-  const bookletImgs   = ['booklet1.png','booklet2.jpg','booklet3.png']
+  const bookletImgs   = ['booklet1.webp','booklet2.webp','booklet3.webp']
     .map(f => `${BASE}spurgeons-flyers/${f}`)
   return (
     <div className="cs-wrap pkg-case-study">
