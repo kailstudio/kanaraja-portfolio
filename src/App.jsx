@@ -128,6 +128,10 @@ export default function App() {
 
   return (
     <>
+    {/* Custom cursor — rendered outside <main> so it's visible even while
+        the password gate is up and <main> is hidden */}
+    <div className="custom-cursor" ref={cursorRef} aria-hidden="true" />
+
     <AnimatePresence>
       {!unlocked && (
         <PasswordGate key="pg" onUnlocked={() => setUnlocked(true)} />
@@ -135,9 +139,6 @@ export default function App() {
     </AnimatePresence>
 
     <main className="app" style={{ visibility: unlocked ? 'visible' : 'hidden' }}>
-      {/* Custom cursor */}
-      <div className="custom-cursor" ref={cursorRef} aria-hidden="true" />
-
       {/* Aurora gradient */}
       <div className="app-bg" aria-hidden="true" />
 
