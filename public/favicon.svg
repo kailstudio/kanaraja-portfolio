@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#1a1234"/>
+  <!-- nested SVG crops to just the K glyph (x=25-586, y=40-420) -->
+  <svg x="4" y="4" width="56" height="56" viewBox="25 40 560 380">
+    <rect fill="#ffffff" x="25.83" y="40" width="180" height="380"/>
+    <circle fill="#ffffff" cx="317.17" cy="128.67" r="88.67"/>
+    <path fill="#ffffff" d="M585.83,420c-99.76,0-180.63-85.07-180.63-190s80.87-190,180.63-190"/>
+    <path fill="#ffffff" d="M406.17,420c0-110.46-80.74-200-180.33-200v200h180.33Z"/>
+  </svg>
+</svg>
