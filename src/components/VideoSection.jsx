@@ -4,7 +4,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 
-const VIDEO_SRC = `${import.meta.env.BASE_URL}showreel.mp4`
+const VIDEO_SRC = `${import.meta.env.BASE_URL}showreel.webm`
 
 // ── SVG icons ────────────────────────────────────────────────────────
 const IconPlay = () => (

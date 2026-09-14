@@ -3,8 +3,8 @@
  *
  * Adapted from Next.js / TypeScript / Tailwind → plain React / Vite / CSS.
  * Place assets in /public/ and pass their paths as props:
- *   mediaSrc  — video or image path  (e.g. /kanaraja-portfolio/showreel.mp4)
- *   bgImageSrc — background image    (e.g. /kanaraja-portfolio/scroll-hero-bg.jpg)
+ *   mediaSrc  — video or image path  (e.g. /kanaraja-portfolio/showreel.webm)
+ *   bgImageSrc — background image    (e.g. /kanaraja-portfolio/scroll-hero-bg.webp)
  *   posterSrc  — video poster image  (optional)
  *
  * The component intercepts wheel / touch scroll until the media is fully

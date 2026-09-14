@@ -45,7 +45,7 @@ export const CATEGORIES = [
     ],
     slides: [
       {
-        id: 6, bg: '#D4C7FF', img: 'projects/parents-connect.jpg', label: 'Parents Connect',
+        id: 6, bg: '#D4C7FF', img: 'projects/parents-connect.webp', label: 'Parents Connect',
         tags: ['Logo', 'Animated Logo', 'Digital Collateral'],
         caseStudy: {
           subtitle: 'Logo · Animated Logo · Digital Collateral',
@@ -64,7 +64,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 3, bg: '#F9D48B', img: 'projects/spurgeons-preschools.jpg', label: 'Spurgeons: Preschools',
+        id: 3, bg: '#F9D48B', img: 'projects/spurgeons-preschools.webp', label: 'Spurgeons: Preschools',
         tags: ['Logo', 'Brand Identity', 'Collateral'],
         caseStudy: {
           subtitle: 'Logo · Brand Sheet · Collateral · Signage',
@@ -234,7 +234,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 7, bg: '#335CFF', img: 'projects/dfh.png', label: 'Digital Family Hub',
+        id: 7, bg: '#335CFF', img: 'projects/dfh.webp', label: 'Digital Family Hub',
         tags: ['Logo', 'Animated Logo', 'Digital Collateral'],
         caseStudy: {
           subtitle: 'Logo · Animated Logo · Digital Collateral',
@@ -254,7 +254,7 @@ export const CATEGORIES = [
       },
 
       {
-        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-iw.jpg', label: 'Spurgeons: Invisible Walls',
+        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-iw.webp', label: 'Spurgeons: Invisible Walls',
         tags: ['Logo', 'Leaflets', 'Illustration', 'Signage'],
         caseStudy: {
           subtitle: 'Logo · Leaflets · Illustrations · Signage',
@@ -402,7 +402,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 9, bg: '#B8D4C8', img: 'spurgeons-counselling/thumbnail.jpg', label: 'Spurgeons: Counselling',
+        id: 9, bg: '#B8D4C8', img: 'spurgeons-counselling/thumbnail.webp', label: 'Spurgeons: Counselling',
         tags: ['Motion Design', 'Illustration', 'Social Content', 'Charity'],
         caseStudy: {
           subtitle: 'Motion Design · Custom Illustration · Social Media Campaign',
@@ -569,7 +569,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-signage.png', label: 'Spurgeons: Signage',
+        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-signage.webp', label: 'Spurgeons: Signage',
         tags: ['Print', 'Signage', 'Charity'],
         caseStudy: {
           subtitle: 'Print Design · Signage · Festival & Event Materials',
@@ -587,7 +587,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 6, bg: '#D4C7FF', img: 'projects/spurgeons-merch.png', label: 'Spurgeons: Merch',
+        id: 6, bg: '#D4C7FF', img: 'projects/spurgeons-merch.webp', label: 'Spurgeons: Merch',
         tags: ['Merch', 'Apparel', 'Charity'],
         caseStudy: {
           subtitle: 'Merchandise Design · Apparel · Charity Fundraising',
@@ -605,7 +605,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 7, bg: '#F0E4C8', img: 'projects/spurgeons-flyers.png', label: 'Spurgeons: Flyers & Posters',
+        id: 7, bg: '#F0E4C8', img: 'projects/spurgeons-flyers.webp', label: 'Spurgeons: Flyers & Posters',
         tags: ['Print', 'Editorial', 'Charity'],
         caseStudy: {
           subtitle: 'Print Design · Flyers · Posters · Campaign Materials',
@@ -639,7 +639,7 @@ export const CATEGORIES = [
     ],
     slides: [
       {
-        id: 1, bg: '#335CFF', img: 'projects/portfolio-showcase.png', label: 'Portfolio Website',
+        id: 1, bg: '#335CFF', img: 'projects/portfolio-showcase.webp', label: 'Portfolio Website',
         tags: ['React', 'Vite', 'Framer Motion', 'Custom CSS'],
         caseStudy: {
           subtitle: 'React 18 + Vite · Framer Motion · Lenis · Custom CSS · GitHub Pages',
@@ -659,7 +659,7 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 2, bg: '#E0F87D', img: 'projects/spurgeons-courseportal.png', label: 'Spurgeons: Course Portal',
+        id: 2, bg: '#E0F87D', img: 'projects/spurgeons-courseportal.webp', label: 'Spurgeons: Course Portal',
         tags: ['UX Design', 'UI Redesign', 'User Testing', 'Charity'],
         caseStudy: {
           subtitle: 'UX Design · UI Redesign · User Testing · Figma',

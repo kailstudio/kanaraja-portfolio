@@ -5,7 +5,7 @@
  *
  * ─── HOW TO ADD YOUR FRAMES ────────────────────────────────────────
  *  1. Place all PNG frames inside:   /public/frames/
- *  2. Name them sequentially:        frame_00000.png … frame_00120.png
+ *  2. Name them sequentially:        frame_00000.webp … frame_00120.webp
  *     (adjust FRAME_COUNT and FRAME_PREFIX below if your naming differs)
  *  3. Run `npm run dev` — frames preload automatically on mount.
  * ────────────────────────────────────────────────────────────────────
@@ -28,13 +28,13 @@ import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-mot
 // ─── Configuration ─────────────────────────────────────────────────
 const FRAME_COUNT  = 121           // total number of PNG frames (0 … 120)
 const FRAME_PREFIX = `${import.meta.env.BASE_URL}frames/frame_`  // path prefix inside /public
-const FRAME_PAD    = 5             // zero-padding digits  (frame_00000.png)
+const FRAME_PAD    = 5             // zero-padding digits  (frame_00000.webp)
 const SCROLL_HEIGHT = '500vh'      // how tall the scroll section is
 // ───────────────────────────────────────────────────────────────────
 
 /** Build the full path for a given frame index */
 function framePath(index) {
-  return `${FRAME_PREFIX}${String(index).padStart(FRAME_PAD, '0')}.png`
+  return `${FRAME_PREFIX}${String(index).padStart(FRAME_PAD, '0')}.webp`
 }
 
 /** Preload an array of image URLs and return a promise that resolves when done */

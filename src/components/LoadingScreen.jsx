@@ -15,8 +15,8 @@ import { motion } from 'framer-motion'
 const FRAME_COUNT  = 121
 const FRAME_PREFIX = `${import.meta.env.BASE_URL}frames/frame_`
 const FRAME_PAD    = 5
-const FRAME_EXT    = '.png'
-const SCROLL_VIDEO = `${import.meta.env.BASE_URL}scroll-hero-video.mp4`
+const FRAME_EXT    = '.webp'
+const SCROLL_VIDEO = `${import.meta.env.BASE_URL}scroll-hero-video.webm`
 
 function framePath(i) {
   return `${FRAME_PREFIX}${String(i).padStart(FRAME_PAD, '0')}${FRAME_EXT}`

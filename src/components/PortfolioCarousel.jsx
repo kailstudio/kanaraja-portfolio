@@ -83,7 +83,7 @@ export default function PortfolioCarousel({ category, onClose }) {
               style={{ background: slide.bg || '#c8b8e8' }}
             >
               {slide.src ? (
-                slide.src.endsWith('.mp4') ? (
+                slide.src.endsWith('.webm') ? (
                   <video src={slide.src} autoPlay loop muted playsInline className="slide-media" />
                 ) : (
                   <img src={slide.src} alt={slide.label} className="slide-media" />

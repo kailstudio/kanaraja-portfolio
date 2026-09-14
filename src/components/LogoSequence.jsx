@@ -23,7 +23,7 @@ const LOGO_SCROLL_RANGE_DESKTOP = 1400
 const LOGO_SCROLL_RANGE_MOBILE  = 1200
 
 function framePath(i) {
-  return `${FRAME_PREFIX}${String(i).padStart(5, '0')}.png`
+  return `${FRAME_PREFIX}${String(i).padStart(5, '0')}.webp`
 }
 function preloadAll() {
   for (let i = 0; i < FRAME_COUNT; i++) {
