@@ -4171,7 +4171,7 @@ const PARENTS_CONNECT_CFG = {
   ],
 }
 
-function ParentsConnectCaseStudyView({ cat, cs, slide }) {
+function ParentsConnectCaseStudyView({ cat, cs, slide, onProjectOpen }) {
   const cfg = PARENTS_CONNECT_CFG
   const PC = `${BASE}parents-connect/`
   return (
@@ -5126,7 +5126,7 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
 }
 
 
-function CaseStudyView({ cat, slide }) {
+function CaseStudyView({ cat, slide, onProjectOpen }) {
   const cs = slide.caseStudy
   if (cat.id === 'packaging') {
     if (slide.id === 1) return <WoodcoCaseStudyView    cat={cat} cs={cs} slide={slide} />
@@ -5155,7 +5155,7 @@ function CaseStudyView({ cat, slide }) {
   if (cat.id === 'brand' && slide.id === 2) return <PGMCaseStudyView           cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 3) return <PreschoolsCaseStudyView      cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 5) return <InvisibleWallsCaseStudyView cat={cat} cs={cs} slide={slide} />
-  if (cat.id === 'brand' && slide.id === 6) return <ParentsConnectCaseStudyView cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'brand' && slide.id === 6) return <ParentsConnectCaseStudyView cat={cat} cs={cs} slide={slide} onProjectOpen={onProjectOpen} />
   if (cat.id === 'brand' && slide.id === 7) return <DFHCaseStudyView            cat={cat} cs={cs} slide={slide} />
   return <CBSCaseStudyView cat={cat} cs={cs} slide={slide} />
 }
@@ -5206,7 +5206,7 @@ export default function ProjectDetail({ cat, slide: initialSlide, onClose, onPro
         )}
 
         {hasCaseStudy ? (
-          <CaseStudyView cat={cat} slide={currentSlide} />
+          <CaseStudyView cat={cat} slide={currentSlide} onProjectOpen={onProjectOpen} />
         ) : (
           <motion.div className="pd-grid-8" initial="initial" animate="animate" exit="exit">
             <VisualCard       cat={cat} />
