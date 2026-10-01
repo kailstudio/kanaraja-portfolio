@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { motion, useInView, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
+import { motion, useInView, AnimatePresence, useMotionValue, useTransform, useReducedMotion } from 'framer-motion'
 import { PDFFlipbook } from './PDFFlipbook'
 import { CATEGORIES } from './PortfolioSection'
 
@@ -1816,9 +1816,10 @@ function PkgImpact({ cfg }) {
   )
 }
 
-function PkgLinks({ cs, cfg, bg }) {
+function PkgLinks({ cs, cfg }) {
   const { linksBody } = cfg
   const links = [
+    cs.demo     && { href: cs.demo,     Icon: GlobeSVG,    label: 'Live Demo' },
     cs.behance  && { href: cs.behance,  Icon: BehanceSVG,  label: 'Behance'  },
     cs.dribbble && { href: cs.dribbble, Icon: DribbbleSVG, label: 'Dribbble' },
     cs.website  && { href: cs.website,  Icon: GlobeSVG,    label: cs.client ? `${cs.client} Website` : 'Website' },
@@ -1827,23 +1828,33 @@ function PkgLinks({ cs, cfg, bg }) {
     cs.vimeo    && { href: cs.vimeo,    Icon: VimeoSVG,    label: 'Watch on Vimeo' },
   ].filter(Boolean)
   if (!links.length) return null
+  const host = (href) => {
+    try { return new URL(href).hostname.replace(/^www\./, '') } catch { return href }
+  }
   return (
-    <CSSection title="View the Project" variant="dark" style={bg ? { background: bg } : undefined}>
-      {linksBody && (
-        <Reveal delay={0.06}>
-          <p className="cs-vi-body" style={{ color: 'rgba(255,255,255,0.65)', marginBottom: 28 }}>{linksBody}</p>
+    <section className="cs-section cs-section--dark plx">
+      <span className="plx-orb plx-orb--a" aria-hidden="true" />
+      <span className="plx-orb plx-orb--b" aria-hidden="true" />
+      <div className="plx-inner">
+        <Reveal>
+          <span className="plx-eyebrow">Explore</span>
+          <h2 className="plx-title">View the Project</h2>
+          {linksBody && <p className="plx-body">{linksBody}</p>}
         </Reveal>
-      )}
-      <Reveal delay={0.12} className="pkg-links">
-        {links.map(({ href, Icon, label }) => (
-          <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="pkg-link-btn">
-            <span className="pkg-link-icon"><Icon /></span>
-            <span className="pkg-link-label">{label}</span>
-            <span className="pkg-link-arrow">↗</span>
-          </a>
-        ))}
-      </Reveal>
-    </CSSection>
+        <Reveal delay={0.1} className="plx-links">
+          {links.map(({ href, Icon, label }) => (
+            <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="plx-link">
+              <span className="plx-link-icon"><Icon /></span>
+              <span className="plx-link-text">
+                <span className="plx-link-label">{label}</span>
+                <span className="plx-link-host">{host(href)}</span>
+              </span>
+              <span className="plx-link-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </Reveal>
+      </div>
+    </section>
   )
 }
 
@@ -3757,108 +3768,77 @@ function useIsMobile(bp = 767) {
   return m
 }
 
-const SWIPE_SETTINGS = {
-  width: 360, height: 480, radius: 16,
-  swipeThreshold: 100,
-  stackRotation: 2, stackScale: 0.02,
-  peekOffset: 126, // 35% of 360px card width
-  tiltStrength: 20,
-  springStiffness: 300, springDamping: 30,
-}
-
-function SwipeCard({ children, isFront, zIndex, onSendToBack, onBringToFront }) {
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const rotateX = useTransform(y, [-200, 200], [SWIPE_SETTINGS.tiltStrength, -SWIPE_SETTINGS.tiltStrength])
-  const rotateY = useTransform(x, [-200, 200], [-SWIPE_SETTINGS.tiltStrength, SWIPE_SETTINGS.tiltStrength])
-
-  function handleDragEnd(_, info) {
-    const farEnough = Math.abs(info.offset.x) > SWIPE_SETTINGS.swipeThreshold || Math.abs(info.offset.y) > SWIPE_SETTINGS.swipeThreshold
-    if (farEnough) { onSendToBack() } else { x.set(0); y.set(0) }
-  }
-
-  return (
-    <motion.div
-      style={{
-        position: 'absolute', width: SWIPE_SETTINGS.width, height: SWIPE_SETTINGS.height,
-        x: isFront ? x : 0, y: isFront ? y : 0,
-        rotateX: isFront ? rotateX : 0, rotateY: isFront ? rotateY : 0,
-        zIndex, cursor: isFront ? 'grab' : 'pointer', userSelect: 'none',
-      }}
-      drag={isFront}
-      dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
-      dragElastic={0.5}
-      onDragEnd={handleDragEnd}
-      onClick={!isFront ? onBringToFront : undefined}
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: 'spring', stiffness: SWIPE_SETTINGS.springStiffness, damping: SWIPE_SETTINGS.springDamping }}
-    >
-      {children}
-    </motion.div>
-  )
+// ── Glass gallery ────────────────────────────────────────────────────
+// One image at a time in a frosted frame, with glass prev/next buttons,
+// a counter, thumbnails, swipe/drag and arrow-key support.
+// (Keeps the old SwipeStackCarousel name so every project picks it up.)
+const GG_VARIANTS = {
+  enter:  (d) => ({ opacity: 0, x: d * 48 }),
+  center: { opacity: 1, x: 0 },
+  exit:   (d) => ({ opacity: 0, x: d * -48 }),
 }
 
 function SwipeStackCarousel({ images }) {
-  const isMobile = useIsMobile()
-  const [cards, setCards] = useState(() => images.map((img, i) => ({ id: i, img })))
-  const moveToBack = (id) => setCards(prev => {
-    const updated = [...prev]
-    const idx = updated.findIndex(c => c.id === id)
-    if (idx !== -1) { const [moved] = updated.splice(idx, 1); updated.push(moved) }
-    return updated
-  })
-  const moveToFront = (id) => setCards(prev => {
-    const updated = [...prev]
-    const idx = updated.findIndex(c => c.id === id)
-    if (idx !== -1) { const [moved] = updated.splice(idx, 1); updated.unshift(moved) }
-    return updated
-  })
-  if (isMobile) {
-    return (
-      <div className="mob-swipe-grid">
-        {images.map((src, i) => (
-          <img key={i} src={src} alt={`Slide ${i + 1}`} loading="lazy" />
-        ))}
-      </div>
-    )
+  const reduce = useReducedMotion()
+  const n = images.length
+  const [[index, dir], setState] = useState([0, 0])
+  const go = (d) => setState(([i]) => [(i + d + n) % n, d])
+  const goTo = (i) => setState(([cur]) => (i === cur ? [cur, 0] : [i, i > cur ? 1 : -1]))
+  const onKey = (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(1) }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(-1) }
   }
+  const d = reduce ? 0 : dir
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem 3rem' }}>
-      <div style={{ position: 'relative', width: SWIPE_SETTINGS.width + SWIPE_SETTINGS.peekOffset * 3, height: SWIPE_SETTINGS.height, perspective: 1200, margin: '0 auto', overflow: 'visible' }}>
-        {cards.map((card, index) => {
-          const isFront = index === 0
-          return (
-            <SwipeCard key={card.id} isFront={isFront} zIndex={cards.length - index} onSendToBack={() => moveToBack(card.id)} onBringToFront={() => moveToFront(card.id)}>
-              <motion.div
-                style={{
-                  position: 'relative', width: '100%', height: '100%', overflow: 'hidden',
-                  borderRadius: SWIPE_SETTINGS.radius, boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-                }}
-                animate={{
-                  x: index * SWIPE_SETTINGS.peekOffset,
-                  rotateZ: index * SWIPE_SETTINGS.stackRotation,
-                  scale: 1 - index * SWIPE_SETTINGS.stackScale,
-                }}
-                initial={false}
-                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-              >
-                <img src={card.img} alt={`Slide ${card.id + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }} loading="lazy" />
-                {index > 0 && (
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    background: '#E0F87D',
-                    opacity: index > 0 ? 0.7 : 0,
-                    pointerEvents: 'none',
-                    borderRadius: SWIPE_SETTINGS.radius,
-                  }} />
-                )}
-              </motion.div>
-            </SwipeCard>
-          )
-        })}
+    <div className="gg" role="region" aria-roledescription="carousel" aria-label="Image gallery" tabIndex={0} onKeyDown={onKey}>
+      <div className="gg-stage">
+        <AnimatePresence initial={false} custom={d}>
+          <motion.div
+            key={index}
+            className="gg-slide"
+            custom={d}
+            variants={GG_VARIANTS}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: reduce ? 0.2 : 0.45, ease: [0.16, 1, 0.3, 1] }}
+            drag={n > 1 ? 'x' : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.25}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60) go(1)
+              else if (info.offset.x > 60) go(-1)
+            }}
+          >
+            <img className="gg-backdrop" src={images[index]} alt="" aria-hidden="true" />
+            <img className="gg-img" src={images[index]} alt={`Image ${index + 1} of ${n}`} draggable={false} />
+          </motion.div>
+        </AnimatePresence>
+        {n > 1 && (
+          <>
+            <button type="button" className="gg-nav gg-nav--prev" onClick={() => go(-1)} aria-label="Previous image">←</button>
+            <button type="button" className="gg-nav gg-nav--next" onClick={() => go(1)} aria-label="Next image">→</button>
+          </>
+        )}
+        <span className="gg-count" aria-live="polite">{index + 1} / {n}</span>
       </div>
-      <p style={{ position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 8 }}>Drag to browse</p>
+      {n > 1 && (
+        <div className="gg-thumbs">
+          {images.map((src, i) => (
+            <button
+              key={src + i}
+              type="button"
+              className={`gg-thumb${i === index ? ' is-active' : ''}`}
+              onClick={() => goTo(i)}
+              aria-label={`Show image ${i + 1}`}
+              aria-current={i === index}
+            >
+              <img src={src} alt="" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -4003,7 +3983,7 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <CSSection title="Merch & Collateral" variant="light" style={{ background: '#D4C7FF', color: '#333333' }}>
+      <CSSection title="Merch & Collateral" variant="light" className="cs-tone--lilac" style={{ color: '#333333' }}>
         <Reveal>
           <p style={{ color: '#333333', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
             Both schools received a suite of branded merchandise: items designed to feel considered rather than off-the-shelf, giving staff and families something tangible to connect with. Each piece carries the school's identity into everyday life, from tote bags and lanyards to keyrings and water bottles.
@@ -4028,7 +4008,7 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
             From A5 handouts to large-format banners, the print suite gave Buttons a consistent presence across waiting room tables, nursery walls, and outdoor spaces. Each piece was designed to work hard in the real world, not just on screen.
           </p>
         </Reveal>
-        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+        <div style={{ position: 'relative', maxWidth: 820, margin: '0 auto' }}>
           <SwipeStackCarousel images={[
             `${B}Banner_Mockup1.webp`,
             `${B}Banner_Mockup2.webp`,
@@ -4036,11 +4016,10 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
             `${B}A2%20Sign.webp`,
             `${B}A2%20Sign%202.webp`,
           ]} />
-          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8 }}>Drag to browse</p>
         </div>
       </CSSection>
 
-      <CSSection title="Social Media Posts" variant="light" style={{ background: '#EEF0F8', color: '#1a1a2e' }}>
+      <CSSection title="Social Media Posts" variant="light" style={{ color: '#333333' }}>
         <Reveal>
           <p style={{ lineHeight: 1.7, color: '#555', marginBottom: '2rem', maxWidth: 640, fontSize: '0.95rem' }}>
             A series of branded social media posts produced for both preschool settings, designed to bring each school's identity to life across Instagram and Facebook.
@@ -4063,7 +4042,7 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       <MotionStats cfg={cfg} />
-      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
+      <PkgLinks cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
   )
@@ -4125,7 +4104,7 @@ function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
         </Reveal>
       </CSSection>
 
-      <CSSection title="Merch & Print" variant="light" style={{ background: '#E8E0FF', color: '#333333' }}>
+      <CSSection title="Merch & Print" variant="light" className="cs-tone--lilac" style={{ color: '#333333' }}>
         <Reveal>
           <p style={{ color: '#333333', lineHeight: 1.7, marginBottom: '1.5rem', maxWidth: 640, fontSize: '0.95rem' }}>
             Every piece of printed material was designed with the sensitivity the context demands: clear, human, and accessible for fathers, families, and prison staff alike.
@@ -4142,7 +4121,7 @@ function InvisibleWallsCaseStudyView({ cat, cs, slide }) {
         />
       </CSSection>
 
-      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
+      <PkgLinks cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
   )
@@ -4241,7 +4220,7 @@ function ParentsConnectCaseStudyView({ cat, cs, slide, onProjectOpen }) {
         </div>
       </CSSection>
 
-      <CSSection title="Logo Animation" variant="light" style={{ background: '#f5f3ff' }}>
+      <CSSection title="Logo Animation" variant="light">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'center' }}>
           <Reveal delay={0}>
             <div style={{ borderRadius: 16, overflow: 'hidden', boxShadow: '0 8px 40px rgba(0,0,0,0.10)' }}>
@@ -4321,14 +4300,13 @@ function ParentsConnectCaseStudyView({ cat, cs, slide, onProjectOpen }) {
             From course handbooks to packaging and printed collateral, every piece was designed to feel cohesive and considered. The print suite gives facilitators and participants something tactile and trustworthy to hold onto throughout the course.
           </p>
         </Reveal>
-        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+        <div style={{ position: 'relative', maxWidth: 820, margin: '0 auto' }}>
           <SwipeStackCarousel images={[
             `${PC}print1.webp`,
             `${PC}print2.webp`,
             `${PC}print3.webp`,
             `${PC}print4.webp`,
           ]} />
-          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8, color: '#fff' }}>Drag to browse</p>
         </div>
       </CSSection>
 
@@ -4354,7 +4332,7 @@ function ParentsConnectCaseStudyView({ cat, cs, slide, onProjectOpen }) {
       </CSSection>
 
       <MotionStats cfg={cfg} />
-      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
+      <PkgLinks cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
   )
@@ -4454,7 +4432,7 @@ function DFHCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      <CSSection title="Handout Samples" variant="light" style={{ background: '#f5f8ff' }}>
+      <CSSection title="Handout Samples" variant="light">
         <Reveal>
           <p style={{ lineHeight: 1.7, color: cfg.dark, fontSize: '0.95rem', maxWidth: 680, marginBottom: '2rem' }}>
             Every course on the platform comes with its own set of handouts, each designed with custom illustrations to make the content feel engaging and accessible. All handout design is produced in-house as part of the embedded team.
@@ -4476,7 +4454,7 @@ function DFHCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       <MotionStats cfg={cfg} />
-      <PkgLinks cs={cs} cfg={cfg} bg="#335CFF" />
+      <PkgLinks cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
     </div>
   )
@@ -4498,6 +4476,7 @@ const PORTFOLIO_WEB_CFG = {
     { label: 'Deployment',  value: 'GitHub Pages'      },
     { label: 'Font',        value: 'Raleway'           },
     { label: 'Status',      value: 'Live'              },
+    { label: 'Recognition', value: 'Awwwards Honorable Mention' },
   ],
   stats: [
     { value: '4',       label: 'Core stack: React 18, Vite, Framer Motion, Lenis'         },
@@ -4505,7 +4484,7 @@ const PORTFOLIO_WEB_CFG = {
     { value: '16',      label: 'Full case studies with custom-built views'                 },
     { value: '4',       label: 'Disciplines: Brand, Motion, Packaging, Web'               },
     { value: '5',       label: 'Brand colours in the complete system'                      },
-    { value: '7★+',    label: 'Awwwards rating — nominated and currently under evaluation'  },
+    { value: '7.09',    label: 'Final Awwwards jury rating, with an Honorable Mention'      },
   ],
 }
 
@@ -4542,8 +4521,8 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       {/* Project Overview */}
       <MotionOverview cs={cs} cfg={PORTFOLIO_WEB_CFG} />
 
-      {/* Awwwards Nomination */}
-      <CSSection title="Awwwards Nomination" variant="dark" style={{ background: '#335CFF' }}>
+      {/* Awwwards Honorable Mention */}
+      <CSSection title="Awwwards Honorable Mention" variant="dark" className="cs-tone--cobalt">
         <Reveal>
           <div className="mob-awwwards-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center' }}>
             {/* Left: image */}
@@ -4554,11 +4533,11 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               <div>
                 <h3 style={{ color: '#E0F87D', fontSize: '1.5rem', fontWeight: 700, margin: '0 0 12px', letterSpacing: '-0.01em' }}>
-                  Nominated for an Awwward
+                  Honorable Mention · August 2026
                 </h3>
                 <p style={{ color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, margin: 0 }}>
-                  This portfolio has been submitted to and nominated by{' '}
-                  <strong style={{ color: '#fff' }}>Awwwards</strong> — the design industry's
+                  This portfolio received an Honorable Mention from{' '}
+                  <strong style={{ color: '#fff' }}>Awwwards</strong>, the design industry's
                   most respected recognition for web design and development excellence. Sites
                   are judged by a jury of leading designers, developers, and creatives worldwide
                   on Design, Usability, Creativity, and Content.
@@ -4567,14 +4546,21 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, textAlign: 'center' }}>
                 {[
-                  { label: 'Design',     stars: '★★★★' },
-                  { label: 'Usability',  stars: '★★★★' },
-                  { label: 'Creativity', stars: '★★★★' },
-                  { label: 'Content',    stars: '★★★★' },
-                ].map(({ label, stars }) => (
-                  <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                    <span style={{ color: '#E0F87D', fontSize: '1rem', letterSpacing: 2 }}>{stars}</span>
-                    <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
+                  { label: 'Design',     score: 7.08 },
+                  { label: 'Usability',  score: 7.15 },
+                  { label: 'Creativity', score: 6.92 },
+                  { label: 'Content',    score: 7.23 },
+                ].map(({ label, score }) => (
+                  <div key={label} style={{
+                    display: 'flex', flexDirection: 'column', gap: 8, padding: '14px 8px',
+                    background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.22)',
+                    borderRadius: 16, backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+                  }}>
+                    <span style={{ color: '#E0F87D', fontSize: '1.35rem', fontWeight: 700, lineHeight: 1 }}>{score.toFixed(2)}</span>
+                    <span style={{ display: 'block', height: 4, borderRadius: 999, background: 'rgba(255,255,255,0.15)', overflow: 'hidden' }}>
+                      <span style={{ display: 'block', height: '100%', width: `${score * 10}%`, borderRadius: 999, background: '#E0F87D' }} />
+                    </span>
+                    <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
                   </div>
                 ))}
               </div>
@@ -4584,13 +4570,13 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
                 borderRadius: 14, padding: '1rem 1.5rem', textAlign: 'center',
               }}>
                 <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 6px' }}>
-                  Current Jury Rating
+                  Final Jury Rating
                 </p>
                 <p style={{ color: '#E0F87D', fontSize: '2rem', fontWeight: 800, margin: '0 0 4px', letterSpacing: '-0.02em' }}>
-                  7+ Stars
+                  7.09 <span style={{ fontSize: '1rem', fontWeight: 600, opacity: 0.7 }}>/ 10</span>
                 </p>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.72rem', margin: 0 }}>
-                  Currently under evaluation by the Awwwards jury
+                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.72rem', margin: 0 }}>
+                  Honorable Mention · 21 August 2026
                 </p>
               </div>
 
@@ -4616,7 +4602,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       {/* The Stack */}
-      <CSSection title="The Stack" variant="dark" style={{ background: "#E0F87D" }}>
+      <CSSection title="The Stack" variant="dark" className="cs-tone--lime">
         <div className="si-characters-grid">
           {PORTFOLIO_WEB_STACK.map((item, i) => (
             <Reveal key={item.name} delay={i * 0.08}>
@@ -4646,7 +4632,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       {/* Custom Illustrations, the six characters */}
-      <CSSection title="Custom Illustrations" style={{ background: "#D4C7FF" }}>
+      <CSSection title="Custom Illustrations" className="cs-tone--lilac">
         <Reveal delay={0.06}>
           <p style={{ color: 'rgba(51,51,51,0.7)', lineHeight: 1.85, marginBottom: 28, maxWidth: 600 }}>
             Six original characters were created as part of the Studio KAIL 2026 rebrand and are woven through the entire site. They orbit the studio mark in the animated hero section, each appearing in turn as an introduction to the studio and its values. They reappear in the footer, anchoring the navigation links with the same warmth and personality. Together they give the portfolio a sense of continuity, the same cast, in different moments, across every page.
@@ -4689,7 +4675,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       </CSSection>
 
       {/* Logo */}
-      <CSSection title="The Studio Mark" style={{ background: "#E0F87D" }}>
+      <CSSection title="The Studio Mark" className="cs-tone--lime">
         <Reveal delay={0.08}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, padding: '32px 0' }}>
             <img
@@ -4790,7 +4776,7 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
             the charity's presence in the communities it serves.
           </p>
         </Reveal>
-        <div style={{ position: 'relative', maxWidth: 700, margin: '0 auto', marginLeft: '-0.5rem' }}>
+        <div style={{ position: 'relative', maxWidth: 820, margin: '0 auto' }}>
           <SwipeStackCarousel images={[
             `${B}building1.webp`,
             `${B}building2.webp`,
@@ -4798,7 +4784,6 @@ function SpurgeonsSignageCaseStudyView({ cat, cs, slide }) {
             `${B}building4.webp`,
             `${B}building5.webp`,
           ]} />
-          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.4, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: -8, color: '#fff' }}>Drag to browse</p>
         </div>
       </CSSection>
 
@@ -4901,156 +4886,6 @@ function SpurgeonsMerchCaseStudyView({ cat, cs, slide }) {
   )
 }
 
-// ── Parents Connect: Course Portal ──────────────────────────────────
-
-const SPURGEONS_PORTAL_CFG = {
-  accent: '#D4C7FF', lightAccent: '#D4C7FF', dark: '#333333',
-  specs: [
-    { label: 'Client',    value: 'Spurgeons'              },
-    { label: 'Product',   value: 'Parents Connect Portal'  },
-    { label: 'Year',      value: '2024'                   },
-    { label: 'Type',      value: 'UX / UI Redesign'        },
-    { label: 'Tool',      value: 'Figma'                  },
-    { label: 'Status',    value: 'Delivered'              },
-  ],
-  stats: [
-    { value: '80%',  label: 'Of users found the redesigned portal easier to use in testing'         },
-    { value: '3+',   label: 'Rounds of user testing run before a single pixel changed'              },
-    { value: '1',    label: 'Critical friction point identified: the course sign-on flow'            },
-    { value: '100%', label: 'Custom UI, no off-the-shelf component library'                        },
-  ],
-}
-
-function SpurgeonsCoursePortalCaseStudyView({ cat, cs, slide }) {
-  const cfg = SPURGEONS_PORTAL_CFG
-  return (
-    <div className="cs-wrap pkg-case-study">
-      <PkgHero cs={cs} slide={slide} cfg={cfg} />
-      <PkgOverview cs={cs} cfg={cfg} />
-
-      {/* The Problem */}
-      <CSSection title="The Problem" variant="dark">
-        <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720, color: '#fff' }}>
-            The Parents Connect course portal, Spurgeons' online learning platform for
-            facilitators and families, was generating a steady stream of support requests.
-            Users were struggling to sign in, losing access to courses they had already
-            enrolled in, and dropping out of the registration flow before completing it.
-            The interface worked in theory, but in practice it was letting people down at
-            exactly the moment they needed it to be seamless.
-          </p>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <p style={{ lineHeight: 1.8, maxWidth: 720, marginTop: '1.25rem', color: '#fff' }}>
-            For Spurgeons, whose users include parents and carers who may not be digitally
-            confident, these friction points were more than inconvenient. They were a barrier
-            to accessing support the charity had built for them. Something had to change.
-          </p>
-        </Reveal>
-      </CSSection>
-
-      {/* User Testing */}
-      <CSSection title="User Testing" variant="light">
-        <Reveal>
-          <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '1.5rem', maxWidth: 720 }}>
-            Before touching a single pixel, multiple rounds of user testing were run with
-            real Parents Connect users: parents, carers, and facilitators who use the
-            portal in their day-to-day. Participants were observed completing common tasks:
-            finding a course, creating an account, and signing back in after a break.
-            Every session was recorded and mapped to identify where confusion entered the
-            flow, and at exactly what point users gave up.
-          </p>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <p style={{ lineHeight: 1.8, color: cfg.dark, marginBottom: '2rem', maxWidth: 720 }}>
-            The findings from each round sharpened the picture. Across all sessions, one
-            screen came up again and again as the single biggest source of friction: the
-            course sign-on screen. Users were uncertain whether they needed to create a
-            new account or already had one, password requirements were hidden until after
-            an error was triggered, and the visual hierarchy gave no clear signal of where
-            to begin. Multiple tests, one consistent answer.
-          </p>
-        </Reveal>
-        <div className="mob-user-testing" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem', marginTop: '0.5rem' }}>
-          {[
-            { icon: '🎙', label: 'Session Observations', note: 'Recorded & mapped across 3+ rounds' },
-            { icon: '🗺', label: 'User Flow Mapping',     note: 'End-to-end journey charted' },
-            { icon: '📉', label: 'Drop-off Analysis',    note: 'Sign-on identified as #1 exit point' },
-          ].map(({ icon, label, note }, i) => (
-            <Reveal key={label} delay={i * 0.08}>
-              <div style={{
-                background: 'rgba(212,199,255,0.12)', border: '1.5px solid rgba(212,199,255,0.3)',
-                borderRadius: 14, padding: '1.5rem', textAlign: 'center',
-                display: 'flex', flexDirection: 'column', gap: 8,
-              }}>
-                <span style={{ fontSize: '2rem' }}>{icon}</span>
-                <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#333' }}>{label}</span>
-                <span style={{ fontSize: '0.75rem', color: 'rgba(51,51,51,0.55)', lineHeight: 1.5 }}>{note}</span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </CSSection>
-
-      {/* The Redesign */}
-      <CSSection title="The Redesign" variant="dark">
-        <Reveal>
-          <p style={{ lineHeight: 1.8, marginBottom: '1.5rem', maxWidth: 720, color: '#fff' }}>
-            With the pain points mapped across multiple test rounds, the sign-on screen was
-            redesigned from scratch in Figma. The focus was ruthlessly on the one thing that
-            kept breaking: helping users understand where they were in the flow, and what
-            they needed to do next.
-          </p>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <p style={{ lineHeight: 1.8, marginBottom: '2.5rem', maxWidth: 720, color: '#fff' }}>
-            The redesign introduced a clear visual split between new and returning user journeys,
-            inline validation with helpful error states, and a warmer visual language aligned
-            with the Parents Connect brand. The wider portal UI was refreshed too, with improved
-            typography, better colour contrast for accessibility, clearer course cards with
-            progress indicators, and a navigation structure that puts the most common tasks
-            front and centre.
-          </p>
-        </Reveal>
-        {/* Figma Embed */}
-        <Reveal>
-          <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.15)' }}>
-            <iframe
-              style={{ border: 'none', display: 'block' }}
-              width="100%"
-              height="450"
-              src="https://embed.figma.com/proto/LZmViGkPxNh7X1w2u8yw7M/Sign-On-Screen?node-id=1-4&embed-host=share"
-              allowFullScreen
-              title="Parents Connect Course Portal: Sign On Screen Redesign"
-            />
-          </div>
-          <p style={{ textAlign: 'center', fontSize: 11, opacity: 0.35, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 10, color: '#fff' }}>
-            Interactive Figma prototype: explore the redesigned sign-on flow
-          </p>
-        </Reveal>
-      </CSSection>
-
-      {/* The Result */}
-      <CSSection title="The Result" variant="light">
-        <Reveal>
-          <p style={{ lineHeight: 1.8, maxWidth: 720, color: cfg.dark }}>
-            A final round of testing with the redesigned interface showed that
-            <strong style={{ color: '#335CFF' }}> 80% of participants found the sign-on
-            experience easier to navigate,</strong> a significant shift from the baseline
-            sessions. Drop-off at the most critical point in the user journey was reduced,
-            and the Parents Connect portal now reflects the warmth and accessibility that
-            Spurgeons puts into everything it builds for families.
-          </p>
-        </Reveal>
-      </CSSection>
-
-      <MotionStats cfg={cfg} />
-      <CSCTA cat={cat} />
-    </div>
-  )
-}
-
-
 // ── Spurgeons: Flyers & Posters ───────────────────────────────────────
 
 const SPURGEONS_FLYERS_CFG = {
@@ -5126,6 +4961,473 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
 }
 
 
+// ── Spurgeons: Support Platform ───────────────────────────────────────
+// Glassmorphism case study. All styles are scoped under .sp-cs in styles.css.
+
+const SP_LIVE_URL = 'https://spurgeonsdesign.github.io/support-platform/'
+
+const SP_IMG = (f) => `${BASE}spurgeons-supportplatform/${f}`
+
+const SP_ICONS = {
+  search:   <><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></>,
+  bell:     <><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></>,
+  key:      <><circle cx="7.5" cy="15.5" r="4.5" /><path d="M10.7 12.3L21 2M16 7l3 3M18 5l2 2" /></>,
+  history:  <><path d="M3 12a9 9 0 1 0 3-6.7L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l3 3" /></>,
+  clock:    <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+  lock:     <><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></>,
+  remove:   <><circle cx="12" cy="12" r="9" /><path d="M15 9l-6 6M9 9l6 6" /></>,
+  download: <><path d="M12 3v12M7 10l5 5 5-5" /><path d="M5 21h14" /></>,
+  eyeoff:   <><path d="M3 3l18 18" /><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6" /><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" /></>,
+  share:    <><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" /></>,
+  bookmark: <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />,
+  phone:    <><rect x="6" y="2" width="12" height="20" rx="3" /><path d="M11 18h2" /></>,
+  check:    <path d="M5 12l5 5L20 7" />,
+  link:     <><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" /><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" /></>,
+  file:     <><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><path d="M14 3v6h6" /></>,
+  zap:      <path d="M13 2L4 14h7l-1 8 9-12h-7z" />,
+  user:     <><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></>,
+  calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></>,
+  layers:   <><path d="M12 2l10 5-10 5L2 7z" /><path d="M2 12l10 5 10-5M2 17l10 5 10-5" /></>,
+  target:   <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1" /></>,
+  code:     <path d="M8 6l-6 6 6 6M16 6l6 6-6 6" />,
+  heart:    <path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z" />,
+  arrow:    <path d="M5 12h14M13 6l6 6-6 6" />,
+  loop:     <><path d="M17 2l4 4-4 4" /><path d="M3 11V9a3 3 0 0 1 3-3h15" /><path d="M7 22l-4-4 4-4" /><path d="M21 13v2a3 3 0 0 1-3 3H3" /></>,
+  spark:    <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />,
+}
+
+function SPIcon({ name, size = 20 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {SP_ICONS[name]}
+    </svg>
+  )
+}
+
+function SPSection({ eyebrow, title, intro, tone = 'light', blobs = [], children }) {
+  return (
+    <section className={`sp-sec sp-sec--${tone}`}>
+      {blobs.map(([color, style], i) => (
+        <span key={i} className={`sp-blob sp-blob--${color}`} style={style} aria-hidden="true" />
+      ))}
+      <div className="sp-sec-inner">
+        <Reveal>
+          {eyebrow && <span className="sp-eyebrow">{eyebrow}</span>}
+          {title && <h2 className="sp-title">{title}</h2>}
+          {intro && <p className="sp-intro">{intro}</p>}
+        </Reveal>
+        {children}
+      </div>
+    </section>
+  )
+}
+
+function SPRing({ value, color }) {
+  const r = 34
+  const c = 2 * Math.PI * r
+  return (
+    <div className="sp-ring-wrap">
+      <svg viewBox="0 0 80 80" className="sp-ring" aria-hidden="true">
+        <circle cx="40" cy="40" r={r} className="sp-ring-track" />
+        <circle cx="40" cy="40" r={r} className="sp-ring-bar" transform="rotate(-90 40 40)"
+          style={{ stroke: color, strokeDasharray: `${(c * value) / 100} ${c}` }} />
+      </svg>
+      <span className="sp-ring-num">{value}%</span>
+    </div>
+  )
+}
+
+function SPResponse({ children }) {
+  return (
+    <div className="sp-response">
+      <SPIcon name="arrow" size={16} />
+      <span>{children}</span>
+    </div>
+  )
+}
+
+function SPBrowser({ src, alt, className = '' }) {
+  return (
+    <div className={`sp-browser ${className}`}>
+      <div className="sp-browser-bar" aria-hidden="true"><i /><i /><i /></div>
+      <img src={src} alt={alt} loading="lazy" />
+    </div>
+  )
+}
+
+const SP_SAFE_LEFT = [
+  ['bell',    'Notifications',  'Every message says only “A new resource has been shared with you by Spurgeons”'],
+  ['key',     'Saved passwords', 'Password saving blocked. “Keep me signed in” is off by default and can be withheld'],
+  ['history', 'Browser history', 'Neutral addresses (?r=30263) and a tab always titled “Spurgeons”'],
+  ['clock',   'Unlocked phone',  'Sign-out after 5 minutes idle'],
+]
+const SP_SAFE_RIGHT = [
+  ['remove',   'Unwanted shares',          'Clients and practitioners can remove items; practitioners see when a client removes one'],
+  ['download', 'Copies & external sites',  'Warnings before downloading or leaving; downloads can be switched off per client'],
+  ['eyeoff',   'Contact details',          'Staff never see them; clients sign up with a one-time code'],
+]
+
+const SP_TABS = [
+  {
+    id: 'practitioner', label: 'Practitioner',
+    title: 'Find it. Share it.',
+    lede: 'A trusted resource found quickly and shared with context.',
+    features: [
+      'Search 26 documents, videos and websites by type, topic, age and source',
+      'Preview and share with a note in seconds',
+      'Track each client’s opens, ratings and removals',
+      'Manage sign-up codes and per-client safety settings',
+    ],
+    visual: (
+      <div className="sp-stack">
+        <SPBrowser src={SP_IMG('1.webp')} alt="Practitioner home with search and filters" className="sp-stack-front" />
+        <SPBrowser src={SP_IMG('2.webp')} alt="Resource catalogue with worksheet previews" className="sp-stack-back" />
+      </div>
+    ),
+  },
+  {
+    id: 'client', label: 'Client',
+    title: 'A private space to return to',
+    lede: 'Its own phone experience. No browsing, no messaging.',
+    features: [
+      'Neutral lock-screen notification',
+      'Password sign-in',
+      'A home screen of shared resources with type filters',
+      'Each resource with the practitioner’s note, rating and remove options',
+    ],
+    visual: (
+      <div className="sp-phones">
+        <img src={SP_IMG('phone3.webp')} alt="Client sign-in screen" loading="lazy" />
+        <img src={SP_IMG('phone4.webp')} alt="A shared video with the practitioner's note" loading="lazy" />
+      </div>
+    ),
+  },
+  {
+    id: 'admin', label: 'Content admin',
+    title: 'Accurate, owned, reviewed',
+    lede: 'Pilot measures and the catalogue, all in one place.',
+    features: [
+      'Pilot measures at a glance',
+      'A catalogue with owners and review dates',
+      'Uploads of documents, videos and links',
+      'A review queue and a requests inbox',
+    ],
+    visual: <SPBrowser src={SP_IMG('5.webp')} alt="Content admin overview dashboard" />,
+  },
+]
+
+function SPPrototypeTabs() {
+  const [tab, setTab] = useState('practitioner')
+  const t = SP_TABS.find((x) => x.id === tab)
+  return (
+    <>
+      <Reveal>
+        <div className="sp-seg" role="tablist" aria-label="Choose a role">
+          {SP_TABS.map((x) => (
+            <button key={x.id} role="tab" aria-selected={tab === x.id} onClick={() => setTab(x.id)}>
+              {x.label}
+            </button>
+          ))}
+        </div>
+      </Reveal>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={tab}
+          className="sp-proto"
+          role="tabpanel"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="sp-proto-copy">
+            <h3>{t.title}</h3>
+            <p>{t.lede}</p>
+            <ul className="sp-feats">
+              {t.features.map((f) => (
+                <li key={f}><span className="sp-check"><SPIcon name="check" size={13} /></span>{f}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="sp-proto-visual">{t.visual}</div>
+        </motion.div>
+      </AnimatePresence>
+    </>
+  )
+}
+
+const SP_TOOLS = [
+  { mono: 'Cl', bg: 'linear-gradient(135deg,#D97757,#F2492B)', name: 'Claude',                    use: 'Code, asset preparation and testing' },
+  { mono: '</>', bg: 'linear-gradient(135deg,#141A5C,#4A35B0)', name: 'HTML, CSS, JavaScript',    use: 'The whole app, no framework, in one self-contained file' },
+  { mono: 'pdf', bg: 'linear-gradient(135deg,#6A4FD1,#9C88F0)', name: 'pdf.js',                   use: 'Previewing PDFs uploaded in the browser' },
+  { mono: 'Py',  bg: 'linear-gradient(135deg,#2A6FDB,#6A4FD1)', name: 'Poppler & Python (Pillow)', use: 'Extracting worksheet text, compressing pages and illustrations',
+    squeeze: [['13MB', 100], ['450KB', 4]] },
+  { mono: 'ff',  bg: 'linear-gradient(135deg,#1F8A5B,#3BB37F)', name: 'FFmpeg',                    use: 'Shrinking a video for sharing',
+    squeeze: [['30MB', 100], ['12MB', 40]] },
+  { mono: 'Pw',  bg: 'linear-gradient(135deg,#B8A400,#DDD21A)', name: 'Playwright',                use: 'Automated click-throughs of every journey',
+    chips: ['Desktop', 'Mobile', 'Light', 'Dark'] },
+]
+
+function SpurgeonsSupportPlatformCaseStudyView({ cat, cs, slide }) {
+  return (
+    <div className="cs-wrap sp-cs">
+
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <section className="sp-hero">
+        <span className="sp-blob sp-blob--purple" style={{ top: -120, right: -60 }} aria-hidden="true" />
+        <span className="sp-blob sp-blob--red"    style={{ bottom: -160, right: '30%' }} aria-hidden="true" />
+        <span className="sp-blob sp-blob--yellow" style={{ top: '20%', left: -140 }} aria-hidden="true" />
+        <div className="sp-hero-grid">
+          <div className="sp-hero-copy">
+            <Reveal>
+              <div className="sp-tags">
+                {(slide.tags || []).map((t) => <span key={t} className="sp-tag">{t}</span>)}
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <span className="sp-hero-kicker">Spurgeons</span>
+              <h1 className="sp-hero-title">Support <em>Platform</em></h1>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="sp-hero-lede">{cs.subtitle}</p>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <div className="sp-hero-actions">
+                <a className="sp-live-btn" href={SP_LIVE_URL} target="_blank" rel="noopener noreferrer">
+                  View the live prototype <span><SPIcon name="arrow" size={14} /></span>
+                </a>
+                <span className="sp-status"><i />{cs.status}</span>
+              </div>
+            </Reveal>
+          </div>
+          <Reveal delay={0.12} className="sp-hero-visual">
+            <div className="sp-hero-frame">
+              <img src={`${BASE}projects/spurgeons-supportplatform.webp`} alt="Spurgeons Support Platform prototype" />
+            </div>
+            <div className="sp-float sp-float--b"><span className="sp-icon-dot sp-icon-dot--sm"><SPIcon name="lock" size={16} /></span>Safeguarding by design</div>
+            <div className="sp-float sp-float--c"><strong>3</strong><span>user roles, one prototype</span></div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── The problem ──────────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="Discovery research" title="The problem"
+        intro="The problem was how hard they were to find, trust, share and come back to. Discovery research by Reason Digital with Spurgeons showed:"
+        blobs={[['purple', { top: -100, left: '40%' }], ['yellow', { bottom: -140, right: -60 }]]}>
+        <div className="sp-prob-grid">
+          <Reveal className="sp-rv">
+            <div className="sp-card sp-stat-card">
+              <SPRing value={59} color="#6A4FD1" />
+              <p className="sp-finding">of staff couldn&rsquo;t find information quickly</p>
+              <SPResponse>Search and filters at the core</SPResponse>
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="sp-rv">
+            <div className="sp-card sp-stat-card">
+              <SPRing value={83} color="#F2492B" />
+              <p className="sp-finding">made their own resources instead of reusing</p>
+              <SPResponse>Approved resources quicker to find than to make</SPResponse>
+            </div>
+          </Reveal>
+          <Reveal delay={0.12} className="sp-rv">
+            <div className="sp-card sp-stat-card">
+              <div className="sp-dots-row">
+                <span className="sp-big">19<small>/22</small></span>
+                <div className="sp-dots" aria-hidden="true">
+                  {Array.from({ length: 22 }, (_, i) => <i key={i} className={i < 19 ? 'on' : ''} />)}
+                </div>
+              </div>
+              <p className="sp-finding">rewrite or explain material before sharing</p>
+              <SPResponse>A short note with every share</SPResponse>
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="sp-rv">
+            <div className="sp-card sp-stat-card sp-stat-card--row">
+              <span className="sp-icon-dot sp-icon-dot--lg"><SPIcon name="bookmark" size={28} /></span>
+              <div className="sp-stat-col">
+                <p className="sp-finding">Families need information they can return to later</p>
+                <SPResponse>A persistent private space</SPResponse>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.12} className="sp-rv">
+            <div className="sp-card sp-stat-card sp-stat-card--row">
+              <span className="sp-icon-dot sp-icon-dot--lg sp-icon-dot--red"><SPIcon name="phone" size={28} /></span>
+              <div className="sp-stat-col">
+                <p className="sp-finding">Phones may be shared or monitored</p>
+                <SPResponse>Even notification wording had to be safe</SPResponse>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+        <Reveal>
+          <div className="sp-banner">
+            <span className="sp-blob sp-blob--red" style={{ right: -120, top: -160, opacity: 0.5 }} aria-hidden="true" />
+            <span className="sp-label"><SPIcon name="spark" size={14} /> The key insight</span>
+            <p>Digital sharing works best as an extension of a practitioner relationship, not open self-service.</p>
+          </div>
+        </Reveal>
+      </SPSection>
+
+      {/* ── The brief ────────────────────────────────────── */}
+      <SPSection eyebrow="The brief" title="A governed, one-way MVP"
+        intro="A product definition for the Senior Leadership Team set out the MVP, built around three people."
+        blobs={[['lilac', { bottom: -120, left: -100 }]]}>
+        <div className="sp-roles">
+          {[
+            ['Practitioners', 'Find a trusted resource quickly and share it with context.', '1.webp', 'left top'],
+            ['Families', 'Return to what was shared with them and say if it helped. No browsing, no messaging.', '3.webp', 'center 30%'],
+            ['Content admins', 'Keep the catalogue accurate, owned and reviewed.', '5.webp', 'center top'],
+          ].map(([name, text, img, pos], i) => (
+            <Reveal key={name} delay={0.08 * i} className="sp-rv">
+              <div className="sp-card sp-role">
+                <div className="sp-role-img"><img src={SP_IMG(img)} alt="" loading="lazy" style={{ objectPosition: pos }} /></div>
+                <div className="sp-role-body">
+                  <h3>{name}</h3>
+                  <p>{text}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <div className="sp-scope">
+          <Reveal className="sp-rv">
+            <div className="sp-card">
+              <span className="sp-label">In the MVP</span>
+              <div className="sp-chips">
+                {['Governed resource catalogue', 'Fast one-way sharing', 'Neutral notifications', 'Private client space', 'Simple feedback & reporting'].map((c) => (
+                  <span key={c} className="sp-chip"><SPIcon name="check" size={14} />{c}</span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08} className="sp-rv">
+            <div className="sp-card">
+              <span className="sp-label">Out of scope</span>
+              <div className="sp-chips">
+                {['Messaging', 'Booking', 'AI advice', 'Courses', 'Public browsing'].map((c) => (
+                  <span key={c} className="sp-chip sp-chip--off">{c}</span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </SPSection>
+
+      {/* ── Safeguarding ─────────────────────────────────── */}
+      <SPSection tone="navy" eyebrow="Safeguarding by design"
+        title="Every screen assumes the person holding the phone might not be the client."
+        blobs={[['purple', { top: '30%', left: '35%', width: 420, height: 420 }], ['red', { bottom: -160, right: -100 }]]}>
+        <div className="sp-safe">
+          <div className="sp-safe-col">
+            {SP_SAFE_LEFT.map(([icon, title, text], i) => (
+              <Reveal key={title} delay={0.06 * i}>
+                <div className="sp-card sp-safe-item">
+                  <span className="sp-icon-dot"><SPIcon name={icon} size={18} /></span>
+                  <div><h4>{title}</h4><p>{text}</p></div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal delay={0.1} className="sp-safe-phone">
+            <div className="sp-notif">
+              <span className="sp-notif-logo"><SPIcon name="bell" size={18} /></span>
+              <div>
+                <div className="sp-notif-top"><b>Spurgeons</b><span>now</span></div>
+                <p>A new resource has been shared with you by Spurgeons</p>
+              </div>
+            </div>
+            <img src={SP_IMG('phone4.webp')} alt="Client view of a shared resource" loading="lazy" />
+          </Reveal>
+          <div className="sp-safe-col">
+            {SP_SAFE_RIGHT.map(([icon, title, text], i) => (
+              <Reveal key={title} delay={0.06 * i}>
+                <div className="sp-card sp-safe-item">
+                  <span className="sp-icon-dot"><SPIcon name={icon} size={18} /></span>
+                  <div><h4>{title}</h4><p>{text}</p></div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </SPSection>
+
+      {/* ── The prototype ────────────────────────────────── */}
+      <SPSection eyebrow="The prototype" title="Three roles, one clickable prototype"
+        intro="Switch between the roles to see each experience."
+        blobs={[['lilac', { top: -100, left: -100 }], ['yellow', { bottom: -160, right: '10%' }]]}>
+        <SPPrototypeTabs />
+      </SPSection>
+
+      {/* ── How it was built ─────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="How it was built" title="Built with Claude as an AI build partner"
+        blobs={[['lilac', { top: -100, right: -60 }], ['yellow', { bottom: -150, left: '30%' }]]}>
+        <div className="sp-duo">
+          <Reveal className="sp-rv">
+            <div className="sp-card">
+              <span className="sp-label">I directed</span>
+              <div className="sp-chips">
+                {['The brief', 'Brand', 'Assets', 'Visual references', 'Review of each round'].map((c) => (
+                  <span key={c} className="sp-chip">{c}</span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <span className="sp-duo-mid"><SPIcon name="loop" size={22} /></span>
+          </Reveal>
+          <Reveal delay={0.12} className="sp-rv">
+            <div className="sp-card sp-card--navy">
+              <span className="sp-label sp-label--light">Claude built</span>
+              <div className="sp-chips">
+                {['The code', 'Asset preparation', 'Testing every change'].map((c) => (
+                  <span key={c} className="sp-chip">{c}</span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+        <div className="sp-tools">
+          {SP_TOOLS.map((t, i) => (
+            <Reveal key={t.name} delay={0.05 * i} className="sp-rv">
+              <div className="sp-card sp-tool">
+                <div className="sp-tool-head">
+                  <span className="sp-mono" style={{ background: t.bg }}>{t.mono}</span>
+                  <h4>{t.name}</h4>
+                </div>
+                <p className="sp-small">{t.use}</p>
+                {t.squeeze && (
+                  <div className="sp-squeeze">
+                    {t.squeeze.map(([label, w], j) => (
+                      <div key={label} className={`sp-bar ${j ? 'sp-bar--after' : 'sp-bar--before'}`}>
+                        <span className="sp-bar-track"><i style={{ width: `${w}%` }} /></span>
+                        <b>{label}</b>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {t.chips && (
+                  <div className="sp-chips sp-chips--tight">
+                    {t.chips.map((c) => <span key={c} className="sp-chip">{c}</span>)}
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal>
+          <p className="sp-note"><SPIcon name="heart" size={14} /> Worksheets, videos, logos and illustrations are real Spurgeons assets; all client names and activity are invented demo data.</p>
+        </Reveal>
+      </SPSection>
+
+      <PkgLinks cs={cs} cfg={{ linksBody: 'Try the live, clickable prototype: switch between the practitioner, client and content admin views.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
 function CaseStudyView({ cat, slide, onProjectOpen }) {
   const cs = slide.caseStudy
   if (cat.id === 'packaging') {
@@ -5151,7 +5453,7 @@ function CaseStudyView({ cat, slide, onProjectOpen }) {
     if (slide.id === 12) return <LeavesOnAStreamCaseStudyView      cat={cat} cs={cs} slide={slide} />
   }
   if (cat.id === 'web' && slide.id === 1) return <PortfolioWebsiteCaseStudyView    cat={cat} cs={cs} slide={slide} />
-  if (cat.id === 'web' && slide.id === 2) return <SpurgeonsCoursePortalCaseStudyView cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'web' && slide.id === 3) return <SpurgeonsSupportPlatformCaseStudyView cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 2) return <PGMCaseStudyView           cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 3) return <PreschoolsCaseStudyView      cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 5) return <InvisibleWallsCaseStudyView cat={cat} cs={cs} slide={slide} />

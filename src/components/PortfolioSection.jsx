@@ -645,7 +645,7 @@ export const CATEGORIES = [
           subtitle: 'React 18 + Vite · Framer Motion · Lenis · Custom CSS · GitHub Pages',
           year: '2026',
           duration: 'Ongoing',
-          status: 'Live · kail.studio',
+          status: 'Live · kail.studio · Awwwards Honorable Mention',
           sections: [
             {
               id: 'overview',
@@ -659,19 +659,20 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 2, bg: '#E0F87D', img: 'projects/spurgeons-courseportal.webp', label: 'Spurgeons: Course Portal',
-        tags: ['UX Design', 'UI Redesign', 'User Testing', 'Charity'],
+        id: 3, bg: '#D4C7FF', img: 'projects/spurgeons-supportplatform.webp', label: 'Spurgeons: Support Platform',
+        tags: ['UX Design', 'Product Design', 'Prototyping', 'Safeguarding', 'Charity'],
         caseStudy: {
-          subtitle: 'UX Design · UI Redesign · User Testing · Figma',
-          year: '2024',
-          duration: 'Ongoing',
-          status: 'Delivered',
+          subtitle: 'UX · Product Design · Visual Design · Prototyping · Built with Claude',
+          year: '2026',
+          duration: '2 days',
+          status: 'Prototype · Going to Senior Leadership Team',
           client: 'Spurgeons',
+          demo: 'https://spurgeonsdesign.github.io/support-platform/',
           sections: [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: 'Spurgeons received consistent complaints that their course portal sign-on experience was confusing and difficult to use. I was brought in to audit the existing flow, run user testing sessions, and redesign the interface from the ground up, making it easier, faster, and more welcoming for the families and professionals Spurgeons serves.',
+              body: `I designed and built a clickable prototype of the Spurgeons Support Platform in two days, turning a product definition paper into something leadership and testers can use.\n\nThe platform helps practitioners find and share quality-assured resources with families, and gives each family a private space to return to them. The prototype is a single-file HTML app with three user roles (practitioner, client and content admin), shared as a private link.`,
             },
           ],
         },
