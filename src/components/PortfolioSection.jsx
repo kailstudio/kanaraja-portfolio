@@ -58,7 +58,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Parents Connect is Spurgeons' suite of three ready-to-run parenting courses, equipping church and community volunteers to support families through different life stages, covering primary years, the teenage years, and neurodiversity. Each course comes with complete facilitator materials and expert-led video content.\n\nWorking as an in-house designer within the Spurgeons team, I designed the Parents Connect identity: a logo that communicates warmth and accessibility, an animated version for use in digital and video contexts, and a suite of digital collateral ensuring the brand carries consistently across course materials, social media, and promotional content.`,
+              body: `Parents Connect is Spurgeons' suite of three ready-to-run parenting courses, equipping church and community volunteers to support families through different life stages, covering primary years, the teenage years, and neurodiversity. Each course comes with complete facilitator materials and expert-led video content.\n\nWorking as an in-house designer within the Spurgeons team, I designed the Parents Connect identity: a logo that communicates warmth and accessibility, an animated version for use in digital and video contexts, and a suite of digital collateral ensuring the brand carries consistently across course materials, social media, and promotional content.\n\nTo keep the brand consistent in everyday use, I also set up a Canva Brand Kit, permissions and a shared workspace, designed templates specifically for non-design users, and created training materials for the family support workers who use them.`,
             },
           ],
         },
@@ -77,7 +77,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Spurgeons runs a family of Ofsted-rated early years settings across Kent. Working as an in-house designer within the Spurgeons team, I developed brand identities for two of their preschools: Buttons, with sites in Maidstone and Ramsgate, and Little Lambs, a community setting that has since closed.\n\nBoth brands were built to feel genuinely warm and child-centred without tipping into the generic: a mark, colour system, and collateral suite that parents and carers could trust at first glance.`,
+              body: `Spurgeons runs a family of Ofsted-rated early years settings across Kent. Working as an in-house designer within the Spurgeons team, I developed brand identities for two of their preschools: Buttons, with sites in Maidstone and Ramsgate, and Little Lambs, a community setting that has since closed.\n\nBoth brands were built to feel genuinely warm and child-centred without tipping into the generic: a mark, colour system, and collateral suite that parents and carers could trust at first glance.\n\nFor Little Lambs, I also set up a Canva Brand Kit, permissions and a shared workspace, designed templates specifically for non-design users, and created training materials so preschool teachers could produce on-brand materials themselves.`,
             },
           ],
         },
@@ -149,7 +149,7 @@ export const CATEGORIES = [
               id: 'outcome',
               label: '06',
               title: 'Outcome',
-              body: `The project was completed in full across all six phases: brand guidelines delivered, logo system finalised, visual language codified, messaging architecture established. Care-Based Safety closed before the new identity could be launched, due to funding constraints outside the organisation's control.\n\nThe rebrand remains a complete strategic and creative work: a full brand system, built with intention, that demonstrates what it looks like when an organisation's values are translated into visual language without compromise.`,
+              body: `The project was completed in full across all six phases: brand guidelines delivered, logo system finalised, visual language codified, messaging architecture established. The handover also put the brand to work in Canva: a Brand Kit, permissions and a shared workspace, templates designed specifically for non-design users, and training materials for CBS's admin team. Care-Based Safety closed before the new identity could be launched, due to funding constraints outside the organisation's control.\n\nThe rebrand remains a complete strategic and creative work: a full brand system, built with intention, that demonstrates what it looks like when an organisation's values are translated into visual language without compromise.`,
             },
             {
               id: 'reflection',
@@ -247,7 +247,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `Spurgeons' Digital Family Hub is a free online platform offering courses and downloadable resources for parents and professionals supporting children and young people, covering everything from mental health and additional needs to parenting after separation and the impact of parental imprisonment.\n\nIn 2026, the Digital Family Hub was established as its own team and I joined as its in-house designer, moving across from Spurgeons' central marketing function. Since conception I have been the sole design presence within the team, responsible for all design work: conceiving the initial brand and logo, producing custom illustrations and animations, designing handouts and course materials, and managing all print and packaging. From the ground up, I designed the DFH identity and continue to lead every creative output the Hub produces.`,
+              body: `Spurgeons' Digital Family Hub is a free online platform offering courses and downloadable resources for parents and professionals supporting children and young people, covering everything from mental health and additional needs to parenting after separation and the impact of parental imprisonment.\n\nIn 2026, the Digital Family Hub was established as its own team and I joined as its in-house designer, moving across from Spurgeons' central marketing function. Since conception I have been the sole design presence within the team, responsible for all design work: conceiving the initial brand and logo, producing custom illustrations and animations, designing handouts and course materials, and managing all print and packaging. From the ground up, I designed the DFH identity and continue to lead every creative output the Hub produces.\n\nAlongside the identity, I set up the Hub's Canva Brand Kit, permissions and shared workspace, designed templates specifically for non-design users, and created training materials so non-designers in the team can produce on-brand materials themselves.`,
             },
           ],
         },

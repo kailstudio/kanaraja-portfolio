@@ -473,7 +473,7 @@ const PHASES = [
   { n: '03', name: 'Colour & Type',     desc: 'Earthy palette finalised, Montserrat system set' },
   { n: '04', name: 'Imagery',           desc: 'Illustration style, photography direction, icon system' },
   { n: '05', name: 'Voice & Messaging', desc: 'Messaging architecture, tone of voice, campaign lines' },
-  { n: '06', name: 'Handover',          desc: 'Brand guidelines, all assets, complete file delivery' },
+  { n: '06', name: 'Handover',          desc: 'Brand guidelines, Canva Brand Kit and templates, admin team training' },
 ]
 
 function CSTimeline() {
@@ -601,6 +601,33 @@ function IllustrationsSection({ label = '05', images = [], colors = [] }) {
   return (
     <CSSection label={label} title="Custom Illustrations & Iconography">
       <ImageGallery images={images} colors={colors} />
+    </CSSection>
+  )
+}
+
+// ── Shared: Canva Brand Kit, templates & training ─────────────────────
+// Used by the CBS, Parents Connect, Digital Family Hub and Preschools
+// (Little Lambs) case studies. Copy is passed in per project.
+function CanvaEnablement({ title = 'Canva Brand Kit, Templates & Training', intro, kit, templates, training }) {
+  const cards = [
+    { icon: '◎', title: 'Brand Kit & Shared Workspace', body: kit },
+    { icon: '▤', title: 'Templates for Non-Designers',  body: templates },
+    { icon: '✦', title: 'Training Materials',           body: training },
+  ]
+  return (
+    <CSSection title={title} className="cs-tone--lime">
+      <Reveal delay={0.08}>
+        <p className="cs-lead cs-lead--sm" style={{ color: '#333333' }}>{intro}</p>
+      </Reveal>
+      <div className="cs-enable-grid">
+        {cards.map(({ icon, title: cardTitle, body }, i) => (
+          <Reveal key={cardTitle} delay={0.1 + i * 0.07} className="cs-brief-card">
+            <span className="cs-brief-icon">{icon}</span>
+            <h4 className="cs-brief-title">{cardTitle}</h4>
+            <p className="cs-brief-body" style={{ color: 'rgba(51,51,51,0.72)' }}>{body}</p>
+          </Reveal>
+        ))}
+      </div>
     </CSSection>
   )
 }
@@ -3689,6 +3716,12 @@ function CBSCaseStudyView({ cat, cs, slide }) {
       <CSStrategy       cs={cs} />
       <CSVisualIdentity cs={cs} />
       <IllustrationsSection images={CBS_ILLUS_IMAGES} colors={CBS_GALLERY_COLORS} />
+      <CanvaEnablement
+        intro="The handover went further than a guidelines PDF. Day-to-day communications would sit with CBS's admin team rather than a designer, so the brand was set up in Canva for them to run on their own."
+        kit="The CBS logo system, colour palette and typography were built into a Canva Brand Kit inside a shared workspace, with permissions set so the team always worked from the approved assets."
+        templates="A set of templates designed specifically for non-design users, so the admin team could produce on-brand materials without design support."
+        training="Training materials written for the admin team, showing non-designers how to use the Brand Kit and templates with confidence."
+      />
       <CSImpact />
       <CSCTA            cat={cat} />
     </div>
@@ -3745,6 +3778,7 @@ const PRESCHOOLS_CFG = {
     { label: 'Year',       value: '2022' },
     { label: 'Type',       value: 'Brand Identity' },
     { label: 'Output',     value: 'Logos · Collateral · Signage · Merch' },
+    { label: 'Canva',      value: 'Brand Kit · Templates · Training' },
     { label: 'Location',   value: 'Kent, UK' },
     { label: 'Status',     value: 'Live' },
   ],
@@ -4042,6 +4076,14 @@ function PreschoolsCaseStudyView({ cat, cs, slide }) {
         </p>
       </CSSection>
 
+      <CanvaEnablement
+        title="Little Lambs: Canva Brand Kit, Templates & Training"
+        intro="At Little Lambs, everyday materials were made by preschool teachers rather than designers. To keep the identity consistent in their hands, I set the brand up in Canva in a form they could use confidently on their own."
+        kit="The Little Lambs logo, colours and fonts were built into a Canva Brand Kit inside a shared workspace, with permissions set so staff always worked from the approved assets."
+        templates="A set of templates designed specifically for non-design users, so preschool teachers could produce on-brand materials without design support."
+        training="Training materials created for preschool teachers, showing non-designers how to use the Brand Kit and templates with confidence."
+      />
+
       <MotionStats cfg={cfg} />
       <PkgLinks cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
@@ -4137,6 +4179,7 @@ const PARENTS_CONNECT_CFG = {
     { label: 'Year',     value: '2023' },
     { label: 'Type',     value: 'Brand Identity · Digital' },
     { label: 'Output',   value: 'Logo · Animated Logo · Digital Collateral' },
+    { label: 'Canva',    value: 'Brand Kit · Templates · Training' },
     { label: 'Status',   value: 'Live' },
   ],
   stats: [
@@ -4332,6 +4375,13 @@ function ParentsConnectCaseStudyView({ cat, cs, slide, onProjectOpen }) {
         </div>
       </CSSection>
 
+      <CanvaEnablement
+        intro="A brand only holds together if the people using it every day can keep it consistent. Parents Connect is put to work by family support workers, not designers, so I set the identity up in Canva in a form they could use confidently on their own."
+        kit="The Parents Connect logos, colours and fonts were built into a Canva Brand Kit inside a shared workspace, with permissions set so everyone works from the approved assets."
+        templates="A set of templates designed specifically for non-design users, so family support workers can produce on-brand materials without design support."
+        training="Training materials created for family support workers, showing non-designers how to use the Brand Kit and templates with confidence."
+      />
+
       <MotionStats cfg={cfg} />
       <PkgLinks cs={cs} cfg={cfg} />
       <CSCTA cat={cat} />
@@ -4348,6 +4398,7 @@ const DFH_CFG = {
     { label: 'Year',     value: '2026' },
     { label: 'Type',     value: 'Brand Identity · Digital' },
     { label: 'Output',   value: 'Logo · Animated Logo · Digital Collateral' },
+    { label: 'Canva',    value: 'Brand Kit · Templates · Training' },
     { label: 'Status',   value: 'Live · Ongoing' },
   ],
   stats: [
@@ -4453,6 +4504,13 @@ function DFHCaseStudyView({ cat, cs, slide }) {
           ))}
         </div>
       </CSSection>
+
+      <CanvaEnablement
+        intro="As the Hub's only designer, part of the job is making sure the brand holds up when I am not the one making the thing. I set the DFH identity up in Canva so non-designers in the team can create on-brand materials themselves."
+        kit="The DFH logos, colours and fonts were built into a Canva Brand Kit inside a shared workspace, with permissions set so everyone works from the approved assets."
+        templates="A set of templates designed specifically for non-design users, so the team can produce on-brand materials without waiting on design support."
+        training="Training materials created for non-designers in the team, showing them how to use the Brand Kit and templates with confidence."
+      />
 
       <MotionStats cfg={cfg} />
       <PkgLinks cs={cs} cfg={cfg} />
@@ -4648,21 +4706,6 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
           {PORTFOLIO_WEB_HERO_INTRO_NUMS.map((n, i) => (
             <Reveal key={n} delay={0.06 + i * 0.06}>
               <WLMedia src={`${BASE}hero-intro/herointro${n}.webp`} alt={`Studio KAIL character ${n}`} />
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Character roster */}
-        <div className="si-characters-grid" style={{ marginTop: 32 }}>
-          {STUDIO_INTRO_CHARACTERS.map((c, i) => (
-            <Reveal key={c.name} delay={i * 0.07}>
-              <div className="si-character-card">
-                <div className="si-character-avatar">
-                  <img src={c.img} alt={c.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '999px' }} />
-                </div>
-                <h3 className="si-character-name" style={{ color: '#335CFF' }}>{c.name}</h3>
-                <p className="si-character-bio">{c.bio}</p>
-              </div>
             </Reveal>
           ))}
         </div>
