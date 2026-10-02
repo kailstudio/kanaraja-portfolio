@@ -664,7 +664,6 @@ export const CATEGORIES = [
         caseStudy: {
           subtitle: 'UX · Product Design · Visual Design · Prototyping · Built with Claude',
           year: '2026',
-          duration: '2 days',
           status: 'Prototype · Going to Senior Leadership Team',
           client: 'Spurgeons',
           demo: 'https://spurgeonsdesign.github.io/support-platform/',
@@ -672,7 +671,7 @@ export const CATEGORIES = [
             {
               id: 'overview',
               title: 'Project Overview',
-              body: `I designed and built a clickable prototype of the Spurgeons Support Platform in two days, turning a product definition paper into something leadership and testers can use.\n\nThe platform helps practitioners find and share quality-assured resources with families, and gives each family a private space to return to them. The prototype is a single-file HTML app with three user roles (practitioner, client and content admin), shared as a private link.`,
+              body: `I designed and built a clickable prototype of the Spurgeons Support Platform, turning a product definition paper into something leadership and testers can use.\n\nThe platform helps practitioners find and share quality-assured resources with families, and gives each family a private space to return to them. The prototype is a single-file HTML app with three user roles (practitioner, client and content admin), shared as a private link.`,
             },
           ],
         },

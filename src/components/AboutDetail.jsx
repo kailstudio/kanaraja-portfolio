@@ -70,7 +70,7 @@ const EXPERIENCE = [
       {
         name: 'Support Platform',
         note: 'Prototype',
-        body: 'Designed and built a clickable prototype in two days, turning a product definition paper into something leadership and testers can use. It helps practitioners find and share quality-assured resources with families, and gives each family a private space to return to them.',
+        body: 'Designed and built a clickable prototype, turning a product definition paper into something leadership and testers can use. It helps practitioners find and share quality-assured resources with families, and gives each family a private space to return to them.',
         link: ['web', 3],
       },
     ],
