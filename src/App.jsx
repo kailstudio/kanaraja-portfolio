@@ -6,6 +6,7 @@ import HeroSequence from './components/HeroSequence.jsx'
 import PortfolioSection from './components/PortfolioSection.jsx'
 import PortfolioTypes from './components/PortfolioTypes.jsx'
 import ProjectDetail from './components/ProjectDetail.jsx'
+import AboutDetail from './components/AboutDetail.jsx'
 import SiteHeader from './components/SiteHeader.jsx'
 import LoadingScreen from './components/LoadingScreen.jsx'
 import PasswordGate from './components/PasswordGate.jsx'
@@ -19,6 +20,10 @@ export default function App() {
   const [siteReady,    setSiteReady]    = useState(false)
   const [loaderExited, setLoaderExited] = useState(false)
   const [detailProject, setDetailProject] = useState(null) // { cat, slide }
+  const [aboutOpen,    setAboutOpen]    = useState(false)
+  // True while a case study opened from the About panel is showing, so its
+  // Back / close button returns to About rather than dropping to the homepage.
+  const [returnToAbout, setReturnToAbout] = useState(false)
 
   const handleReady      = useCallback(() => setSiteReady(true),    [])
   const handleLoaderDone = useCallback(() => setLoaderExited(true), [])
@@ -26,6 +31,7 @@ export default function App() {
   // Fire a GA4 event every time a project detail panel is opened so you can
   // see click counts per project in Analytics → Events → project_open.
   const openProject = useCallback((cat, slide) => {
+    setAboutOpen(false) // About links through to case studies — swap panels
     setDetailProject({ cat, slide })
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'project_open', {
@@ -35,6 +41,22 @@ export default function App() {
       })
     }
   }, [])
+
+  const openAbout  = useCallback(() => setAboutOpen(true),  [])
+  const closeAbout = useCallback(() => setAboutOpen(false), [])
+
+  const openProjectFromAbout = useCallback((cat, slide) => {
+    setReturnToAbout(true)
+    openProject(cat, slide)
+  }, [openProject])
+
+  const closeProject = useCallback(() => {
+    setDetailProject(null)
+    if (returnToAbout) {
+      setReturnToAbout(false)
+      setAboutOpen(true)
+    }
+  }, [returnToAbout])
 
   const ease = [0.16, 1, 0.3, 1]
 
@@ -143,7 +165,7 @@ export default function App() {
       <div className="app-bg" aria-hidden="true" />
 
       {/* Fixed glass header */}
-      <SiteHeader onProjectOpen={openProject} />
+      <SiteHeader onProjectOpen={openProject} onAboutOpen={openAbout} />
 
       {/* Hero — first thing shown once the loader exits. Always mounted
           (like .site-split below) rather than conditionally rendered, so
@@ -184,9 +206,16 @@ export default function App() {
             key={`${detailProject.cat.id}-${detailProject.slide?.id ?? 'cat'}`}
             cat={detailProject.cat}
             slide={detailProject.slide}
-            onClose={() => setDetailProject(null)}
+            onClose={closeProject}
             onProjectOpen={openProject}
           />
+        )}
+      </AnimatePresence>
+
+      {/* About panel — opened from the site menu */}
+      <AnimatePresence>
+        {aboutOpen && (
+          <AboutDetail key="about" onClose={closeAbout} onProjectOpen={openProjectFromAbout} />
         )}
       </AnimatePresence>
 

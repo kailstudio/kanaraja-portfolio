@@ -3,6 +3,8 @@
  *
  * Desktop: Logo left, category nav right. Hovering a category reveals a
  *   glassmorphism dropdown panel with all projects in that category.
+ *   "About" sits before the categories as a plain link (no dropdown) and
+ *   opens the About panel.
  *
  * Mobile (≤600px): Logo left, hamburger right. Tapping opens a full-screen
  *   dark-glass overlay. Categories are accordion rows — tap to expand and
@@ -133,7 +135,7 @@ const MOBILE_PROJECT_VARIANTS = {
 }
 
 // SiteHeader renders the header bar + the portalised MobileMenu below it.
-export default function SiteHeader({ onProjectOpen }) {
+export default function SiteHeader({ onProjectOpen, onAboutOpen }) {
   // Desktop hover nav
   const [activeId, setActiveId] = useState(null)
   const [dropdownPage, setDropdownPage] = useState(0)
@@ -225,6 +227,17 @@ export default function SiteHeader({ onProjectOpen }) {
 
         {/* Desktop category nav — hidden on mobile via CSS */}
         <nav className="site-nav" aria-label="Portfolio categories" ref={navRef}>
+          {/* About — plain link, no dropdown. Hovering it closes any open
+              category dropdown, the same way moving to another category does. */}
+          <div className="site-nav-item" onMouseEnter={() => setActiveId(null)}>
+            <button
+              className="site-nav-btn"
+              onClick={() => { setActiveId(null); onAboutOpen?.() }}
+            >
+              About
+            </button>
+          </div>
+
           {CATEGORIES.map((cat) => (
             <div
               key={cat.id}
@@ -350,6 +363,7 @@ export default function SiteHeader({ onProjectOpen }) {
       setMobileCatOpen={setMobileCatOpen}
       onClose={closeMobileMenu}
       onProjectOpen={onProjectOpen}
+      onAboutOpen={onAboutOpen}
     />
   </>
   )
@@ -357,7 +371,7 @@ export default function SiteHeader({ onProjectOpen }) {
 
 // ── Mobile overlay — rendered via portal so backdrop-filter on the header
 //    doesn't hijack `position:fixed` and trap it inside the header's 52px box.
-function MobileMenu({ isOpen, mobileCatOpen, setMobileCatOpen, onClose, onProjectOpen }) {
+function MobileMenu({ isOpen, mobileCatOpen, setMobileCatOpen, onClose, onProjectOpen, onAboutOpen }) {
   const scrollToWork = () => {
     document.getElementById('work')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
@@ -373,11 +387,28 @@ function MobileMenu({ isOpen, mobileCatOpen, setMobileCatOpen, onClose, onProjec
           exit="hidden"
           aria-label="Mobile navigation"
         >
+          {/* About — same pill as the categories, but opens the About panel
+              directly instead of expanding an accordion. */}
+          <motion.div
+            className="site-mobile-cat"
+            custom={0}
+            variants={MOBILE_CAT_VARIANTS}
+            initial="hidden"
+            animate="visible"
+          >
+            <button
+              className="site-mobile-cat-btn"
+              onClick={() => { onClose(); onAboutOpen?.() }}
+            >
+              <span className="site-mobile-cat-label">About</span>
+            </button>
+          </motion.div>
+
           {CATEGORIES.map((cat, i) => (
             <motion.div
               key={cat.id}
               className="site-mobile-cat"
-              custom={i}
+              custom={i + 1}
               variants={MOBILE_CAT_VARIANTS}
               initial="hidden"
               animate="visible"

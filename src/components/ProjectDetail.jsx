@@ -107,8 +107,8 @@ function Counter({ to, suffix = '', prefix = '' }) {
   return <span ref={ref}>{prefix}{isNum ? val : to}{suffix}</span>
 }
 
-// Scroll-reveal motion wrapper
-function Reveal({ children, delay = 0, className }) {
+// Scroll-reveal motion wrapper (also used by AboutDetail.jsx)
+export function Reveal({ children, delay = 0, className }) {
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
   return (
@@ -124,8 +124,8 @@ function Reveal({ children, delay = 0, className }) {
   )
 }
 
-// Section wrapper — title only (numbering removed)
-function CSSection({ label, title, children, variant = 'light', className, style }) {
+// Section wrapper — title only (numbering removed) (also used by AboutDetail.jsx)
+export function CSSection({ label, title, children, variant = 'light', className, style }) {
   const cls = ['cs-section', `cs-section--${variant}`, className].filter(Boolean).join(' ')
   return (
     <section className={cls} style={style}>
@@ -1154,7 +1154,8 @@ function CTABanner() {
   )
 }
 
-function CSCTA() {
+// Heading lines default to the case-study wording; AboutDetail.jsx passes its own.
+export function CSCTA({ lineOne = 'Working on', lineTwo = 'something similar?' }) {
   return (
     <section className="cs-end-cta">
       {/* Background image, large, right-anchored, bottom may be clipped */}
@@ -1167,7 +1168,7 @@ function CSCTA() {
       {/* Foreground content: heading + links */}
       <div className="cs-cta-content">
         <Reveal delay={0.06}>
-          <p className="cs-cta-eyebrow"><span style={{ fontWeight: 300, display: 'block' }}>Working on</span><span style={{ fontWeight: 400, display: 'block' }}>something similar?</span></p>
+          <p className="cs-cta-eyebrow"><span style={{ fontWeight: 300, display: 'block' }}>{lineOne}</span><span style={{ fontWeight: 400, display: 'block' }}>{lineTwo}</span></p>
         </Reveal>
         <Reveal delay={0.2}>
           <div className="cs-cta-links">
