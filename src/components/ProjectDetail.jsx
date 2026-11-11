@@ -1784,6 +1784,10 @@ function PkgGallery({ cfg }) {
             </div>
             {c && <div className="pkg-gallery-item pkg-gallery-item--full"><img src={c.src} alt={c.alt} /></div>}
           </>
+        ) : galleryLayout === 'six' ? (
+          <div className="pkg-gallery-row pkg-gallery-row--three">
+            {images.map((img) => <div key={img.src} className="pkg-gallery-item pkg-gallery-item--wide"><img src={img.src} alt={img.alt} /></div>)}
+          </div>
         ) : galleryLayout === 'one-then-two' ? (
           <>
             <div className="pkg-gallery-item pkg-gallery-item--full"><img src={a.src} alt={a.alt} /></div>
@@ -5320,9 +5324,9 @@ function SpurgeonsSupportPlatformCaseStudyView({ cat, cs, slide }) {
         blobs={[['lilac', { bottom: -120, left: -100 }]]}>
         <div className="sp-roles">
           {[
-            ['Practitioners', 'Find a trusted resource quickly and share it with context.', '1.webp', 'left top'],
-            ['Families', 'Return to what was shared with them and say if it helped. No browsing, no messaging.', '3.webp', 'center 30%'],
-            ['Content admins', 'Keep the catalogue accurate, owned and reviewed.', '5.webp', 'center top'],
+            ['Practitioners', 'Find a trusted resource quickly and share it with context.', 'role-practitioner.webp', 'center'],
+            ['Families', 'Return to what was shared with them and say if it helped. No browsing, no messaging.', 'role-family.webp', 'center'],
+            ['Content admins', 'Keep the catalogue accurate, owned and reviewed.', 'role-admin.webp', 'center'],
           ].map(([name, text, img, pos], i) => (
             <Reveal key={name} delay={0.08 * i} className="sp-rv">
               <div className="sp-card sp-role">
@@ -5472,6 +5476,408 @@ function SpurgeonsSupportPlatformCaseStudyView({ cat, cs, slide }) {
 }
 
 
+// ── PBD Project: Peroxisome Film ──────────────────────────────────────
+
+const PBD_LIVE_URL = 'https://kailstudio.github.io/PBD-explainer/'
+const PBD_IMG = (f) => `${BASE}pbd/${f}`
+const PBD_FILM_SRC = `${BASE}pbd/pbd-film.webm`
+
+const PBD_FILM_CFG = {
+  accent: '#2E8C99', lightAccent: '#5FB8C4', dark: '#122A30',
+  specs: [
+    { label: 'Client',   value: 'PBD Project' },
+    { label: 'Year',     value: '2026' },
+    { label: 'Type',     value: 'Motion Design · Science Explainer' },
+    { label: 'Output',   value: 'One-Minute Animated Film' },
+    { label: 'Timeline', value: '3 Weeks' },
+    { label: 'Status',   value: 'Delivered' },
+  ],
+  stats: [
+    { value: '1 min', label: 'Film Length' },
+    { value: '10+',   label: 'Versions Refined' },
+    { value: '15',    label: 'Topics Introduced' },
+    { value: '3 wks', label: 'Film + Website' },
+  ],
+  images: [
+    { src: PBD_IMG('film-title.webp'),     alt: 'Peroxisome title card' },
+    { src: PBD_IMG('film-fats.webp'),      alt: 'Breaks down fats: very-long-chain fatty acids' },
+    { src: PBD_IMG('film-lipids.webp'),    alt: 'Builds essential lipids' },
+    { src: PBD_IMG('film-crosstalk.webp'), alt: 'The peroxisome talking to other parts of the cell' },
+    { src: PBD_IMG('film-fail.webp'),      alt: 'But when peroxisomes fail, the damage spreads' },
+    { src: PBD_IMG('film-diseases.webp'),  alt: 'The conditions linked to peroxisomes branching out around a failing peroxisome' },
+  ],
+  galleryLayout: 'six',
+}
+
+const PBD_FILM_STORY = [
+  { step: '01', title: 'Inside every cell', img: 'film-cells.webp',
+    text: 'Opens on a field of cells and moves into one of them to introduce the peroxisome by name.' },
+  { step: '02', title: 'What it does', img: 'film-functions.webp',
+    text: 'Breaking down fats, building essential lipids, clearing away toxins and talking to the rest of the cell, each in its own short scene.' },
+  { step: '03', title: 'When it fails', img: 'film-diseases.webp',
+    text: 'The peroxisome turns red and breaks apart, and the conditions it is linked to branch out around it.' },
+  { step: '04', title: 'Why it matters', img: 'film-closing.webp',
+    text: "It closes on PBD Project's message: understanding the peroxisome is how we start to fix it." },
+]
+
+function PBDFilmCaseStudyView({ cat, cs, slide }) {
+  const cfg = PBD_FILM_CFG
+  return (
+    <div className="cs-wrap pkg-case-study">
+      <MotionHero cs={cs} slide={slide} cfg={cfg} />
+
+      <MotionOverview cs={cs} cfg={cfg} />
+
+      {/* The Film */}
+      <CSSection title="The Film" variant="dark">
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, maxWidth: 640, margin: '0 auto 40px' }}>
+            One minute that takes the viewer from a single cell to the diseases peroxisomes are linked to, and then points them to the Peroxisome Explainer to find out more.
+          </p>
+          <Reveal delay={0.06}>
+            <SCVideoPlayer src={PBD_FILM_SRC} label="PBD Project · Peroxisome Film" />
+          </Reveal>
+        </div>
+      </CSSection>
+
+      {/* The Story */}
+      <CSSection title="The Story">
+        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, opacity: 0.85, maxWidth: 740, margin: '0 auto 40px' }}>
+            Peroxisomes are hard to picture and their names are long, so the film tells the story in four simple steps, with one idea on screen at a time.
+          </p>
+          <div className="mob-1col" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
+            {PBD_FILM_STORY.map((s, i) => (
+              <Reveal key={s.step} delay={0.06 * i}>
+                <div style={{ background: 'rgba(46,140,153,0.08)', border: '1px solid rgba(46,140,153,0.2)', borderRadius: 16, overflow: 'hidden', height: '100%' }}>
+                  <img src={PBD_IMG(s.img)} alt={s.title} loading="lazy" style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover' }} />
+                  <div style={{ padding: '1.25rem 1.5rem 1.5rem' }}>
+                    <h4 style={{ fontFamily: 'Raleway, sans-serif', fontSize: 13, letterSpacing: '0.1em', textTransform: 'uppercase', color: cfg.accent, marginBottom: 10 }}>
+                      {s.step} · {s.title}
+                    </h4>
+                    <p style={{ fontSize: 14, lineHeight: 1.75, opacity: 0.8 }}>{s.text}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </CSSection>
+
+      {/* The Approach */}
+      <CSSection title="The Approach" variant="dark">
+        <div style={{ maxWidth: 740, margin: '0 auto' }}>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, marginBottom: 24 }}>
+            The film was made alongside the website, so the two share one visual language: the same glossy, liquid peroxisome, the same drifting proteins and pixel textures, and the same branching layout that the explainer's main page uses for functions and diseases.
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.8, color: '#fff', opacity: 0.85, marginBottom: 40 }}>
+            Cool teal carries what the peroxisome does; PBD Project's brand red takes over when it fails. Short lines of kinetic type keep the science readable for families and researchers alike.
+          </p>
+          <div className="mob-1col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
+            {[
+              { label: 'One Visual Language', desc: 'Built from the same peroxisome, proteins and textures as the website, so the film and the site feel like one piece.' },
+              { label: 'Plain-Language Science', desc: 'One idea per scene, in short kinetic type, so a complex organelle reads clearly in a minute.' },
+              { label: 'On Brand', desc: "PBD Project's colours, typefaces, sparks and pixel pattern used throughout." },
+            ].map((item, i) => (
+              <Reveal key={item.label} delay={i * 0.1}>
+                <div className="si-character-card">
+                  <h3 className="si-character-name" style={{ color: cfg.lightAccent, fontSize: 13, marginBottom: 8 }}>{item.label}</h3>
+                  <p className="si-character-bio" style={{ fontSize: 14, color: '#fff', opacity: 0.85 }}>{item.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </CSSection>
+
+      <PkgGallery cfg={cfg} />
+
+      <MotionStats cfg={cfg} />
+      <PkgLinks cs={cs} cfg={{ linksBody: 'The film introduces the interactive Peroxisome Explainer, built alongside it for PBD Project.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
+// ── PBD Project: Peroxisome Explainer ─────────────────────────────────
+// Reuses the glass case study layout (.sp-cs) from the Support Platform.
+
+const PBD_TABS = [
+  {
+    id: 'intro', label: 'Intro',
+    title: 'A story told by scrolling',
+    lede: 'A first-visit intro, scrubbed forwards and back as you scroll.',
+    features: [
+      'The peroxisome draws itself in, line by line',
+      'It pixelates into place, fails, then heals',
+      'Three short lines of copy set up the whole site',
+      'Skip button, and left out for deep links and reduced motion',
+    ],
+    visual: (
+      <div className="sp-stack">
+        <SPBrowser src={PBD_IMG('intro-sits.webp')} alt="Intro: the peroxisome forming inside the cell" className="sp-stack-front" />
+        <SPBrowser src={PBD_IMG('intro-fails.webp')} alt="Intro: the peroxisome failing" className="sp-stack-back" />
+      </div>
+    ),
+  },
+  {
+    id: 'hub', label: 'Main page',
+    title: 'Two ways in',
+    lede: 'One peroxisome at the centre, with every topic branching off it.',
+    features: [
+      'Switch between Functions and Diseases & Conditions',
+      'The page cross-fades from cool lilac to brand red',
+      'Branches light up on hover or keyboard focus',
+      'Add a topic to the content file and the ring re-spaces itself',
+    ],
+    visual: (
+      <div className="sp-stack">
+        <SPBrowser src={PBD_IMG('hub-functions.webp')} alt="Main page, Functions view" className="sp-stack-front" />
+        <SPBrowser src={PBD_IMG('hub-diseases.webp')} alt="Main page, Diseases & Conditions view" className="sp-stack-back" />
+      </div>
+    ),
+  },
+  {
+    id: 'detail', label: 'Topic pages',
+    title: 'From overview to evidence',
+    lede: 'Each topic reads top to bottom, with the research one click away.',
+    features: [
+      'The peroxisome glides into the corner and stays as the way back',
+      'A plain-language description, then one glass card per sub-topic',
+      'Opening a card shows two panels of detail below it',
+      'Every claim linked to its source paper',
+    ],
+    visual: (
+      <div className="sp-stack">
+        <SPBrowser src={PBD_IMG('detail-functions.webp')} alt="Lipid Breakdown topic page" className="sp-stack-front" />
+        <SPBrowser src={PBD_IMG('detail-diseases.webp')} alt="Genetic Peroxisomal Disorders topic page" className="sp-stack-back" />
+      </div>
+    ),
+  },
+  {
+    id: 'mobile', label: 'Mobile',
+    title: 'Made for phones too',
+    lede: 'On small and touch screens the ring becomes a list.',
+    features: [
+      'Every branch description visible, no hover needed',
+      'Each row ends in an arrow so it reads as tappable',
+      'The same topic pages and evidence panels',
+    ],
+    visual: (
+      <div className="sp-phones">
+        <img src={PBD_IMG('mobile-hub-phone.webp')} alt="Main page on a phone" loading="lazy" />
+        <img src={PBD_IMG('mobile-detail-phone.webp')} alt="Topic page on a phone" loading="lazy" />
+      </div>
+    ),
+  },
+]
+
+function PBDTabs() {
+  const [tab, setTab] = useState('hub')
+  const t = PBD_TABS.find((x) => x.id === tab)
+  return (
+    <>
+      <Reveal>
+        <div className="sp-seg" role="tablist" aria-label="Choose a part of the site">
+          {PBD_TABS.map((x) => (
+            <button key={x.id} role="tab" aria-selected={tab === x.id} onClick={() => setTab(x.id)}>
+              {x.label}
+            </button>
+          ))}
+        </div>
+      </Reveal>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={tab}
+          className="sp-proto"
+          role="tabpanel"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="sp-proto-copy">
+            <h3>{t.title}</h3>
+            <p>{t.lede}</p>
+            <ul className="sp-feats">
+              {t.features.map((f) => (
+                <li key={f}><span className="sp-check"><SPIcon name="check" size={13} /></span>{f}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="sp-proto-visual">{t.visual}</div>
+        </motion.div>
+      </AnimatePresence>
+    </>
+  )
+}
+
+const PBD_TEST_LEFT = [
+  ['target', 'Branches look clickable', 'Each branch now sits in a glass button with an arrow, and a "Click a branch to learn more" prompt sits under the switch'],
+  ['layers', 'Cards look clickable',    'Specific prompts like "Learn more about Refsum disease", which change to "Shown below" once opened'],
+  ['arrow',  'Clearer start',           'A lit "Scroll to begin" panel with an animated mouse replaces a small label'],
+]
+const PBD_TEST_RIGHT = [
+  ['loop',  'The logo goes home',   'Every participant who wanted to go back clicked the logo, so now it returns to the start'],
+  ['check', 'No accidental exits',  'Empty space no longer acts as a back button; the pointer only shows on real links'],
+  ['file',  'Plainer words',        '"Mechanisms" became "Functions", and all copy was synced to the latest master document'],
+]
+
+const PBD_TOOLS = [
+  { mono: 'R',   bg: 'linear-gradient(135deg,#141A5C,#4A35B0)', name: 'React & Vite',              use: 'Component architecture and a fast static build' },
+  { mono: '3D',  bg: 'linear-gradient(135deg,#2A6FDB,#6A4FD1)', name: 'three.js & React Three Fiber', use: 'The peroxisome as a WebGL liquid drop, with custom shaders' },
+  { mono: 'Fm',  bg: 'linear-gradient(135deg,#6A4FD1,#9C88F0)', name: 'Framer Motion',             use: 'Page transitions and the glide into the corner' },
+  { mono: '{ }', bg: 'linear-gradient(135deg,#1F8A5B,#3BB37F)', name: 'JSON content',              use: 'Every word lives outside the code, so copy can change without touching components',
+    chips: ['7 functions', '8 diseases', '49 sub-topics'] },
+  { mono: 'Py',  bg: 'linear-gradient(135deg,#B8A400,#DDD21A)', name: 'Python & pandoc',           use: "A script that syncs the site's copy from PBD Project's master Word document" },
+  { mono: 'GH',  bg: 'linear-gradient(135deg,#D97757,#F2492B)', name: 'GitHub Pages & Actions',    use: 'Builds and publishes the site on every change' },
+]
+
+function PBDExplainerCaseStudyView({ cat, cs, slide }) {
+  return (
+    <div className="cs-wrap sp-cs">
+
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <section className="sp-hero">
+        <span className="sp-blob sp-blob--purple" style={{ top: -120, right: -60 }} aria-hidden="true" />
+        <span className="sp-blob sp-blob--red"    style={{ bottom: -160, right: '30%' }} aria-hidden="true" />
+        <span className="sp-blob sp-blob--lilac"  style={{ top: '20%', left: -140 }} aria-hidden="true" />
+        <div className="sp-hero-grid">
+          <div className="sp-hero-copy">
+            <Reveal>
+              <div className="sp-tags">
+                {(slide.tags || []).map((t) => <span key={t} className="sp-tag">{t}</span>)}
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <span className="sp-hero-kicker">PBD Project</span>
+              <h1 className="sp-hero-title">Peroxisome <em>Explainer</em></h1>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <p className="sp-hero-lede">{cs.subtitle}</p>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <div className="sp-hero-actions">
+                <a className="sp-live-btn" href={PBD_LIVE_URL} target="_blank" rel="noopener noreferrer">
+                  Explore the live site <span><SPIcon name="arrow" size={14} /></span>
+                </a>
+                <span className="sp-status"><i />{cs.status}</span>
+              </div>
+            </Reveal>
+          </div>
+          <Reveal delay={0.12} className="sp-hero-visual">
+            <div className="sp-hero-frame">
+              <img src={`${BASE}projects/pbd-explainer.webp`} alt="Peroxisome Explainer main page" />
+            </div>
+            <div className="sp-float sp-float--b"><span className="sp-icon-dot sp-icon-dot--sm"><SPIcon name="user" size={16} /></span>Refined with participant testing</div>
+            <div className="sp-float sp-float--c"><strong>15</strong><span>topics, two ways in</span></div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── The brief ────────────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="The brief" title="Make the peroxisome make sense"
+        intro="PBD Project funds research into Peroxisome Biogenesis Disorders, rare genetic conditions including Zellweger spectrum disorder. They wanted one place where anyone, from a family to a researcher, could see what peroxisomes do and how they connect to disease, with the evidence one click away."
+        blobs={[['purple', { top: -100, left: '40%' }], ['lilac', { bottom: -140, right: -60 }]]}>
+        <div className="sp-roles">
+          {[
+            ['By function', 'Seven things peroxisomes do, from breaking down fats to talking to the rest of the cell.', 'hub-functions.webp', 'center 30%'],
+            ['By disease', 'Eight conditions they are linked to, from rare genetic disorders to cancer and aging.', 'hub-diseases.webp', 'center 30%'],
+            ['With the evidence', 'What is known, what is still open, and 250+ links to the research behind it.', 'detail-functions.webp', 'center top'],
+          ].map(([name, text, img, pos], i) => (
+            <Reveal key={name} delay={0.08 * i} className="sp-rv">
+              <div className="sp-card sp-role">
+                <div className="sp-role-img"><img src={PBD_IMG(img)} alt="" loading="lazy" style={{ objectPosition: pos }} /></div>
+                <div className="sp-role-body">
+                  <h3>{name}</h3>
+                  <p>{text}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal>
+          <div className="sp-banner">
+            <span className="sp-blob sp-blob--red" style={{ right: -120, top: -160, opacity: 0.5 }} aria-hidden="true" />
+            <span className="sp-label"><SPIcon name="spark" size={14} /> The idea</span>
+            <p>Put the peroxisome itself at the centre, and let every topic branch off it.</p>
+          </div>
+        </Reveal>
+      </SPSection>
+
+      {/* ── The experience ───────────────────────────────── */}
+      <SPSection eyebrow="The experience" title="One organelle, explored four ways"
+        intro="Switch between the parts of the site to see each one."
+        blobs={[['lilac', { top: -100, left: -100 }], ['purple', { bottom: -160, right: '10%' }]]}>
+        <PBDTabs />
+      </SPSection>
+
+      {/* ── Testing ──────────────────────────────────────── */}
+      <SPSection tone="navy" eyebrow="Shaped by testing"
+        title="Participant testing showed where people got stuck, so every next step became obvious."
+        blobs={[['purple', { top: '30%', left: '35%', width: 420, height: 420 }], ['red', { bottom: -160, right: -100 }]]}>
+        <div className="sp-safe">
+          <div className="sp-safe-col">
+            {PBD_TEST_LEFT.map(([icon, title, text], i) => (
+              <Reveal key={title} delay={0.06 * i}>
+                <div className="sp-card sp-safe-item">
+                  <span className="sp-icon-dot"><SPIcon name={icon} size={18} /></span>
+                  <div><h4>{title}</h4><p>{text}</p></div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal delay={0.1} className="sp-safe-phone">
+            <img src={PBD_IMG('mobile-hub-phone.webp')} alt="The main page on a phone" loading="lazy" />
+          </Reveal>
+          <div className="sp-safe-col">
+            {PBD_TEST_RIGHT.map(([icon, title, text], i) => (
+              <Reveal key={title} delay={0.06 * i}>
+                <div className="sp-card sp-safe-item">
+                  <span className="sp-icon-dot"><SPIcon name={icon} size={18} /></span>
+                  <div><h4>{title}</h4><p>{text}</p></div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </SPSection>
+
+      {/* ── How it was built ─────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="How it was built" title="Built to be easy to keep up to date"
+        intro="Made in three weeks alongside the film, working directly with PBD Project's owner through rounds of feedback and copy updates."
+        blobs={[['lilac', { top: -100, right: -60 }], ['purple', { bottom: -150, left: '30%' }]]}>
+        <div className="sp-tools">
+          {PBD_TOOLS.map((t, i) => (
+            <Reveal key={t.name} delay={0.05 * i} className="sp-rv">
+              <div className="sp-card sp-tool">
+                <div className="sp-tool-head">
+                  <span className="sp-mono" style={{ background: t.bg }}>{t.mono}</span>
+                  <h4>{t.name}</h4>
+                </div>
+                <p className="sp-small">{t.use}</p>
+                {t.chips && (
+                  <div className="sp-chips sp-chips--tight">
+                    {t.chips.map((c) => <span key={c} className="sp-chip">{c}</span>)}
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal>
+          <p className="sp-note"><SPIcon name="heart" size={14} /> Accessible by design: Atkinson Hyperlegible type, full keyboard navigation, and a reduced-motion mode that switches off the pulse, tilt and drifting proteins.</p>
+        </Reveal>
+      </SPSection>
+
+      <PkgLinks cs={cs} cfg={{ linksBody: 'Explore the live explainer: start from a function or a disease and follow it through to the research.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
 function CaseStudyView({ cat, slide, onProjectOpen }) {
   const cs = slide.caseStudy
   if (cat.id === 'packaging') {
@@ -5495,9 +5901,11 @@ function CaseStudyView({ cat, slide, onProjectOpen }) {
     if (slide.id === 10) return <SpurgeonsPASCaseStudyView     cat={cat} cs={cs} slide={slide} />
     if (slide.id === 11) return <SpurgeonsConnectCaseStudyView cat={cat} cs={cs} slide={slide} />
     if (slide.id === 12) return <LeavesOnAStreamCaseStudyView      cat={cat} cs={cs} slide={slide} />
+    if (slide.id === 13) return <PBDFilmCaseStudyView          cat={cat} cs={cs} slide={slide} />
   }
   if (cat.id === 'web' && slide.id === 1) return <PortfolioWebsiteCaseStudyView    cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'web' && slide.id === 3) return <SpurgeonsSupportPlatformCaseStudyView cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'web' && slide.id === 4) return <PBDExplainerCaseStudyView cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 2) return <PGMCaseStudyView           cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 3) return <PreschoolsCaseStudyView      cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 5) return <InvisibleWallsCaseStudyView cat={cat} cs={cs} slide={slide} />

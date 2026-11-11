@@ -288,6 +288,24 @@ export const CATEGORIES = [
     ],
     slides: [
       {
+        id: 13, bg: '#9CC8CE', img: 'projects/pbd-film.webp', label: 'PBD Project: Peroxisome Film',
+        tags: ['Motion Design', 'Science Explainer', 'Animation', 'Charity'],
+        caseStudy: {
+          subtitle: 'Motion Design · Science Explainer · Rare Disease Charity',
+          year: '2026',
+          duration: '3 Weeks',
+          status: 'Delivered',
+          client: 'PBD Project',
+          demo: 'https://kailstudio.github.io/PBD-explainer/',
+          sections: [
+            {
+              id: 'overview',
+              body: "A one-minute animated film for PBD Project, a nonprofit funding research into Peroxisome Biogenesis Disorders, rare genetic conditions that include Zellweger spectrum disorder. The film introduces the peroxisome, a tiny organelle found inside almost every cell, and leads into the Peroxisome Explainer website.\n\nIn about a minute it shows what peroxisomes do (breaking down fats, building essential lipids, clearing away toxins and talking to the rest of the cell) and what happens when they fail: rare genetic disorders, and links to cancer, infection, brain and nerve disease, obesity and diabetes, liver and kidney disease and aging. It closes on the idea behind the whole project: understanding the peroxisome is how we start to fix it.\n\nThe film and the website were made together over three weeks, working directly with PBD Project's owner and using PBD Project's brand throughout.",
+            },
+          ],
+        },
+      },
+      {
         id: 12, bg: '#A8C8B8', img: 'leaves/leaves-thumb.webp', label: 'Spurgeons: Leaves on a Stream',
         tags: ['Motion Design', 'Mindfulness', 'Animation', 'Charity'],
         caseStudy: {
@@ -672,6 +690,25 @@ export const CATEGORIES = [
               id: 'overview',
               title: 'Project Overview',
               body: `I designed and built a clickable prototype of the Spurgeons Support Platform, turning a product definition paper into something leadership and testers can use.\n\nThe platform helps practitioners find and share quality-assured resources with families, and gives each family a private space to return to them. The prototype is a single-file HTML app with three user roles (practitioner, client and content admin), shared as a private link.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 4, bg: '#1E2550', img: 'projects/pbd-explainer.webp', label: 'PBD Project: Peroxisome Explainer',
+        tags: ['Interactive', 'Web Design', 'WebGL', 'React', 'Charity'],
+        caseStudy: {
+          subtitle: 'Interactive Web Design · WebGL · React · Science Communication',
+          year: '2026',
+          duration: '3 Weeks (with the film)',
+          status: 'Live · Refined with participant testing',
+          client: 'PBD Project',
+          demo: 'https://kailstudio.github.io/PBD-explainer/',
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `An interactive web explainer for PBD Project, a nonprofit funding research into Peroxisome Biogenesis Disorders. Visitors explore the peroxisome two ways, by what it does and by the diseases it is linked to, and every topic leads to what is known, what is still open, and the research behind it.\n\nBuilt in React with the peroxisome drawn live in WebGL, in three weeks alongside a companion film, working directly with PBD Project's owner.`,
             },
           ],
         },
