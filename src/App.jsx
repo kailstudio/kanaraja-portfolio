@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
-import Hero from './components/Hero.jsx'
 import HeroSequence from './components/HeroSequence.jsx'
 import PortfolioSection from './components/PortfolioSection.jsx'
 import PortfolioTypes from './components/PortfolioTypes.jsx'
@@ -167,15 +166,9 @@ export default function App() {
       {/* Fixed glass header */}
       <SiteHeader onProjectOpen={openProject} onAboutOpen={openAbout} />
 
-      {/* Hero — first thing shown once the loader exits. Always mounted
-          (like .site-split below) rather than conditionally rendered, so
-          its 170vh of real document height is accounted for from the very
-          first layout pass — mounting it late caused .site-split to jump
-          down by that same amount right as the loader exited, which
-          framer-motion's `layout` prop on the portfolio's rotating-word
-          chip visibly animated as a "starts at the top, slides down" glitch.
-          Visibility itself is just an opacity fade via the `visible` prop. */}
-      <Hero visible={loaderExited} />
+      {/* The scroll-driven intro hero (Hero.jsx, public/hero-intro/) was removed
+          so the site opens on the portfolio deck card. The component and
+          illustrations are kept in the repo, just not rendered. */}
 
       {/* HeroSequence mounts only after loader fully exits */}
       {loaderExited && <HeroSequence />}

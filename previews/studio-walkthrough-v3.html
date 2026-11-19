@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio KAIL · Studio walkthrough (preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cobalt: #335CFF;
+    --lime:   #E0F87D;
+    --lilac:  #D4C7FF;
+    --dark:   #333333;
+    --white:  #FFFFFF;
+    --ink:    #1C1B22;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--ink); }
+  body { font-family: 'Raleway', system-ui, sans-serif; color: var(--white); }
+
+  .cw-scroll { position: relative; height: 2200vh; }
+  .cw-stage {
+    position: sticky; top: 0; height: 100vh; height: 100dvh; width: 100%; overflow: hidden;
+    background:
+      radial-gradient(45% 40% at 18% 12%, rgba(212,199,255,0.16) 0%, rgba(212,199,255,0) 70%),
+      radial-gradient(50% 45% at 85% 90%, rgba(51,92,255,0.28) 0%, rgba(51,92,255,0) 70%),
+      radial-gradient(35% 30% at 90% 15%, rgba(224,248,125,0.08) 0%, rgba(224,248,125,0) 70%),
+      radial-gradient(70% 60% at 50% 40%, #3A3842 0%, #2A2930 45%, #1C1B22 100%);
+  }
+  canvas.cw-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* cinematic finish */
+  .cw-vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%); }
+  .cw-grain { position: absolute; inset: -50%; pointer-events: none; opacity: 0.05; background-size: 160px 160px; mix-blend-mode: overlay;
+    animation: cw-grain 0.9s steps(6) infinite; }
+  @keyframes cw-grain { 0%{transform:translate(0,0)} 20%{transform:translate(-3%,2%)} 40%{transform:translate(2%,-4%)} 60%{transform:translate(-4%,-1%)} 80%{transform:translate(3%,3%)} 100%{transform:translate(0,0)} }
+  .cw-bar { position: absolute; left: 0; right: 0; height: 7vh; background: #121116; pointer-events: none; transform: scaleY(0); }
+  .cw-bar--top { top: 0; transform-origin: top; }
+  .cw-bar--bottom { bottom: 0; transform-origin: bottom; }
+
+  /* opening: the main animation in its glass orb */
+  .cw-intro { position: absolute; left: 50%; top: 50%; width: min(62vmin, 520px); aspect-ratio: 1;
+    transform: translate(-50%, -50%); pointer-events: none; will-change: transform, opacity; }
+  .cw-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(212,199,255,0.45);
+    box-shadow: 0 0 40px rgba(212,199,255,0.08) inset, 0 0 60px rgba(51,92,255,0.12); }
+  .cw-ring--outer { inset: 0; } .cw-ring--inner { inset: 11%; border-color: rgba(212,199,255,0.3); }
+  .cw-orb { position: absolute; inset: 21%; border-radius: 50%;
+    background: radial-gradient(circle at 32% 26%, rgba(255,255,255,0.35) 0%, rgba(212,199,255,0.22) 30%, rgba(51,92,255,0.12) 70%, rgba(51,92,255,0.05) 100%);
+    border: 1px solid rgba(212,199,255,0.55);
+    box-shadow: inset 0 0 60px rgba(212,199,255,0.18), 0 30px 80px rgba(51,92,255,0.25); }
+  .cw-intro-media { position: absolute; inset: 14%; display: grid; place-items: center; }
+  .cw-intro-media video, .cw-intro-media img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* characters placed in the building */
+  .cw-chip { position: absolute; left: 0; top: 0; width: 600px; height: 600px; transform-origin: 0 0;
+    pointer-events: none; will-change: transform, opacity; opacity: 0; }
+  .cw-chip video, .cw-chip img { width: 100%; height: 100%; object-fit: contain; display: block;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,0.45)); }
+
+  /* chapter caption */
+  .cw-chapter { position: absolute; left: 6vw; bottom: 13vh; pointer-events: none; opacity: 0; }
+  .cw-chapter-num { font-size: 12px; letter-spacing: 0.32em; color: var(--lime); text-transform: uppercase; }
+  .cw-chapter-title { font-size: clamp(28px, 4vw, 54px); font-weight: 300; letter-spacing: 0.02em; margin-top: 8px; color: var(--white); }
+  .cw-chapter-room { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--lilac); margin-top: 10px; opacity: 0.8; }
+  .cw-chapter-line { width: 0; height: 1px; background: var(--lilac); margin-top: 16px; opacity: 0.6; }
+
+  /* ending */
+  .cw-end { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: min(34vmin, 300px); opacity: 0; pointer-events: none; text-align: center; }
+  .cw-end svg { width: 100%; height: auto; display: block; }
+  .cw-byline { display: flex; justify-content: space-between; margin-top: 12px;
+    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lilac); }
+
+  .cw-hint { position: absolute; left: 50%; bottom: 5vh; transform: translateX(-50%);
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--lilac); opacity: 0.8; }
+  .cw-progress { position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+    width: 1px; height: 160px; background: rgba(212,199,255,0.18); }
+  .cw-progress i { position: absolute; left: -0.5px; top: 0; width: 2px; background: var(--lime); }
+  .cw-label { position: fixed; left: 18px; top: 16px; z-index: 50; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; padding: 7px 12px; border-radius: 999px; color: var(--lilac);
+    background: rgba(28,27,34,0.6); border: 1px solid rgba(212,199,255,0.3); backdrop-filter: blur(8px); }
+  .cw-after { min-height: 60vh; display: grid; place-items: center; background: var(--ink);
+    font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lilac); opacity: 0.6; }
+</style>
+</head>
+<body>
+<div class="cw-label">Preview · Studio walkthrough</div>
+
+<section class="cw-scroll" id="cwScroll">
+  <div class="cw-stage">
+    <canvas class="cw-canvas" id="cwCanvas"></canvas>
+
+    <div class="cw-intro" id="cwIntro">
+      <div class="cw-ring cw-ring--outer"></div>
+      <div class="cw-ring cw-ring--inner"></div>
+      <div class="cw-orb"></div>
+      <div class="cw-intro-media" id="cwIntroMedia"></div>
+    </div>
+
+    <div id="cwChips"></div>
+
+    <div class="cw-end" id="cwEnd">
+      <svg viewBox="0 0 1590 460" aria-label="Studio KAIL">
+        <g fill="#FFFFFF">
+          <rect x="25.83" y="40" width="180" height="380"/>
+          <rect x="605.83" y="40" width="180" height="380"/>
+          <circle cx="317.17" cy="128.67" r="88.67"/>
+          <rect x="805.83" y="268" width="180" height="152"/>
+          <polygon points="1185.83 242.67 1185.83 40 1005.83 40 1005.83 420 1031.55 420 1185.83 420 1365.83 420 1365.83 242.67 1185.83 242.67"/>
+          <circle cx="894.5" cy="154" r="88.67"/>
+          <circle cx="1474.17" cy="330" r="90" fill="#E0F87D"/>
+          <path d="M585.83,420c-99.76,0-180.63-85.07-180.63-190s80.87-190,180.63-190"/>
+          <path d="M406.17,420c0-110.46-80.74-200-180.33-200v200h180.33Z"/>
+        </g>
+      </svg>
+      <div class="cw-byline"><span>by</span><span>kana</span><span>raja</span></div>
+    </div>
+
+    <div class="cw-vignette"></div>
+    <div class="cw-bar cw-bar--top" id="cwBarT"></div>
+    <div class="cw-bar cw-bar--bottom" id="cwBarB"></div>
+
+    <div class="cw-hint" id="cwHint">Scroll to enter the studio</div>
+    <div class="cw-progress"><i id="cwProg"></i></div>
+  </div>
+</section>
+<div class="cw-after">Portfolio continues here</div>
+
+<script>
+(() => {
+  // ── Media: the original animations, straight from the site's public folder ──
+  const HI = '../public/hero-intro/';
+  const MEDIA = {
+    start: { webm: HI + 'herointrostart.webm', webp: HI + 'herointrostart.webp' },
+    chips: [
+      { n: 1, tag: 'Colour',       room: 'Atrium · foot of the stair' },
+      { n: 2, tag: 'Illustration', room: 'Mezzanine' },
+      { n: 4, tag: 'Planning',     room: 'Model workshop' },
+      { n: 5, tag: 'Materials',    room: 'Studio floor' },
+      { n: 6, tag: 'Making',       room: 'Courtyard' },
+      { n: 'start', tag: 'Ideas',  room: 'Library' },
+    ].map((c) => ({ ...c, webm: HI + `herointro${c.n}.webm`, webp: HI + `herointro${c.n}.webp` })),
+  };
+  const probe = document.createElement('video');
+  const canWebm = !!probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"') !== '';
+  function img(m) { const i = new Image(); i.src = m.webp; i.alt = ''; return i; }
+  function media(m) {
+    if (!canWebm) return img(m);
+    const v = document.createElement('video');
+    v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true; v.preload = 'auto';
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+    v.poster = m.webp; v.src = m.webm;
+    v.addEventListener('error', () => v.replaceWith(img(m)));
+    return v;
+  }
+  document.getElementById('cwIntroMedia').appendChild(media(MEDIA.start));
+
+  // ── Palette ──
+  const LILAC = [212, 199, 255], COBALT = [51, 92, 255], LIME = [224, 248, 125], WHITE = [255, 255, 255];
+  const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ease = (t) => t * t * (3 - 2 * t);
+  const easeIO = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const range = (p, a, b) => clamp((p - a) / (b - a));
+
+  let seed = 11;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const rr = (a, b) => a + rnd() * (b - a);
+
+  // ════════════════════════════════════════════════════════════════
+  //  THE BUILDING — every object is a list of 3D line segments.
+  //  Units: metres. y up. Entrance at z = 0, building runs to z = 80.
+  // ════════════════════════════════════════════════════════════════
+  const objs = [];
+  const TIPS = [];
+  let O = null;
+  // colour roles: 'l' lilac line, 'c' cobalt structure, 'g' lime light, 'w' white detail
+  function begin(cx, cy, cz, r) { O = { c: [cx, cy, cz], r, segs: [], dots: [], labels: [], dims: [] }; objs.push(O); }
+  function L(a, b, s = 'line', col = 'l') { O.segs.push({ a, b, s, col, t: rnd() * 0.5 }); }
+  function poly(pts, s, col, close) { for (let i = 0; i < pts.length - 1; i++) L(pts[i], pts[i + 1], s, col); if (close) L(pts[pts.length - 1], pts[0], s, col); }
+  function box(x, y, z, w, h, d, s, col) {
+    const p = [[x,y,z],[x+w,y,z],[x+w,y,z+d],[x,y,z+d]], q = p.map(([a,b,c]) => [a, b+h, c]);
+    for (let i = 0; i < 4; i++) { L(p[i], p[(i+1)%4], s, col); L(q[i], q[(i+1)%4], s, col); L(p[i], q[i], s, col); }
+  }
+  function ring(cx, cy, cz, r, plane = 'xz', n = 24, s, col, a0 = 0, a1 = Math.PI * 2) {
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+      const t = a0 + (i / n) * (a1 - a0);
+      pts.push(plane === 'xz' ? [cx + Math.cos(t) * r, cy, cz + Math.sin(t) * r]
+             : plane === 'xy' ? [cx + Math.cos(t) * r, cy + Math.sin(t) * r, cz]
+             : [cx, cy + Math.sin(t) * r, cz + Math.cos(t) * r]);
+    }
+    poly(pts, s, col);
+  }
+  function cyl(cx, y0, y1, cz, r, n = 16, s, col) {
+    ring(cx, y0, cz, r, 'xz', n, s, col); ring(cx, y1, cz, r, 'xz', n, s, col);
+    for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2; L([cx + Math.cos(a) * r, y0, cz + Math.sin(a) * r], [cx + Math.cos(a) * r, y1, cz + Math.sin(a) * r], s, col); }
+  }
+  const dot = (p) => O.dots.push(p);
+  const label = (p, text) => O.labels.push({ p, text });
+  const dim = (a, b, text) => O.dims.push({ a, b, text });
+
+  // ── Entrance facade: glazing grid, deep vertical fins, canopy ──
+  begin(0, 4.5, 0, 26);
+  L([-24, 0, 0], [24, 0, 0], 'line', 'c'); L([-24, 9, 0], [24, 9, 0], 'line', 'c');
+  for (let x = -24; x <= 24.01; x += 1.5) {
+    const door = Math.abs(x) < 3;
+    if (!door) L([x, 0, 0], [x, 9, 0], 'line', 'l'); else L([x, 4.2, 0], [x, 9, 0], 'line', 'l');
+    L([x, 0, -0.8], [x, 9, -0.8], 'line', 'l'); L([x, 9, -0.8], [x, 9, 0], 'line', 'l'); L([x, 0, -0.8], [x, 0, 0], 'dot', 'l');  // fins
+  }
+  [3, 6].forEach((y) => { L([-24, y, 0], [-3, y, 0], 'dash', 'l'); L([3, y, 0], [24, y, 0], 'dash', 'l'); });
+  box(-4, 4.2, -2.4, 8, 0.25, 2.4, 'line', 'c');                     // canopy
+  for (let x = -3.5; x <= 3.51; x += 0.5) L([x, 4.2, -2.4], [x, 4.2, 0], 'dot', 'l');
+  [-3, 3].forEach((x) => L([x, 0, 0], [x, 4.2, 0], 'line', 'c'));
+  for (let i = 0; i < 4; i++) L([-3 + i * 1.5 + 0.75, 0, 0.02], [-3 + i * 1.5 + 0.75, 3.8, 0.02], 'dash', 'w');   // doors
+  dim([-24, -0.4, -1.2], [24, -0.4, -1.2], '48.00');
+
+  // ── Shell: outer walls, roof edge, column grid ──
+  begin(0, 4.5, 40, 50);
+  [[-24, 0, 0, 80], [24, 0, 0, 80]].forEach(([x]) => { L([x, 0, 0], [x, 0, 80], 'line', 'c'); L([x, 9, 0], [x, 9, 80], 'dash', 'l'); });
+  L([-24, 0, 80], [24, 0, 80], 'line', 'c'); L([-24, 9, 80], [24, 9, 80], 'dash', 'l');
+  for (let z = 8; z <= 72; z += 8) L([-24, 9, z], [24, 9, z], 'dot', 'l');               // roof beams
+  for (let z = 8; z <= 72; z += 8) for (const x of [-16, 16]) {
+    if (z > 46 && z < 62) continue;
+    begin(x, 4.5, z, 5); cyl(x, 0, 9, z, 0.3, 14, 'line', 'l');
+    ring(x, 0.02, z, 0.6, 'xz', 16, 'dot', 'l');
+  }
+
+  // ── Reception: curved desk + logo wall ──
+  begin(-6, 1, 5, 4);
+  ring(-6, 1.1, 6, 2.2, 'xz', 30, 'line', 'l', Math.PI * 0.15, Math.PI * 0.95);
+  ring(-6, 0.0, 6, 2.2, 'xz', 30, 'line', 'l', Math.PI * 0.15, Math.PI * 0.95);
+  ring(-6, 1.1, 6, 1.7, 'xz', 30, 'dash', 'l', Math.PI * 0.15, Math.PI * 0.95);
+  for (let i = 0; i <= 8; i++) { const a = Math.PI * (0.15 + i * 0.1); L([-6 + Math.cos(a) * 2.2, 0, 6 + Math.sin(a) * 2.2], [-6 + Math.cos(a) * 2.2, 1.1, 6 + Math.sin(a) * 2.2], i % 2 ? 'dot' : 'line', 'l'); }
+  ring(-6, 1.12, 6, 0.08, 'xz', 10, 'line', 'g'); dot([-6.4, 1.15, 7.6]);
+  label([-6, 0.01, 3], 'RECEPTION');
+  // plinths with small models in the lobby
+  for (let i = 0; i < 3; i++) {
+    const x = 5 + i * 1.8, z = 4.5;
+    begin(x, 0.6, z, 1.2); box(x - 0.35, 0, z - 0.35, 0.7, 1.0, 0.7, 'line', 'l');
+    for (let k = 0; k < 5; k++) { const h = rr(0.1, 0.45); box(x - 0.3 + (k % 3) * 0.2, 1.0, z - 0.25 + Math.floor(k / 3) * 0.25, 0.15, h, 0.18, k % 2 ? 'dash' : 'line', 'w'); }
+  }
+
+  // ── Atrium: double height, diagrid skylight, pendant cluster ──
+  begin(0, 9, 20, 14);
+  poly([[-8, 9, 8], [8, 9, 8], [8, 9, 32], [-8, 9, 32]], 'line', 'c', true);
+  for (let k = -24; k <= 24; k += 2) {                                 // diagrid
+    const a = [], b = [];
+    for (let s = 0; s <= 1; s += 1) {}
+    const p1 = [Math.max(-8, -8 + k), Math.max(8, 8 - k)], p2 = [Math.min(8, 8 + k), Math.min(32, 32 + k)];
+    const seg1 = clipDiag(-8 + k, 8, 1), seg2 = clipDiag(8 - k, 8, -1);
+    if (seg1) L([seg1[0], 9, seg1[1]], [seg1[2], 9, seg1[3]], 'line', 'l');
+    if (seg2) L([seg2[0], 9, seg2[1]], [seg2[2], 9, seg2[3]], 'dash', 'l');
+  }
+  function clipDiag(x0, z0, dir) {                                    // line x = x0 + dir*(z - z0) inside the skylight
+    const pts = [];
+    for (let z = 8; z <= 32; z += 0.25) { const x = x0 + dir * (z - z0); if (x >= -8 && x <= 8) pts.push([x, z]); }
+    return pts.length > 1 ? [pts[0][0], pts[0][1], pts[pts.length - 1][0], pts[pts.length - 1][1]] : null;
+  }
+  for (let z = 8; z <= 32; z += 4) L([-8, 9.6, z], [8, 9.6, z], 'dot', 'l');   // raised roof lantern
+  [[-8, 8], [8, 8], [8, 32], [-8, 32]].forEach(([x, z]) => L([x, 9, z], [x, 9.6, z], 'line', 'l'));
+  poly([[-8, 9.6, 8], [8, 9.6, 8], [8, 9.6, 32], [-8, 9.6, 32]], 'line', 'l', true);
+  // pendant cluster
+  begin(-1, 6, 18, 5);
+  for (let i = 0; i < 11; i++) {
+    const x = rr(-3, 1.5), z = rr(15, 21), y = rr(5.2, 7.4), r = rr(0.18, 0.34);
+    L([x, 9, z], [x, y + r, z], 'dot', 'l');
+    ring(x, y, z, r, 'xy', 18, 'line', 'l'); ring(x, y, z, r, 'yz', 18, 'dash', 'l'); ring(x, y, z, r * 0.4, 'xz', 10, 'line', 'g');
+    dot([x, y, z]);
+  }
+  label([0, 0.01, 12], 'ATRIUM');
+  dim([8.6, 0, 12], [8.6, 9, 12], '9.00');
+
+  // ── Spiral stair to the mezzanine ──
+  begin(5, 2.1, 20, 3.4);
+  const SC = [5, 20], R1 = 0.35, R2 = 1.7, TURN = 1.15 * Math.PI * 2, STEPS = 26, A0 = Math.PI * 0.6;
+  for (let i = 0; i <= STEPS; i++) {
+    const a = A0 + (i / STEPS) * TURN, y = (i / STEPS) * 4.2;
+    const ci = [SC[0] + Math.cos(a) * R1, y, SC[1] + Math.sin(a) * R1], co = [SC[0] + Math.cos(a) * R2, y, SC[1] + Math.sin(a) * R2];
+    L(ci, co, 'line', 'l');
+    if (i < STEPS) {
+      const a2 = A0 + ((i + 1) / STEPS) * TURN, y2 = ((i + 1) / STEPS) * 4.2;
+      L(co, [SC[0] + Math.cos(a2) * R2, y, SC[1] + Math.sin(a2) * R2], 'line', 'l');                       // tread edge
+      L([SC[0] + Math.cos(a2) * R2, y, SC[1] + Math.sin(a2) * R2], [SC[0] + Math.cos(a2) * R2, y2, SC[1] + Math.sin(a2) * R2], 'dot', 'l');  // riser
+      L([SC[0] + Math.cos(a) * R2, y + 0.95, SC[1] + Math.sin(a) * R2], [SC[0] + Math.cos(a2) * R2, y2 + 0.95, SC[1] + Math.sin(a2) * R2], 'line', 'w');   // handrail
+      if (i % 2 === 0) L(co, [co[0], y + 0.95, co[2]], 'line', 'l');                                      // balusters
+    }
+  }
+  cyl(SC[0], 0, 5.2, SC[1], R1, 12, 'line', 'c');
+  ring(SC[0], 0.01, SC[1], R2 + 0.3, 'xz', 32, 'dot', 'l');
+
+  // ── Mezzanine: slab, glass balustrade, workstations ──
+  begin(0, 4.2, 28.5, 9);
+  poly([[-8, 4.2, 25], [8, 4.2, 25], [8, 4.2, 32], [-8, 4.2, 32]], 'line', 'c', true);
+  poly([[-8, 3.9, 25], [8, 3.9, 25]], 'line', 'c');
+  for (let x = -8; x <= 8.01; x += 1) {
+    L([x, 4.2, 25], [x, 5.25, 25], 'line', 'l');
+    if (x < 8) poly([[x + 0.05, 4.3, 25], [x + 0.95, 4.3, 25], [x + 0.95, 5.15, 25], [x + 0.05, 5.15, 25]], 'dot', 'l', true);
+  }
+  L([-8, 5.25, 25], [8, 5.25, 25], 'line', 'w');
+  for (let x = -6; x <= 6; x += 3) {
+    box(x - 0.9, 4.2 + 0.72, 28.6, 1.8, 0.04, 0.8, 'line', 'l');
+    rectX(x - 0.5, 4.2 + 0.98, 4.2 + 1.42, 29.2, 29.25);
+    L([x - 0.6, 4.2, 28.7], [x - 0.6, 4.92, 28.7], 'dot', 'l'); L([x + 0.6, 4.2, 28.7], [x + 0.6, 4.92, 28.7], 'dot', 'l');
+  }
+  function rectX(x0, y0, y1, z0, z1) { poly([[x0, y0, z0], [x0 + 1, y0, z0], [x0 + 1, y1, z0], [x0, y1, z0]], 'line', 'l', true); }
+  label([0, 4.21, 30.8], 'MEZZANINE');
+
+  // ── Model workshop (left): city model, cutting tables, material wall, laser cutter ──
+  begin(-16, 1, 24, 10);
+  label([-16, 0.01, 17], 'MODEL WORKSHOP');
+  [[-19.5, 20], [-13.5, 20], [-19.5, 27], [-13.5, 27]].forEach(([x, z], ti) => {
+    begin(x + 1.5, 1, z + 1, 2.5);
+    box(x, 0.9, z, 3, 0.05, 2, 'line', 'l');
+    [[x + 0.1, z + 0.1], [x + 2.9, z + 0.1], [x + 0.1, z + 1.9], [x + 2.9, z + 1.9]].forEach(([a, b]) => L([a, 0, b], [a, 0.9, b], 'line', 'l'));
+    for (let g = 0.25; g < 2; g += 0.25) L([x + 0.1, 0.951, z + g], [x + 2.9, 0.951, z + g], 'dot', 'l');   // cutting mat
+    // massing model
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) {
+      if (rnd() < 0.2) continue;
+      const h = rr(0.08, ti === 1 && i === 2 && j === 1 ? 0.7 : 0.4);
+      box(x + 0.5 + i * 0.5, 0.955, z + 0.4 + j * 0.45, 0.36, h, 0.32, rnd() < 0.3 ? 'dash' : 'line', 'w');
+    }
+  });
+  begin(-23.5, 2, 24, 8);                                              // material wall
+  for (const y of [0, 0.6, 1.2, 1.8, 2.4, 3.0]) L([-23.6, y, 16], [-23.6, y, 33], 'line', 'l');
+  for (let z = 16; z <= 33; z += 1.7) L([-23.6, 0, z], [-23.6, 3, z], 'line', 'l');
+  for (let k = 0; k < 35; k++) {
+    const z = rr(16.1, 32.6), y = [0, 0.6, 1.2, 1.8, 2.4][Math.floor(rnd() * 5)], h = rr(0.2, 0.5), w = rr(0.04, 0.3);
+    if (rnd() < 0.5) L([-23.55, y, z], [-23.55, y + h, z + rr(-0.05, 0.08)], 'line', 'w');
+    else poly([[-23.5, y, z], [-23.5, y + h * 0.6, z], [-23.5, y + h * 0.6, z + w], [-23.5, y, z + w]], 'dot', 'l', true);
+  }
+  begin(-12, 0.6, 33, 2);                                              // laser cutter
+  box(-13, 0, 32.4, 2.2, 0.95, 1.2, 'line', 'l');
+  poly([[-12.9, 0.95, 32.5], [-11, 0.95, 32.5], [-11, 1.25, 33.2], [-12.9, 1.25, 33.2]], 'line', 'l', true);
+  for (let i = 1; i < 6; i++) L([-12.9 + i * 0.32, 0.951, 32.5], [-12.9 + i * 0.32, 1.249, 33.2], 'dot', 'l');
+  dot([-11.2, 0.8, 32.4]);
+
+  // ── Studio floor (right): long benching, monitors, task lamps, pin-up wall ──
+  begin(15, 1, 38, 10);
+  label([15, 0.01, 30], 'STUDIO');
+  for (const zr of [34, 38.5, 43]) {
+    begin(15, 1, zr + 0.8, 7);
+    box(9.5, 0.73, zr, 12, 0.04, 1.6, 'line', 'l');
+    for (const x of [9.6, 15.4, 21.4]) { L([x, 0, zr + 0.1], [x, 0.73, zr + 0.1], 'line', 'l'); L([x, 0, zr + 1.5], [x, 0.73, zr + 1.5], 'line', 'l'); L([x, 0.2, zr + 0.1], [x, 0.2, zr + 1.5], 'dot', 'l'); }
+    L([9.5, 1.15, zr + 0.8], [21.5, 1.15, zr + 0.8], 'dash', 'l');       // centre screen
+    for (let x = 10.5; x < 21; x += 2) {
+      [-1, 1].forEach((sd) => {
+        const zz = zr + 0.8 + sd * 0.35;
+        poly([[x - 0.35, 1.0, zz], [x + 0.35, 1.0, zz], [x + 0.35, 1.42, zz], [x - 0.35, 1.42, zz]], 'line', 'l', true);   // monitor
+        L([x, 0.77, zz], [x, 1.0, zz], 'line', 'l');
+        // chair
+        const cz = zz - sd * 0.95;
+        ring(x, 0.47, cz, 0.24, 'xz', 14, 'line', 'l'); L([x, 0.08, cz], [x, 0.47, cz], 'line', 'l');
+        for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2; L([x, 0.08, cz], [x + Math.cos(a) * 0.3, 0.03, cz + Math.sin(a) * 0.3], 'line', 'l'); }
+        poly([[x - 0.2, 0.55, cz - sd * 0.24], [x + 0.2, 0.55, cz - sd * 0.24], [x + 0.2, 1.0, cz - sd * 0.24], [x - 0.2, 1.0, cz - sd * 0.24]], 'line', 'l', true);
+      });
+      // task lamp
+      poly([[x + 0.8, 0.77, zr + 0.8], [x + 0.6, 1.2, zr + 0.8], [x + 0.35, 1.32, zr + 0.8]], 'line', 'w');
+      ring(x + 0.35, 1.25, zr + 0.8, 0.08, 'xz', 10, 'line', 'g');
+    }
+    for (let x = 10.5; x < 21; x += 4) { L([x, 9, zr + 0.8], [x, 2.9, zr + 0.8], 'dot', 'l'); L([x - 1.5, 2.9, zr + 0.8], [x + 1.5, 2.9, zr + 0.8], 'line', 'g'); }   // linear lights
+  }
+  begin(23.6, 2, 38, 7);                                               // pin-up wall
+  poly([[23.6, 1, 31], [23.6, 3.2, 31], [23.6, 3.2, 46], [23.6, 1, 46]], 'line', 'l', true);
+  for (let k = 0; k < 26; k++) {
+    const z = rr(31.3, 45), y = rr(1.15, 2.6), w = rr(0.3, 0.8), h = rr(0.25, 0.5);
+    poly([[23.58, y, z], [23.58, y + h, z], [23.58, y + h, z + w], [23.58, y, z + w]], rnd() < 0.5 ? 'line' : 'dash', 'l', true);
+    if (rnd() < 0.6) for (let q = 1; q < 3; q++) L([23.57, y + h * q / 3, z + 0.05], [23.57, y + h * q / 3, z + w * rr(0.4, 0.9)], 'dot', 'w');
+    if (rnd() < 0.35) dot([23.55, y + h - 0.04, z + w / 2]);
+  }
+  // drafting table for the studio's character
+  begin(14, 1, 32, 2.5);
+  L([13, 0, 31], [13.5, 0.9, 31.2], 'line', 'l'); L([14.2, 0, 31], [13.5, 0.9, 31.2], 'line', 'l');
+  L([13, 0, 32.6], [13.5, 0.9, 32.4], 'line', 'l'); L([14.2, 0, 32.6], [13.5, 0.9, 32.4], 'line', 'l');
+  poly([[13, 0.85, 30.9], [14.1, 1.3, 30.9], [14.1, 1.3, 32.7], [13, 0.85, 32.7]], 'line', 'l', true);
+  poly([[13.1, 0.89, 31.0], [14.0, 1.26, 31.0], [14.0, 1.26, 32.6], [13.1, 0.89, 32.6]], 'dash', 'w', true);
+  L([13.3, 0.93, 30.9], [13.3, 0.93, 32.7], 'line', 'w');
+
+  // ── Courtyard: open to the sky, colonnade, tree, reflecting pool ──
+  begin(0, 3, 54, 12);
+  label([0, 0.01, 49], 'COURTYARD');
+  poly([[-10, 0, 47], [10, 0, 47], [10, 0, 62], [-10, 0, 62]], 'line', 'c', true);
+  for (let x = -10; x <= 10.01; x += 2) { [47, 62].forEach((z) => { cyl(x, 0, 4.5, z, 0.12, 8, 'line', 'l'); }); }
+  for (let z = 49; z <= 60.01; z += 2) { [-10, 10].forEach((x) => cyl(x, 0, 4.5, z, 0.12, 8, 'line', 'l')); }
+  poly([[-10, 4.5, 47], [10, 4.5, 47], [10, 4.5, 62], [-10, 4.5, 62]], 'line', 'l', true);
+  poly([[-10.8, 4.6, 46.2], [10.8, 4.6, 46.2], [10.8, 4.6, 62.8], [-10.8, 4.6, 62.8]], 'dash', 'l', true);
+  // reflecting pool with ripples
+  begin(4, 0.1, 55, 4);
+  poly([[1.5, 0.15, 51], [7.5, 0.15, 51], [7.5, 0.15, 59], [1.5, 0.15, 59]], 'line', 'l', true);
+  poly([[1.5, 0, 51], [7.5, 0, 51], [7.5, 0, 59], [1.5, 0, 59]], 'dot', 'l', true);
+  [0.5, 1.0, 1.6].forEach((r, i) => ring(4.5, 0.02, 55, r, 'xz', 30, i ? 'dot' : 'line', 'c'));
+  // stepping stones
+  for (let i = 0; i < 6; i++) ring(-5 + i * 0.9, 0.02, 49 + i * 1.6, 0.35, 'xz', 14, 'line', 'l');
+  // benches
+  [[-8.5, 52], [-8.5, 57]].forEach(([x, z]) => { begin(x, 0.4, z, 1.5); box(x, 0.42, z, 0.5, 0.06, 2, 'line', 'l'); L([x + 0.25, 0, z + 0.2], [x + 0.25, 0.42, z + 0.2], 'line', 'l'); L([x + 0.25, 0, z + 1.8], [x + 0.25, 0.42, z + 1.8], 'line', 'l'); });
+  // the tree: recursive branches with leaf rings
+  begin(-3, 4, 56, 5);
+  cyl(-3, 0, 0.5, 56, 1.2, 24, 'line', 'l');                            // planter
+  (function branch(p, dir, len, depth) {
+    const q = [p[0] + dir[0] * len, p[1] + dir[1] * len, p[2] + dir[2] * len];
+    L(p, q, depth > 2 ? 'line' : 'dash', depth > 3 ? 'w' : 'l');
+    if (depth === 0) { TIPS.push(q); ring(q[0], q[1], q[2], rr(0.25, 0.45), rnd() < 0.5 ? 'xy' : 'yz', 12, 'dot', 'l'); if (rnd() < 0.25) dot(q); return; }
+    const n = depth > 3 ? 3 : 2;
+    for (let i = 0; i < n; i++) {
+      const a = rr(0, Math.PI * 2), sp = rr(0.35, 0.7);
+      const nd = [dir[0] * 0.65 + Math.cos(a) * sp, dir[1] * 0.65 + rr(0.2, 0.5), dir[2] * 0.65 + Math.sin(a) * sp];
+      const m = Math.hypot(...nd); branch(q, nd.map((v) => v / m), len * rr(0.62, 0.78), depth - 1);
+    }
+  })([-3, 0.5, 56], [0, 1, 0], 2.0, 5);
+
+  // ── Library: tall shelves with ladders, reading table, arched windows ──
+  begin(0, 3, 71, 12);
+  label([0, 0.01, 64.5], 'LIBRARY');
+  for (const xw of [-9.6, 9.6]) {
+    begin(xw, 3, 71, 8);
+    const sd = Math.sign(xw);
+    for (let y = 0; y <= 6.01; y += 0.5) L([xw, y, 64], [xw, y, 78], y % 1.5 === 0 ? 'line' : 'dot', 'l');
+    for (let z = 64; z <= 78.01; z += 1.4) L([xw, 0, z], [xw, 6, z], 'line', 'l');
+    for (let y = 0; y < 6; y += 0.5) {
+      let z = 64.05;
+      while (z < 77.9) {
+        const bw = rr(0.03, 0.07), bh = rr(0.28, 0.44), lean = rnd() < 0.08 ? rr(0.05, 0.1) : 0;
+        if (rnd() < 0.9) L([xw - sd * 0.05, y, z], [xw - sd * 0.05, y + bh, z + lean], 'line', rnd() < 0.15 ? 'w' : 'l');
+        z += bw * 2.2 + lean + (rnd() < 0.08 ? rr(0.3, 0.6) : 0.04);
+      }
+    }
+    // rolling ladder
+    const lz = xw < 0 ? 70 : 74;
+    L([xw - sd * 0.9, 0, lz], [xw - sd * 0.1, 6.2, lz], 'line', 'w'); L([xw - sd * 0.9, 0, lz + 0.5], [xw - sd * 0.1, 6.2, lz + 0.5], 'line', 'w');
+    for (let i = 1; i < 18; i++) { const t = i / 18; L([xw - sd * (0.9 - 0.8 * t), t * 6.2, lz], [xw - sd * (0.9 - 0.8 * t), t * 6.2, lz + 0.5], 'line', 'l'); }
+    L([xw - sd * 0.05, 6.2, 64], [xw - sd * 0.05, 6.2, 78], 'line', 'w');                // ladder rail
+  }
+  begin(0, 0.8, 71, 4);
+  box(-1.2, 0.74, 66.5, 2.4, 0.05, 9, 'line', 'l');
+  for (const z of [67, 75.5]) for (const x of [-1, 1]) L([x, 0, z], [x, 0.74, z], 'line', 'l');
+  for (let z = 67.5; z < 75.5; z += 2) {
+    poly([[0, 0.79, z], [0.15, 1.2, z + 0.15], [0, 1.45, z + 0.3]], 'line', 'w');            // reading lamps
+    ring(0, 1.38, z + 0.3, 0.14, 'xz', 12, 'line', 'g');
+    [-1.6, 1.6].forEach((x) => { ring(x, 0.47, z + 0.6, 0.22, 'xz', 12, 'line', 'l'); L([x, 0, z + 0.6], [x, 0.47, z + 0.6], 'line', 'l'); });
+    poly([[-0.8, 0.8, z + 0.2], [-0.35, 0.8, z + 0.2], [-0.35, 0.8, z + 0.8], [-0.8, 0.8, z + 0.8]], 'dot', 'w', true);   // open books
+  }
+  begin(0, 4, 79.8, 9);                                                // arched windows on the back wall
+  for (let i = -3; i <= 3; i++) {
+    const x = i * 2.6;
+    L([x - 0.9, 0.6, 79.9], [x - 0.9, 4.2, 79.9], 'line', 'l'); L([x + 0.9, 0.6, 79.9], [x + 0.9, 4.2, 79.9], 'line', 'l');
+    L([x - 0.9, 0.6, 79.9], [x + 0.9, 0.6, 79.9], 'line', 'l');
+    ring(x, 4.2, 79.9, 0.9, 'xy', 18, 'line', 'l', 0, Math.PI);
+    L([x, 0.6, 79.9], [x, 5.1, 79.9], 'dash', 'l');
+    [1.8, 3.0].forEach((y) => L([x - 0.9, y, 79.9], [x + 0.9, y, 79.9], 'dot', 'l'));
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  //  MORE DETAIL + ATMOSPHERE
+  // ════════════════════════════════════════════════════════════════
+  const FILLS = [], POOLS = [], SHAFTS = [], WASHES = [];
+  // translucent glass / water planes: 4 corners, colour, strength
+  const glass = (pts, col, a = 0.08) => FILLS.push({ pts, col, a });
+  const pool = (p, r, col, a = 0.35) => POOLS.push({ p, r, col, a });
+  const wash = (p, r, col, a = 0.2) => WASHES.push({ p, r, col, a });
+
+  // concrete floor joints
+  begin(0, 0, 40, 50);
+  for (let x = -24; x <= 24; x += 4) L([x, 0.002, 0], [x, 0.002, 80], 'dot', 'c');
+  for (let z = 0; z <= 80; z += 4) L([-24, 0.002, z], [24, 0.002, z], 'dot', 'c');
+
+  // colour washes on the floor, one per space
+  wash([0, 0, 6], 9, COBALT, 0.22);      // lobby
+  wash([0, 0, 20], 11, LILAC, 0.2);      // atrium
+  wash([-16, 0, 25], 9, COBALT, 0.26);   // workshop
+  wash([15, 0, 38], 10, LIME, 0.12);     // studio
+  wash([0, 0, 54], 10, LIME, 0.16);      // courtyard
+  wash([0, 0, 71], 10, LILAC, 0.2);      // library
+  wash([4.5, 0.16, 55], 3.5, COBALT, 0.35); // pool glow
+
+  // glazing
+  glass([[-24, 0, 0.01], [-3, 0, 0.01], [-3, 9, 0.01], [-24, 9, 0.01]], COBALT, 0.10);
+  glass([[3, 0, 0.01], [24, 0, 0.01], [24, 9, 0.01], [3, 9, 0.01]], COBALT, 0.10);
+  glass([[-8, 9, 8], [8, 9, 8], [8, 9, 32], [-8, 9, 32]], LILAC, 0.09);
+  glass([[-8, 4.25, 25], [8, 4.25, 25], [8, 5.2, 25], [-8, 5.2, 25]], LILAC, 0.12);
+  glass([[1.5, 0.15, 51], [7.5, 0.15, 51], [7.5, 0.15, 59], [1.5, 0.15, 59]], COBALT, 0.22);
+  glass([[9, 0, 29], [9, 0, 47], [9, 3.2, 47], [9, 3.2, 29]], LILAC, 0.07);
+  for (let i = -3; i <= 3; i++) glass([[i * 2.6 - 0.9, 0.6, 79.88], [i * 2.6 + 0.9, 0.6, 79.88], [i * 2.6 + 0.9, 4.2, 79.88], [i * 2.6 - 0.9, 4.2, 79.88]], LILAC, 0.1);
+
+  // light through the skylight and over the courtyard
+  SHAFTS.push({ top: [[-7, 9, 9], [7, 9, 9], [7, 9, 31], [-7, 9, 31]], off: [2.4, 0, 3.2], col: LILAC, a: 0.10 });
+  SHAFTS.push({ top: [[-9, 9, 48], [9, 9, 48], [9, 9, 61], [-9, 9, 61]], off: [3, 0, 2], col: LIME, a: 0.06 });
+
+  // glass partition to the studio
+  begin(9, 1.6, 38, 9);
+  for (let z = 29; z <= 47.01; z += 1.5) L([9, 0, z], [9, 3.2, z], 'line', 'l');
+  L([9, 3.2, 29], [9, 3.2, 47], 'line', 'l'); L([9, 1.1, 29], [9, 1.1, 47], 'dot', 'l');
+
+  // acoustic baffles above the studio + cable tray in the workshop
+  begin(16, 7.5, 38, 9);
+  for (let z = 30; z <= 47; z += 0.6) { L([9.5, 7.5, z], [22.5, 7.5, z], 'line', 'l'); L([9.5, 7.1, z], [22.5, 7.1, z], 'dot', 'l'); }
+  begin(-16, 6, 24, 9);
+  for (const x of [-20, -12]) { L([x, 6.2, 15], [x, 6.2, 34], 'line', 'c'); L([x + 0.4, 6.2, 15], [x + 0.4, 6.2, 34], 'line', 'c'); for (let z = 15; z <= 34; z += 0.8) L([x, 6.2, z], [x + 0.4, 6.2, z], 'line', 'l'); }
+  for (let z = 16; z < 34; z += 3) { L([-20, 6.2, z], [-20, 9, z], 'dot', 'l'); L([-12, 6.2, z], [-12, 9, z], 'dot', 'l'); }
+
+  // workshop pegboard with tools, stools
+  begin(-23.5, 2.2, 36, 3);
+  for (let y = 1; y <= 3; y += 0.5) for (let z = 33.5; z <= 38.5; z += 0.5) { if (rnd() < 0.5) L([-23.58, y, z], [-23.58, y + 0.01, z], 'line', 'l'); }
+  for (let k = 0; k < 9; k++) { const z = 34 + k * 0.5, y = rr(1.5, 2.6); L([-23.55, y, z], [-23.55, y - rr(0.25, 0.5), z + rr(-0.05, 0.05)], 'line', 'w'); ring(-23.55, y + 0.05, z, 0.06, 'yz', 8, 'line', 'g'); }
+  [[-15, 22.6], [-18, 22.6], [-15, 29.6], [-18, 29.6]].forEach(([x, z]) => { begin(x, 0.4, z, 1); ring(x, 0.7, z, 0.18, 'xz', 12, 'line', 'l'); for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2 + 0.4; L([x + Math.cos(a) * 0.12, 0.7, z + Math.sin(a) * 0.12], [x + Math.cos(a) * 0.22, 0, z + Math.sin(a) * 0.22], 'line', 'l'); } ring(x, 0.3, z, 0.19, 'xz', 12, 'dot', 'l'); });
+
+  // atrium: planter trees, lounge, sculpture, trailing plants from the mezzanine
+  function planterTree(x, z, h) {
+    begin(x, h / 2, z, 3);
+    cyl(x, 0, 0.6, z, 0.8, 20, 'line', 'l'); ring(x, 0.6, z, 0.9, 'xz', 20, 'line', 'l');
+    (function br(p, d, len, depth) {
+      const q = [p[0] + d[0] * len, p[1] + d[1] * len, p[2] + d[2] * len];
+      L(p, q, depth > 2 ? 'line' : 'dash', depth > 3 ? 'w' : 'l');
+      if (!depth) { TIPS.push(q); ring(q[0], q[1], q[2], rr(0.2, 0.35), rnd() < 0.5 ? 'xy' : 'yz', 10, 'dot', 'l'); return; }
+      for (let i = 0; i < 2 + (depth > 3 ? 1 : 0); i++) { const a = rr(0, 6.28), s = rr(0.3, 0.7), nd = [d[0] * 0.6 + Math.cos(a) * s, d[1] * 0.6 + rr(0.25, 0.5), d[2] * 0.6 + Math.sin(a) * s], m = Math.hypot(...nd); br(q, nd.map((v) => v / m), len * rr(0.6, 0.78), depth - 1); }
+    })([x, 0.6, z], [0, 1, 0], h * 0.32, 5);
+  }
+  planterTree(-6, 13, 4.2); planterTree(6.5, 10, 3.6);
+  begin(-3, 0.4, 22, 3);
+  box(-5, 0, 21, 2.4, 0.42, 0.9, 'line', 'l'); box(-5, 0.42, 21.7, 2.4, 0.45, 0.2, 'line', 'l');
+  box(-1.4, 0, 21, 0.9, 0.42, 0.9, 'line', 'l'); ring(-2.8, 0.38, 19.8, 0.5, 'xz', 20, 'line', 'l');
+  ring(-2.8, 0.005, 20.6, 2.4, 'xz', 30, 'dot', 'l');
+  begin(-1, 1.5, 9.5, 2);                                              // sculpture: stacked rings
+  for (let i = 0; i < 7; i++) ring(-1, 0.3 + i * 0.32, 9.5, 0.55 - i * 0.05, i % 2 ? 'xy' : 'yz', 22, 'line', i === 6 ? 'g' : 'w');
+  box(-1.5, 0, 9, 1, 0.3, 1, 'line', 'l');
+  begin(0, 3.2, 25, 8);                                                // trailing plants
+  for (let x = -7.5; x < 8; x += 1.3) { const len = rr(0.8, 2.2); let y = 4.2; for (let k = 0; k < 6; k++) { const y2 = y - len / 6; L([x + Math.sin(k) * 0.05, y, 24.95], [x + Math.sin(k + 1) * 0.05, y2, 24.95], 'line', 'l'); if (k % 2) ring(x + 0.08, y2, 24.95, 0.07, 'xy', 8, 'line', 'g'); y = y2; } }
+
+  // lobby: art on the walls, benches
+  begin(-23.8, 3, 8, 6);
+  [[2.5, 2.2, 3, 2], [6.5, 1.6, 2, 2.8], [9.5, 2.4, 2.2, 1.6]].forEach(([z, y, w, h]) => {
+    poly([[-23.9, y, z], [-23.9, y + h, z], [-23.9, y + h, z + w], [-23.9, y, z + w]], 'line', 'w', true);
+    poly([[-23.88, y + 0.15, z + 0.15], [-23.88, y + h - 0.15, z + 0.15], [-23.88, y + h - 0.15, z + w - 0.15], [-23.88, y + 0.15, z + w - 0.15]], 'dot', 'l', true);
+    ring(-23.87, y + h * 0.55, z + w * 0.45, Math.min(w, h) * 0.22, 'yz', 18, 'line', 'g');
+    L([-23.87, y + 0.3, z + 0.3], [-23.87, y + h * 0.45, z + w - 0.3], 'line', 'l');
+  });
+  glass([[-23.85, 1.6, 2.5], [-23.85, 4.4, 2.5], [-23.85, 4.4, 12], [-23.85, 1.6, 12]], LIME, 0.05);
+
+  // courtyard: grasses and lanterns
+  begin(0, 0.4, 54, 9);
+  for (let k = 0; k < 50; k++) { const x = rr(-9.5, -5) * (rnd() < 0.5 ? 1 : -1) * (rnd() < 0.3 ? 0.4 : 1), z = rr(47.5, 61.5); if (Math.abs(x) < 1.6) continue; const h = rr(0.2, 0.6); L([x, 0, z], [x + rr(-0.12, 0.12), h, z + rr(-0.1, 0.1)], 'line', rnd() < 0.2 ? 'g' : 'l'); }
+  [[-7, 49], [7, 49], [-7, 60], [7, 60]].forEach(([x, z]) => { L([x, 0, z], [x, 0.9, z], 'line', 'l'); box(x - 0.12, 0.9, z - 0.12, 0.24, 0.32, 0.24, 'line', 'w'); dot([x, 1.06, z]); pool([x, 0, z], 1.4, LIME, 0.3); });
+
+  // library: globe, armchairs
+  begin(-6, 1, 66, 2);
+  ring(-6, 1.25, 66, 0.35, 'xy', 20, 'line', 'w'); ring(-6, 1.25, 66, 0.35, 'yz', 20, 'line', 'l'); ring(-6, 1.25, 66, 0.35, 'xz', 20, 'dash', 'l');
+  ring(-6, 1.25, 66, 0.42, 'xy', 20, 'dot', 'g', -0.4, Math.PI + 0.4); L([-6, 0, 66], [-6, 0.9, 66], 'line', 'l'); ring(-6, 0, 66, 0.3, 'xz', 14, 'line', 'l');
+  [[5.5, 66], [5.5, 69]].forEach(([x, z]) => { begin(x, 0.5, z, 1.2); box(x - 0.45, 0, z - 0.45, 0.9, 0.42, 0.9, 'line', 'l'); box(x + 0.25, 0.42, z - 0.45, 0.2, 0.55, 0.9, 'line', 'l'); box(x - 0.45, 0.42, z - 0.45, 0.7, 0.18, 0.12, 'dot', 'l'); box(x - 0.45, 0.42, z + 0.33, 0.7, 0.18, 0.12, 'dot', 'l'); });
+  pool([-6, 0, 66], 1.2, LILAC, 0.3);
+
+  // light pools under the lamps
+  pool([-1, 0, 18], 4.5, LILAC, 0.35);
+  for (const zr of [34, 38.5, 43]) for (let x = 10.5; x < 21; x += 4) pool([x, 0.75, zr + 0.8], 1.8, LIME, 0.22);
+  for (let z = 67.5; z < 75.5; z += 2) pool([0, 0.79, z + 0.3], 0.9, LIME, 0.35);
+  pool([-12, 0, 33], 1.6, LIME, 0.2);
+  pool([-6, 0, 6.5], 2.4, COBALT, 0.3);
+
+  // distant skyline beyond the glass
+  begin(0, 10, -40, 60);
+  for (let k = 0; k < 26; k++) {
+    const x = -70 + k * 5.6 + rr(-1, 1), w = rr(3, 5), h = rr(8, 34), z = -30 - rr(0, 25);
+    poly([[x, 0, z], [x, h, z], [x + w, h, z], [x + w, 0, z]], 'line', 'c');
+    for (let y = 2; y < h - 1; y += 2.2) if (rnd() < 0.6) L([x + 0.6, y, z], [x + w - 0.6, y, z], 'dot', 'l');
+    if (rnd() < 0.3) { L([x + w / 2, h, z], [x + w / 2, h + rr(3, 8), z], 'line', 'c'); dot([x + w / 2, h + 3, z]); }
+  }
+  begin(0, 10, 120, 60);
+  for (let k = 0; k < 22; k++) {
+    const x = -60 + k * 5.8 + rr(-1, 1), w = rr(3, 6), h = rr(6, 28), z = 105 + rr(0, 25);
+    poly([[x, 0, z], [x, h, z], [x + w, h, z], [x + w, 0, z]], 'line', 'c');
+    for (let y = 2; y < h - 1; y += 2.2) if (rnd() < 0.5) L([x + 0.6, y, z], [x + w - 0.6, y, z], 'dot', 'l');
+  }
+
+  // floating dust in the light
+  const MOTES = [];
+  for (let i = 0; i < 260; i++) {
+    const zone = rnd();
+    const c = zone < 0.45 ? [rr(-7, 7), rr(0.5, 8.5), rr(9, 31)] : zone < 0.7 ? [rr(-9, 9), rr(0.3, 6), rr(48, 61)] : zone < 0.85 ? [rr(-8, 8), rr(0.5, 5), rr(63, 78)] : [rr(10, 22), rr(0.8, 4), rr(30, 46)];
+    MOTES.push({ c, ph: rr(0, 6.28), sp: rr(0.1, 0.35), col: rnd() < 0.3 ? LIME : LILAC });
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  //  COLLAGE LAYER — notes, colour planes, halftones, stipple, people
+  // ════════════════════════════════════════════════════════════════
+  const NOTES = [
+    [[13.5, 7.2, -0.8], 'Aluminium fins', '1500 c/c'],
+    [[2.5, 4.35, -1.6], 'Cantilever canopy', 'lime-lacquered soffit'],
+    [[-6, 1.1, 4.4], 'Curved reception', 'r = 2.20'],
+    [[3.5, 9, 14], 'Diagrid rooflight', 'triple glazed'],
+    [[-1.5, 6.6, 17], 'Pendant cluster', '11 no. globes'],
+    [[6.4, 2.6, 19], 'Spiral stair', '26 treads · 4.20 rise'],
+    [[-5.5, 5.25, 25], 'Glass balustrade', '1050 h'],
+    [[-16.2, 1.25, 21], 'Massing models', '1 : 500'],
+    [[-11.4, 1.25, 32.6], 'Laser cutter', ''],
+    [[-23.6, 2.4, 24], 'Material library', ''],
+    [[16, 7.4, 36], 'Acoustic baffles', '600 c/c'],
+    [[23.5, 2.6, 40], 'Pin-up wall', 'crit space'],
+    [[-3, 3.6, 56], 'Multi-stem tree', ''],
+    [[6.5, 0.2, 52], 'Reflecting pool', '150 deep'],
+    [[-9.6, 4.6, 69], 'Oak shelving', '6.20 h'],
+    [[2.6, 3.6, 79.9], 'Arched glazing', '7 bays'],
+  ];
+
+  // solid colour planes (painted surfaces), like a marker on the drawing
+  const BLOCKS = [];
+  const block = (pts, col, a) => BLOCKS.push({ pts, col, a });
+  block([[-4, 4.19, -2.4], [4, 4.19, -2.4], [4, 4.19, 0], [-4, 4.19, 0]], LIME, 0.55);              // canopy soffit
+  block([[-8, 4.2, 32], [8, 4.2, 32], [8, 9, 32], [-8, 9, 32]], COBALT, 0.42);                       // mezzanine feature wall
+  block([[1.5, 0.155, 51], [7.5, 0.155, 51], [7.5, 0.155, 59], [1.5, 0.155, 59]], COBALT, 0.5);     // pool
+  block([[-1.2, 0.004, -14], [1.2, 0.004, -14], [1.2, 0.004, 12], [-1.2, 0.004, 12]], LIME, 0.28);   // the path in
+  block([[-23.95, 0, 14], [-23.95, 0, 34], [-23.95, 3.6, 34], [-23.95, 3.6, 14]], LILAC, 0.16);    // workshop wall
+  block([[24, 1, 31], [24, 1, 46], [24, 3.2, 46], [24, 3.2, 31]], COBALT, 0.3);                     // pin-up wall backing
+  block([[-10, 0, 62.05], [10, 0, 62.05], [10, 4.5, 62.05], [-10, 4.5, 62.05]], LILAC, 0.1);       // library threshold
+
+  // giant collage shapes placed in the world, so they slide with the camera
+  const DISCS = [
+    { p: [0, 15, 104], r: 10, col: COBALT, a: 0.38, halftone: false },
+    { p: [-34, 9, 40], r: 6, col: LIME, a: 0.4, halftone: false },
+    { p: [30, 11, 22], r: 5, col: LILAC, a: 0.6, halftone: false },
+    { p: [-12, 3.5, 64], r: 2.4, col: LIME, a: 0.7, halftone: false },
+    { p: [12, 16, -30], r: 7, col: LIME, a: 0.32, halftone: false },
+  ];
+
+  // hatching on a few surfaces
+  begin(0, 2, 0, 20);
+  for (let z = -13.5; z < 12; z += 0.5) L([-1.2, 0.006, z], [1.2, 0.006, z + 0.25], 'line', 'g');   // across the path
+  for (let x = -3.8; x < 4; x += 0.3) L([x, 4.18, -2.3], [x + 0.2, 4.18, -0.1], 'line', 'w');        // soffit grain
+  begin(0, 6.5, 32, 9);
+  for (let x = -7.6; x < 8; x += 0.45) L([x, 4.4, 31.98], [x + 1.2, 8.8, 31.98], 'line', 'l');       // feature wall hatch
+  begin(4.5, 0.2, 55, 4);
+  for (let z = 51.3; z < 59; z += 0.35) L([1.6, 0.16, z], [7.4, 0.16, z], 'dot', 'w');               // water lines
+
+  // street trees outside the entrance (stippled)
+  [[-12, -7, 6], [13, -9, 7], [-19, -4, 5]].forEach(([x, z, h]) => {
+    begin(x, h / 2, z, 4);
+    (function br(p, d, len, depth) {
+      const q = [p[0] + d[0] * len, p[1] + d[1] * len, p[2] + d[2] * len];
+      L(p, q, 'line', depth > 3 ? 'w' : 'l');
+      if (!depth) { TIPS.push(q); return; }
+      for (let i = 0; i < 2 + (depth > 3 ? 1 : 0); i++) { const a = rr(0, 6.28), s = rr(0.3, 0.75), nd = [d[0] * 0.6 + Math.cos(a) * s, d[1] * 0.6 + rr(0.2, 0.5), d[2] * 0.6 + Math.sin(a) * s], m = Math.hypot(...nd); br(q, nd.map((v) => v / m), len * rr(0.6, 0.78), depth - 1); }
+    })([x, 0, z], [0, 1, 0], h * 0.38, 6);
+  });
+  // stipple canopy points round every branch tip
+  const STIPPLE = [];
+  for (const t of TIPS) for (let i = 0; i < 9; i++) {
+    const a = rr(0, 6.28), b = rr(-1, 1), r = rr(0, 0.55) * rr(0.4, 1);
+    STIPPLE.push([t[0] + Math.cos(a) * r * Math.sqrt(1 - b * b), t[1] + b * r * 0.8, t[2] + Math.sin(a) * r * Math.sqrt(1 - b * b), rnd() < 0.18 ? 1 : 0]);
+  }
+
+  // people moving through the building: start, end, speed, phase
+  const PEOPLE = [
+    { a: [-4, 0, -12], b: [-1.5, 0, 6], sp: 0.05, ph: 0.1 },
+    { a: [6, 0, -10], b: [3, 0, -1], sp: 0.04, ph: 0.6 },
+    { a: [-10, 0, -6], b: [8, 0, -6], sp: 0.03, ph: 0.3 },
+    { a: [-3.6, 0, 14.5], b: [-3.6, 0, 14.5], sp: 0, ph: 0, face: [-2.6, 0, 15] },
+    { a: [-2.6, 0, 15.2], b: [-2.6, 0, 15.2], sp: 0, ph: 0, face: [-3.6, 0, 14.5] },
+    { a: [-19, 0, 30], b: [-12, 0, 18], sp: 0.035, ph: 0.2 },
+    { a: [17, 0, 46.5], b: [11, 0, 30.5], sp: 0.03, ph: 0.7 },
+    { a: [6, 0, 48.5], b: [-6, 0, 60.5], sp: 0.03, ph: 0.45 },
+    { a: [3.5, 0, 77], b: [-3.5, 0, 64], sp: 0.025, ph: 0.85 },
+    { a: [-1.6, 4.2, 30.5], b: [6.5, 4.2, 30.5], sp: 0.04, ph: 0.15 },
+  ];
+
+  // centre of every object, for culling
+  const STYLE = { line: 0, dash: 1, dot: 2 }, COLI = { l: 0, c: 1, g: 2, w: 3 };
+  objs.forEach((o) => {
+    if (!o.r) o.r = 5;
+    const n = o.segs.length;
+    o.n = n; o.P = new Float32Array(n * 6); o.S = new Uint8Array(n); o.C = new Uint8Array(n); o.T = new Float32Array(n);
+    o.segs.forEach((g, i) => { o.P.set([...g.a, ...g.b], i * 6); o.S[i] = STYLE[g.s]; o.C[i] = COLI[g.col]; o.T[i] = g.t; });
+    o.segs = null;
+  });
+
+  // ════════════════════════════════════════════════════════════════
+  //  CAMERA PATH — keyframes (position, look-at, field of view)
+  // ════════════════════════════════════════════════════════════════
+  const K = [
+    { p: 0.10, pos: [0, 1.7, -14],  look: [0, 3.2, 6],    fov: 46 },   // outside, facing the facade
+    { p: 0.17, pos: [0, 1.7, -3],   look: [0, 4.0, 10],   fov: 54 },   // under the canopy
+    { p: 0.23, pos: [-1, 1.7, 7],   look: [1, 7.5, 18],   fov: 66 },   // look up into the atrium
+    { p: 0.29, pos: [2.2, 1.6, 12], look: [3.6, 1.0, 16.4], fov: 40 }, // 01 Colour at the stair
+    { p: 0.35, pos: [8.2, 2.6, 18], look: [2, 5.2, 24],   fov: 56 },   // swing round the stair
+    { p: 0.41, pos: [2.5, 5.9, 23.2], look: [-4.5, 5.0, 27.4], fov: 40 }, // 02 Illustration on the mezzanine
+    { p: 0.47, pos: [-6, 6.4, 23],  look: [-16, 0.6, 22], fov: 58 },   // over the balustrade to the workshop
+    { p: 0.53, pos: [-12.5, 1.75, 29.5], look: [-16.6, 1.0, 25.4], fov: 42 }, // 03 Planning in the workshop
+    { p: 0.58, pos: [-6, 2.0, 37],  look: [10, 1.6, 36],  fov: 62 },   // pan across to the studio
+    { p: 0.635, pos: [10.2, 1.7, 30.5], look: [13.2, 1.0, 32.6], fov: 42 }, // 04 Materials on the studio floor
+    { p: 0.69, pos: [11, 2.2, 44],  look: [0, 2.6, 54],   fov: 60 },   // turn to the courtyard
+    { p: 0.745, pos: [1.6, 1.7, 51.5], look: [-1.6, 1.0, 55.4], fov: 42 }, // 05 Making in the courtyard
+    { p: 0.80, pos: [-1, 2.0, 61],  look: [0, 3.6, 72],   fov: 60 },   // into the library
+    { p: 0.855, pos: [2.2, 1.7, 67], look: [-0.6, 1.0, 71.2], fov: 42 }, // 06 Ideas in the library
+    { p: 0.90, pos: [0, 16, 64],    look: [0, 0, 44],     fov: 58 },   // rise through the roof
+    { p: 0.95, pos: [0, 58, 40.5],  look: [0, 0, 40],     fov: 64 },   // aerial plan
+  ];
+  // where each character stands (on the floor, or the mezzanine)
+  const CHARS = [
+    { pos: [3.6, 0, 16.4] },
+    { pos: [-4.5, 4.2, 27.4] },
+    { pos: [-16.6, 0, 25.4] },
+    { pos: [13.2, 0, 32.6] },
+    { pos: [-1.6, 0, 55.4] },
+    { pos: [-0.6, 0, 71.2] },
+  ];
+  const CHAR_KEY = [3, 5, 7, 9, 11, 13];
+
+  function cr(p0, p1, p2, p3, t) {          // Catmull-Rom
+    const t2 = t * t, t3 = t2 * t;
+    return p1.map((_, i) => 0.5 * ((2 * p1[i]) + (-p0[i] + p2[i]) * t + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * t2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * t3));
+  }
+  function camAt(p) {
+    if (p <= K[0].p) return { pos: K[0].pos.slice(), look: K[0].look.slice(), fov: K[0].fov };
+    if (p >= K[K.length - 1].p) { const k = K[K.length - 1]; return { pos: k.pos.slice(), look: k.look.slice(), fov: k.fov }; }
+    let i = 0; while (p > K[i + 1].p) i++;
+    let t = (p - K[i].p) / (K[i + 1].p - K[i].p);
+    t = lerp(t, easeIO(t), 0.55);                    // linger at each keyframe, glide between
+    const g = (j) => K[clamp(j, 0, K.length - 1)];
+    return {
+      pos: cr(g(i - 1).pos, g(i).pos, g(i + 1).pos, g(i + 2).pos, t),
+      look: cr(g(i - 1).look, g(i).look, g(i + 1).look, g(i + 2).look, t),
+      fov: lerp(g(i).fov, g(i + 1).fov, ease(t)),
+    };
+  }
+
+  // ════════════════════════════════════════════════════════════════
+  //  RENDERING
+  // ════════════════════════════════════════════════════════════════
+  const cvs = document.getElementById('cwCanvas');
+  const ctx = cvs.getContext('2d');
+  let W = 0, H = 0, DPR = 1;
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 1.25);
+    W = cvs.clientWidth; H = cvs.clientHeight;
+    cvs.width = W * DPR; cvs.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', resize); resize();
+
+  // film grain tile
+
+
+  const cam = { pos: [0, 0, 0], r: [1, 0, 0], u: [0, 1, 0], f: [0, 0, 1], F: 1 };
+  const NEAR = 0.2; let FAR = 90, ALT = 1.15, LWB = 1;
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const norm = (a) => { const m = Math.hypot(...a) || 1; return [a[0] / m, a[1] / m, a[2] / m]; };
+  function setCamera(c, roll) {
+    cam.pos = c.pos;
+    const f = norm(sub(c.look, c.pos));
+    const worldUp = Math.abs(f[1]) > 0.97 ? [0, 0, 1] : [0, 1, 0];
+    let r = norm(cross(worldUp, f)); let u = cross(f, r);
+    // gentle roll on turns
+    const cr_ = Math.cos(roll), sr = Math.sin(roll);
+    const r2 = [r[0] * cr_ + u[0] * sr, r[1] * cr_ + u[1] * sr, r[2] * cr_ + u[2] * sr];
+    const u2 = [u[0] * cr_ - r[0] * sr, u[1] * cr_ - r[1] * sr, u[2] * cr_ - r[2] * sr];
+    cam.f = f; cam.r = r2; cam.u = u2;
+    cam.F = (H / 2) / Math.tan((c.fov * Math.PI / 180) / 2);
+  }
+  function view(p) { const d = sub(p, cam.pos); return [dot3(d, cam.r), dot3(d, cam.u), dot3(d, cam.f)]; }
+  function scr(v) { return [W / 2 + (v[0] * cam.F) / v[2], H / 2 - (v[1] * cam.F) / v[2]]; }
+
+  const COLARR = [LILAC, COBALT, LIME, WHITE], STYLES = ['line', 'dash', 'dot'];
+  // buckets: index = col*3*12*21 + style*12*21 + lwIdx*21 + aIdx
+  const NB = 4 * 3 * 12 * 21;
+  const B = Array.from({ length: NB }, () => []);
+  const used = [];
+  let cx = 0, cy = 0, cz = 0, rx = 1, ry = 0, rz = 0, ux = 0, uy = 1, uz = 0, fx = 0, fy = 0, fz = 1, CF = 1, W2 = 0, H2 = 0;
+  function syncCam() {
+    [cx, cy, cz] = cam.pos; [rx, ry, rz] = cam.r; [ux, uy, uz] = cam.u; [fx, fy, fz] = cam.f; CF = cam.F; W2 = W / 2; H2 = H / 2;
+  }
+  function pushLine(col, style, lw, al, ax, ay, bx, by) {
+    let li = Math.round(lw * 4); if (li > 11) li = 11;
+    let ai = Math.round(al * 20); if (ai <= 0) return; if (ai > 20) ai = 20;
+    const k = ((col * 3 + style) * 12 + li) * 21 + ai;
+    const arr = B[k]; if (arr.length === 0) used.push(k);
+    arr.push(ax, ay, bx, by);
+  }
+  function seg(ax0, ay0, az0, bx0, by0, bz0, style, col, alpha, frac) {
+    let dx = ax0 - cx, dy = ay0 - cy, dz = az0 - cz;
+    let AX = dx * rx + dy * ry + dz * rz, AY = dx * ux + dy * uy + dz * uz, AZ = dx * fx + dy * fy + dz * fz;
+    dx = bx0 - cx; dy = by0 - cy; dz = bz0 - cz;
+    let BX = dx * rx + dy * ry + dz * rz, BY = dx * ux + dy * uy + dz * uz, BZ = dx * fx + dy * fy + dz * fz;
+    if (AZ < NEAR && BZ < NEAR) return;
+    if (frac < 1) { BX = AX + (BX - AX) * frac; BY = AY + (BY - AY) * frac; BZ = AZ + (BZ - AZ) * frac; }
+    if (AZ < NEAR) { const t = (NEAR - AZ) / (BZ - AZ); AX += (BX - AX) * t; AY += (BY - AY) * t; AZ = NEAR; }
+    else if (BZ < NEAR) { const t = (NEAR - BZ) / (AZ - BZ); BX += (AX - BX) * t; BY += (AY - BY) * t; BZ = NEAR; }
+    const zm = (AZ + BZ) * 0.5;
+    let fog = 1 - (zm - 8) / (FAR - 8); if (fog <= 0) return; if (fog > 1) fog = 1;
+    if (zm < 1) fog *= zm;
+    const al = fog * alpha * ALT * (style === 0 ? 0.9 : 0.7) * (col === 1 ? 1.15 : 1) * (style !== 0 && zm > 16 ? 0.6 : 1);
+    if (al < 0.03) return;
+    const sax = W2 + AX * CF / AZ, say = H2 - AY * CF / AZ, sbx = W2 + BX * CF / BZ, sby = H2 - BY * CF / BZ;
+    if ((sax < -60 && sbx < -60) || (sax > W + 60 && sbx > W + 60) || (say < -60 && sby < -60) || (say > H + 60 && sby > H + 60)) return;
+    const ddx = sbx - sax, ddy = sby - say; if (ddx * ddx + ddy * ddy < 2.5) return;   // too small to see
+    let lw = 5.5 / zm; if (lw < 0.45) lw = 0.45; else if (lw > 2) lw = 2;
+    if (style !== 0 && zm > 16) { style = 0; }
+    if (col === 1) lw *= 1.3;
+    pushLine(col, style, lw, al, sax, say, sbx, sby);
+  }
+  // keep the old signature for the few callers that pass arrays
+  function seg3(a, b, style, col, alpha, frac) { seg(a[0], a[1], a[2], b[0], b[1], b[2], STYLE[style], COLI[col], alpha, frac); }
+  function flush(glow) {
+    ctx.lineCap = 'butt';
+    const pass = (scale, amul, glowOnly) => {
+      for (const k of used) {
+        if (glowOnly && (k % 21 < 12 || Math.floor(k / (21 * 12)) % 3 !== 0)) continue;
+        const ai = k % 21, li = Math.floor(k / 21) % 12, st = Math.floor(k / (21 * 12)) % 3, col = Math.floor(k / (21 * 12 * 3));
+        const lw = Math.max(li, 1) / 4;
+        if (st === 1) ctx.setLineDash([lw * 5, lw * 4]); else if (st === 2) ctx.setLineDash([lw * 0.5, lw * 3.4]); else ctx.setLineDash([]);
+        ctx.lineWidth = lw * scale;
+        ctx.strokeStyle = rgba(COLARR[col], (ai / 20) * amul);
+        ctx.beginPath();
+        const p = B[k];
+        for (let i = 0; i < p.length; i += 4) { ctx.moveTo(p[i], p[i + 1]); ctx.lineTo(p[i + 2], p[i + 3]); }
+        ctx.stroke();
+      }
+    };
+    
+    pass(1, 1);
+    for (const k of used) B[k].length = 0;
+    used.length = 0;
+  }
+  // ── Atmosphere: colour washes, light pools, glass, light shafts, dust ──
+  function vz(p) { return view(p); }
+  function projPoly(pts) {
+    const out = [];
+    for (const p of pts) { const v = view(p); if (v[2] < NEAR) return null; out.push(scr(v)); }
+    return out;
+  }
+  function fogAt(z) { return clamp(1 - (z - 10) / (FAR - 10)); }
+  function floorDisc(c, r, col, a, alpha) {
+    const cv = view(c); if (cv[2] < NEAR) return;
+    const pts = [];
+    for (let i = 0; i < 28; i++) {
+      const t = (i / 28) * Math.PI * 2, v = view([c[0] + Math.cos(t) * r, c[1], c[2] + Math.sin(t) * r]);
+      if (v[2] < 0.6) return;                          // the camera is standing in it: skip rather than smear
+      pts.push(scr(v));
+    }
+    const [sx, sy] = scr(cv);
+    let R = 0; for (const [x, y] of pts) R = Math.max(R, Math.hypot(x - sx, y - sy));
+    if (R < 2) return;
+    const g = ctx.createRadialGradient(sx, sy, 0, sx, sy, R);
+    const k = a * alpha * fogAt(cv[2]);
+    g.addColorStop(0, rgba(col, k)); g.addColorStop(0.55, rgba(col, k * 0.35)); g.addColorStop(1, rgba(col, 0));
+    ctx.fillStyle = g; ctx.beginPath();
+    pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+    ctx.closePath(); ctx.fill();
+  }
+  function drawAtmosphere(alpha, tm) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (const w of WASHES) floorDisc(w.p, w.r, w.col, w.a * 0.5, alpha);
+    for (const p of POOLS) floorDisc(p.p, p.r, p.col, p.a, alpha);
+    // glass planes, shaded top to bottom
+    for (const f of FILLS) {
+      const s = projPoly(f.pts); if (!s) continue;
+      const cz = view(f.pts.reduce((a, b) => [a[0] + b[0] / 4, a[1] + b[1] / 4, a[2] + b[2] / 4], [0, 0, 0]))[2];
+      const k = f.a * alpha * fogAt(cz);
+      const ys = s.map((q) => q[1]), y0 = Math.min(...ys), y1 = Math.max(...ys);
+      const g = ctx.createLinearGradient(0, y0, 0, y1 + 1);
+      g.addColorStop(0, rgba(f.col, k)); g.addColorStop(1, rgba(f.col, k * 0.25));
+      ctx.fillStyle = g; ctx.beginPath(); s.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill();
+    }
+    // light shafts: the four faces of a slanted volume, fading downwards
+    for (const sh of SHAFTS) {
+      const bot = sh.top.map(([x, y, z]) => [x + sh.off[0], 0, z + sh.off[2]]);
+      const shimmer = 0.85 + Math.sin(tm * 0.7) * 0.15;
+      for (let i = 0; i < 4; i++) {
+        const quad = [sh.top[i], sh.top[(i + 1) % 4], bot[(i + 1) % 4], bot[i]];
+        const s = projPoly(quad); if (!s) continue;
+        const g = ctx.createLinearGradient(0, Math.min(s[0][1], s[1][1]), 0, Math.max(s[2][1], s[3][1]) + 1);
+        g.addColorStop(0, rgba(sh.col, sh.a * alpha * shimmer)); g.addColorStop(1, rgba(sh.col, 0));
+        ctx.fillStyle = g; ctx.beginPath(); s.forEach(([x, y], j) => (j ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill();
+      }
+    }
+    // dust motes drifting in the light
+    for (const m of MOTES) {
+      const p = [m.c[0] + Math.sin(tm * m.sp + m.ph) * 0.4, m.c[1] + Math.sin(tm * m.sp * 0.7 + m.ph * 2) * 0.3, m.c[2] + Math.cos(tm * m.sp + m.ph) * 0.4];
+      const v = view(p); if (v[2] < NEAR || v[2] > 40) continue;
+      const [sx, sy] = scr(v); if (sx < 0 || sx > W || sy < 0 || sy > H) continue;
+      const r = clamp(5 / v[2], 0.6, 3.2), k = alpha * clamp(1 - v[2] / 40) * (0.5 + 0.5 * Math.sin(tm * 1.3 + m.ph));
+      ctx.fillStyle = rgba(m.col, 0.55 * k);
+      ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ── Collage drawing ──
+  function drawBlocks(alpha) {
+    for (const b of BLOCKS) {
+      const s = projPoly(b.pts); if (!s) continue;
+      const cz = view(b.pts.reduce((a, q) => [a[0] + q[0] / 4, a[1] + q[1] / 4, a[2] + q[2] / 4], [0, 0, 0]))[2];
+      ctx.fillStyle = rgba(b.col, b.a * alpha * fogAt(cz));
+      ctx.beginPath(); s.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.fill();
+    }
+  }
+  function drawDiscs(alpha) {
+    for (const d of DISCS) {
+      const v = view(d.p); if (v[2] < 2) continue;
+      const [sx, sy] = scr(v), R = (d.r * cam.F) / v[2];
+      if (sx + R < 0 || sx - R > W || sy + R < 0 || sy - R > H) continue;
+      const k = d.a * alpha * clamp(1 - (v[2] - 30) / 140);
+      if (!d.halftone) {
+        ctx.fillStyle = rgba(d.col, k); ctx.beginPath(); ctx.arc(sx, sy, R, 0, Math.PI * 2); ctx.fill();
+      } else {
+        const step = Math.max(4, R / 14);
+        ctx.fillStyle = rgba(d.col, k);
+        for (let y = -R; y <= R; y += step) for (let x = -R; x <= R; x += step) {
+          const dd = Math.hypot(x, y) / R; if (dd > 1) continue;
+          const rr_ = step * 0.42 * (1 - dd * 0.75);
+          ctx.beginPath(); ctx.arc(sx + x, sy + y, rr_, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      // fine ring + crosshair, like a registration mark
+      ctx.strokeStyle = rgba(WHITE, 0.25 * alpha); ctx.lineWidth = 0.8; ctx.setLineDash([2, 5]);
+      ctx.beginPath(); ctx.arc(sx, sy, R * 1.12, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(sx - R * 1.3, sy); ctx.lineTo(sx - R * 1.05, sy); ctx.moveTo(sx + R * 1.05, sy); ctx.lineTo(sx + R * 1.3, sy); ctx.stroke();
+    }
+  }
+  function drawStipple(alpha) {
+    for (const s of STIPPLE) {
+      const dx = s[0] - cx, dy = s[1] - cy, dz = s[2] - cz;
+      const Z = dx * fx + dy * fy + dz * fz; if (Z < NEAR || Z > 60) continue;
+      const X = dx * rx + dy * ry + dz * rz, Y = dx * ux + dy * uy + dz * uz;
+      const sx = W2 + X * CF / Z, sy = H2 - Y * CF / Z;
+      if (sx < 0 || sx > W || sy < 0 || sy > H) continue;
+      const r = Math.max(0.7, Math.min(2.6, 4.5 / Z)), k = alpha * clamp(1 - (Z - 10) / 50);
+      ctx.fillStyle = s[3] ? rgba(LIME, 0.85 * k) : rgba(LILAC, 0.6 * k);
+      ctx.fillRect(sx - r / 2, sy - r / 2, r, r);
+    }
+  }
+  function drawPeople(alpha, tm) {
+    const list = PEOPLE.map((pp) => {
+      let pos = pp.a, dir = pp.face ? sub(pp.face, pp.a) : sub(pp.b, pp.a), walk = 0;
+      if (pp.sp) {
+        const t = (tm * pp.sp + pp.ph) % 2, u = t < 1 ? t : 2 - t;          // walk there and back
+        pos = [lerp(pp.a[0], pp.b[0], u), pp.a[1], lerp(pp.a[2], pp.b[2], u)];
+        walk = tm * 3.2 + pp.ph * 10;
+      }
+      return { pos, walk, z: view(pos)[2] };
+    }).filter((q) => q.z > 0.8 && q.z < 55).sort((a, b) => b.z - a.z);
+    for (const q of list) {
+      const P0 = q.pos, k = alpha * clamp(1 - (q.z - 10) / 45);
+      const pt = (dx, dy) => { const v = view([P0[0] + dx * cam.r[0], P0[1] + dy, P0[2] + dx * cam.r[2]]); return v[2] < NEAR ? null : scr(v); };
+      const sw = Math.sin(q.walk) * 0.16;
+      const head = pt(0, 1.62), sh1 = pt(-0.2, 1.42), sh2 = pt(0.2, 1.42), hp1 = pt(-0.15, 0.92), hp2 = pt(0.15, 0.92);
+      const f1 = pt(-0.1 + sw, 0), f2 = pt(0.1 - sw, 0), hip = pt(0, 0.92);
+      if (!head || !sh1 || !sh2 || !hp1 || !hp2 || !f1 || !f2) continue;
+      const hr = Math.abs(sh2[0] - sh1[0]) * 0.3;
+      ctx.fillStyle = rgba(LILAC, 0.6 * k); ctx.strokeStyle = rgba(WHITE, 0.55 * k); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(sh1[0], sh1[1]); ctx.lineTo(sh2[0], sh2[1]); ctx.lineTo(hp2[0], hp2[1]); ctx.lineTo(hp1[0], hp1[1]); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(head[0], head[1], Math.max(1.5, hr), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.lineWidth = Math.max(1, hr * 0.7); ctx.strokeStyle = rgba(LILAC, 0.75 * k);
+      ctx.beginPath(); ctx.moveTo(hip[0], hip[1]); ctx.lineTo(f1[0], f1[1]); ctx.moveTo(hip[0], hip[1]); ctx.lineTo(f2[0], f2[1]); ctx.stroke();
+      // soft shadow on the floor
+      const sh = pt(0, 0); if (sh) { ctx.fillStyle = rgba([0, 0, 0], 0.25 * k); ctx.beginPath(); ctx.ellipse(sh[0], sh[1], hr * 2.2, hr * 0.5, 0, 0, Math.PI * 2); ctx.fill(); }
+    }
+  }
+  function drawNotes(alpha) {
+    ctx.save();
+    for (const [p, t1, t2] of NOTES) {
+      const v = view(p); if (v[2] < 2.5 || v[2] > 26) continue;
+      const [sx, sy] = scr(v); if (sx < 30 || sx > W - 30 || sy < 40 || sy > H - 40) continue;
+      const k = alpha * clamp((26 - v[2]) / 8) * clamp((v[2] - 2.5) / 2);
+      if (k < 0.03) continue;
+      const dir = sx < W / 2 ? -1 : 1, ex = sx + dir * 70, ey = sy - 54, tx = ex + dir * 90;
+      ctx.strokeStyle = rgba(WHITE, 0.6 * k); ctx.lineWidth = 0.8;
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey); ctx.lineTo(tx, ey); ctx.stroke();
+      ctx.strokeStyle = rgba(LIME, 0.95 * k); ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(sx, sy, 3.5, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = rgba(WHITE, 0.85 * k); ctx.font = '500 11px Raleway, sans-serif';
+      ctx.textAlign = dir < 0 ? 'right' : 'left'; ctx.textBaseline = 'bottom';
+      ctx.letterSpacing = '1.5px';
+      ctx.fillText(t1.toUpperCase(), ex + dir * 4, ey - 4);
+      if (t2) { ctx.fillStyle = rgba(LILAC, 0.7 * k); ctx.font = 'italic 300 11px Raleway, sans-serif'; ctx.letterSpacing = '0.5px'; ctx.textBaseline = 'top'; ctx.fillText(t2, ex + dir * 4, ey + 4); }
+      ctx.letterSpacing = '0px';
+    }
+    ctx.restore();
+  }
+
+  function drawFloor(alpha) {
+    // dot grid across the whole plan, thinned with distance
+    const step = cam.pos[1] > 12 ? 2 : 1;
+    for (let z = 0; z <= 80; z += step) for (let x = -24; x <= 24; x += step) {
+      const v = view([x, 0, z]); if (v[2] < NEAR || v[2] > FAR) continue;
+      const d = v[2]; if (d > 30 && (x % 2 || z % 2)) continue;
+      const [sx, sy] = scr(v); if (sx < -10 || sx > W + 10 || sy < -10 || sy > H + 10) continue;
+      const fog = clamp(1 - (d - 6) / (FAR - 6));
+      ctx.fillStyle = rgba(LILAC, 0.32 * fog * alpha);
+      const r = clamp(3.6 / d, 0.4, 1.8);
+      ctx.fillRect(sx - r / 2, sy - r / 2, r, r);
+    }
+  }
+  function drawObjects(alpha, buildBoost) {
+    const marks = [], texts = [], dims = [];
+    for (const o of objs) {
+      const v = view(o.c);
+      if (v[2] < -o.r || v[2] - o.r > FAR) continue;
+      const dist = Math.hypot(...sub(o.c, cam.pos)) - o.r * 0.5;
+      const build = clamp((34 - dist) / 22 + buildBoost);       // sketches itself in as you approach
+      const P = o.P, S = o.S, C = o.C, T = o.T;
+      for (let i = 0, j = 0; i < o.n; i++, j += 6) {
+        let f = (build - T[i]) / 0.5; if (f < 0) f = 0; else if (f > 1) f = 1;
+        if (f > 0) seg(P[j], P[j + 1], P[j + 2], P[j + 3], P[j + 4], P[j + 5], S[i], C[i], alpha, f * f * (3 - 2 * f));
+      }
+      if (build > 0.6) { o.dots.forEach((p) => marks.push([p, build])); o.labels.forEach((l) => texts.push([l, build])); o.dims.forEach((d) => dims.push([d, build])); }
+    }
+    flush(true);
+    // lime joints and lights
+    for (const [p, b] of marks) {
+      const v = view(p); if (v[2] < NEAR) continue;
+      const [sx, sy] = scr(v), r = clamp(7 / v[2], 1.2, 5);
+      const a = clamp(1 - (v[2] - 10) / (FAR - 10)) * alpha * range(b, 0.6, 1);
+      ctx.fillStyle = rgba(LIME, a); ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  // Halo ring on the floor under each character: draws itself as you arrive
+  function drawHalo(c, k) {
+    if (k <= 0.001) return;
+    const n = 48, R = 0.75, end = Math.floor(n * k);
+    for (let pass = 0; pass < 2; pass++) {
+      ctx.beginPath(); let started = false;
+      for (let i = 0; i <= end; i++) {
+        const a = -Math.PI / 2 + (i / n) * Math.PI * 2;
+        const v = view([c.pos[0] + Math.cos(a) * R * (pass ? 1.35 : 1), c.pos[1] + 0.01, c.pos[2] + Math.sin(a) * R * (pass ? 1.35 : 1)]);
+        if (v[2] < NEAR) { started = false; continue; }
+        const [sx, sy] = scr(v);
+        if (!started) { ctx.moveTo(sx, sy); started = true; } else ctx.lineTo(sx, sy);
+      }
+      ctx.setLineDash(pass ? [2, 6] : []);
+      ctx.lineWidth = pass ? 1 : 2;
+      ctx.strokeStyle = rgba(LIME, (pass ? 0.5 : 0.9) * k);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  // ── Character elements ──
+  const chips = MEDIA.chips.map((m, i) => {
+    const el = document.createElement('div'); el.className = 'cw-chip';
+    el.appendChild(media(m));
+    document.getElementById('cwChips').appendChild(el);
+    return { el, m, pos: CHARS[i].pos, key: K[CHAR_KEY[i]].p, vid: el.querySelector('video'), playing: true };
+  });
+
+  // ── Scroll ──
+  const scroller = document.getElementById('cwScroll');
+  let target = 0, p = 0, sp = 0;
+  function readScroll() {
+    const r = scroller.getBoundingClientRect();
+    target = clamp(-r.top / (scroller.offsetHeight - window.innerHeight));
+  }
+  window.addEventListener('scroll', readScroll, { passive: true });
+  readScroll(); p = sp = target;
+
+  const $ = (id) => document.getElementById(id);
+  const intro = $('cwIntro'), endEl = $('cwEnd'), hint = $('cwHint'), prog = $('cwProg');
+  const barT = $('cwBarT'), barB = $('cwBarB');
+  let lastLook = null, roll = 0, holdK = 0;
+  const HOLD_MS = 2000;
+  const HOLDS = CHAR_KEY.map((i) => ({ k: K[i].p, start: 0, done: false }));
+
+  function frame() {
+    const now = performance.now(), dt = Math.min(0.1, (now - (frame.last || now)) / 1000); frame.last = now;
+    sp += (target - sp) * (1 - Math.exp(-dt * 5));
+    if (Math.abs(target - sp) < 0.00003) sp = target;
+    // the camera follows the scroll, but stops at each character for HOLD_MS
+    let want = sp; holdK = 0;
+    if (want < p) { HOLDS.forEach((h) => { if (h.k > want + 0.004) { h.start = 0; h.done = false; } }); }
+    else for (const h of HOLDS) {
+      if (h.done || p > h.k + 0.0005 || want <= h.k) continue;
+      if (p >= h.k - 0.0012) {
+        if (!h.start) h.start = now;
+        const e = now - h.start; holdK = clamp(e / HOLD_MS);
+        if (e < HOLD_MS) want = h.k; else h.done = true;
+      } else want = Math.min(want, h.k);
+      break;
+    }
+    p += (want - p) * (1 - Math.exp(-dt * 3.2));
+    if (Math.abs(want - p) < 0.00002) p = want;
+
+    const c = camAt(p);
+    c.fov -= 3 * ease(holdK);                         // a slow push-in while we hold
+    // a slight handheld breathing so it never feels mechanical
+    const tm = performance.now() / 1000;
+    c.pos = [c.pos[0] + Math.sin(tm * 0.6) * 0.015, c.pos[1] + Math.sin(tm * 0.9) * 0.012, c.pos[2]];
+    // roll into turns, from how fast the look direction is swinging
+    const f = norm(sub(c.look, c.pos));
+    if (lastLook) { const turn = f[0] * lastLook[2] - f[2] * lastLook[0]; roll = lerp(roll, clamp(turn * 6, -0.05, 0.05), 0.08); }
+    lastLook = f;
+    setCamera(c, roll); syncCam();
+    FAR = 55 + Math.max(0, c.pos[1] - 8) * 2.4;            // see the whole plan from the air
+    const up = clamp((c.pos[1] - 8) / 40); ALT = 1.15 + up * 1.2; LWB = 1 + up * 1.4;
+
+    const worldA = range(p, 0.05, 0.13) * (1 - range(p, 0.955, 0.985) * 0.85);
+    const buildBoost = range(p, 0.86, 0.94) * 1.5;      // everything completes as we rise for the aerial view
+
+    ctx.clearRect(0, 0, W, H);
+    if (worldA > 0.002) {
+      drawDiscs(worldA);
+      drawBlocks(worldA);
+      drawFloor(worldA);
+      drawObjects(worldA, buildBoost);
+    }
+
+    // opening orb grows past the viewer and dissolves into the building
+    const io = ease(range(p, 0.03, 0.12));
+    intro.style.opacity = 1 - io;
+    intro.style.transform = `translate(-50%, -50%) scale(${1 + io * 3})`;
+    intro.style.visibility = io >= 1 ? 'hidden' : 'visible';
+    const iv = intro.querySelector('video');
+    if (iv) { if (io >= 1 && !iv.paused) iv.pause(); else if (io < 1 && iv.paused) iv.play().catch(() => {}); }
+    hint.style.opacity = 0.8 * (1 - range(p, 0, 0.03));
+
+    // letterbox bars during the walk
+    const bars = range(p, 0.08, 0.14) * (1 - range(p, 0.92, 0.97));
+    barT.style.transform = barB.style.transform = `scaleY(${bars})`;
+
+    // characters: rise in as the camera arrives, then stay in the building
+    const gather = ease(range(p, 0.955, 0.99));
+    const ringR = Math.min(W, H) * 0.32, cPx = Math.min(W, H) * 0.22;
+    let active = -1, activeK = 0;
+    chips.forEach((ch, i) => {
+      const arrive = range(p, ch.key - 0.06, ch.key - 0.012);      // 0 → 1 as we walk up
+      const k = ease(arrive);
+      if (k > activeK && p < ch.key + 0.04) { active = i; activeK = k * (1 - range(p, ch.key + 0.02, ch.key + 0.04)); }
+      const v = view([ch.pos[0], ch.pos[1] + 0.95, ch.pos[2]]);
+      let x = -9999, y = -9999, s = 0, o = 0;
+      if (v[2] > NEAR) {
+        const [sx, sy] = scr(v);
+        const px = (1.95 * cam.F) / v[2] * lerp(0.55, 1, k);
+        s = px / 600; x = sx - px / 2; y = sy - px / 2 + (1 - k) * px * 0.25;
+        o = k * clamp((v[2] - 0.6) / 1.2) * (1 - range(p, 0.9, 0.93));
+      }
+      // finale: gather round the logo
+      const a = -Math.PI / 2 + (i / chips.length) * Math.PI * 2;
+      const gx = W / 2 + Math.cos(a) * ringR - cPx / 2, gy = H / 2 + Math.sin(a) * ringR - cPx / 2;
+      if (gather > 0.001) {
+        const sx0 = W / 2 + Math.cos(a) * ringR * 2.6 - cPx / 2, sy0 = H / 2 + Math.sin(a) * ringR * 2.6 - cPx / 2;
+        x = lerp(sx0, gx, gather); y = lerp(sy0, gy, gather); s = (cPx / 600) * lerp(0.7, 1, gather); o = gather;
+      } else if (v[2] > NEAR) {
+        drawHalo(ch, k * (1 - range(p, 0.9, 0.93)));
+      }
+      ch.el.style.opacity = o.toFixed(3);
+      // only decode the clips you can actually see
+      if (ch.vid) {
+        const want = o > 0.01;
+        if (want && !ch.playing) { ch.vid.play().catch(() => {}); ch.playing = true; }
+        else if (!want && ch.playing) { ch.vid.pause(); ch.playing = false; }
+      }
+      ch.el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${s})`;
+      ch.el.style.zIndex = gather > 0.001 ? 20 : Math.round(1000 - v[2] * 10);
+    });
+
+    endEl.style.opacity = ease(range(p, 0.965, 0.995));
+    endEl.style.transform = `translate(-50%, -50%) scale(${lerp(0.94, 1, ease(range(p, 0.965, 0.995)))})`;
+    prog.style.height = `${(p * 100).toFixed(2)}%`;
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

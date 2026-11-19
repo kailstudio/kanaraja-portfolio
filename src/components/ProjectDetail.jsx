@@ -6,7 +6,7 @@
  *  2. Premium case study — when slide.caseStudy is present
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { Fragment, useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useInView, AnimatePresence, useMotionValue, useTransform, useReducedMotion } from 'framer-motion'
 import { PDFFlipbook } from './PDFFlipbook'
 import { CATEGORIES } from './PortfolioSection'
@@ -1711,6 +1711,13 @@ const VimeoSVG = () => (
     <path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197c1.185-1.044 2.351-2.084 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.48 4.807z"/>
   </svg>
 )
+const DownloadSVG = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+    <path d="M13 3H6.5A1.5 1.5 0 0 0 5 4.5v13A1.5 1.5 0 0 0 6.5 19h9a1.5 1.5 0 0 0 1.5-1.5V7z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/>
+    <path d="M13 3v4h4" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+    <path d="M11 9.5v6M8.5 13l2.5 2.5 2.5-2.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
 
 // ── Generic Pkg components ────────────────────────────────────────────
 
@@ -1858,6 +1865,9 @@ function PkgLinks({ cs, cfg }) {
     cs.amazon   && { href: cs.amazon,   Icon: AmazonSVG,   label: 'View on Amazon' },
     cs.article  && { href: cs.article,  Icon: GlobeSVG,    label: 'Read Article' },
     cs.vimeo    && { href: cs.vimeo,    Icon: VimeoSVG,    label: 'Watch on Vimeo' },
+    // Optional PDF download — cs.pdf = { file, label, pages, size }, file in public/
+    cs.pdf      && { href: `${BASE}${cs.pdf.file}`, Icon: DownloadSVG, label: `Download the ${cs.pdf.label.toLowerCase()}`,
+                     sub: `PDF · ${cs.pdf.pages} pages · ${cs.pdf.size}`, download: true },
   ].filter(Boolean)
   if (!links.length) return null
   const host = (href) => {
@@ -1874,14 +1884,15 @@ function PkgLinks({ cs, cfg }) {
           {linksBody && <p className="plx-body">{linksBody}</p>}
         </Reveal>
         <Reveal delay={0.1} className="plx-links">
-          {links.map(({ href, Icon, label }) => (
-            <a key={href} href={href} target="_blank" rel="noopener noreferrer" className="plx-link">
+          {links.map(({ href, Icon, label, sub, download }) => (
+            <a key={href} href={href} className="plx-link"
+              {...(download ? { download: '' } : { target: '_blank', rel: 'noopener noreferrer' })}>
               <span className="plx-link-icon"><Icon /></span>
               <span className="plx-link-text">
                 <span className="plx-link-label">{label}</span>
-                <span className="plx-link-host">{host(href)}</span>
+                <span className="plx-link-host">{sub ?? host(href)}</span>
               </span>
-              <span className="plx-link-arrow" aria-hidden="true">↗</span>
+              <span className="plx-link-arrow" aria-hidden="true">{download ? '↓' : '↗'}</span>
             </a>
           ))}
         </Reveal>
@@ -4698,7 +4709,7 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
       <CSSection title="Custom Illustrations" className="cs-tone--lilac">
         <Reveal delay={0.06}>
           <p style={{ color: 'rgba(51,51,51,0.7)', lineHeight: 1.85, marginBottom: 28, maxWidth: 600 }}>
-            Six original characters were created as part of the Studio KAIL 2026 rebrand and are woven through the entire site. They orbit the studio mark in the animated hero section, each appearing in turn as an introduction to the studio and its values. They reappear in the footer, anchoring the navigation links with the same warmth and personality. Together they give the portfolio a sense of continuity, the same cast, in different moments, across every page.
+            Six original characters were created as part of the Studio KAIL 2026 rebrand and are woven through the entire site. They appear in the footer, anchoring the navigation links with the same warmth and personality. Together they give the portfolio a sense of continuity, the same cast, in different moments, across every page.
           </p>
         </Reveal>
 
@@ -4722,28 +4733,11 @@ function PortfolioWebsiteCaseStudyView({ cat, cs, slide }) {
         </div>
       </CSSection>
 
-      {/* Logo */}
-      <CSSection title="The Studio Mark" className="cs-tone--lime">
-        <Reveal delay={0.08}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, padding: '32px 0' }}>
-            <img
-              src={`${BASE}logo.svg`}
-              alt="Studio KAIL logo"
-              style={{ height: 64, objectFit: 'contain' }}
-              onError={(e) => { e.currentTarget.style.display = 'none' }}
-            />
-            <p style={{ color: 'rgba(51,51,51,0.55)', fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', textAlign: 'center' }}>
-              Studio KAIL · Designed in Figma · Built in React
-            </p>
-          </div>
-        </Reveal>
-      </CSSection>
-
       {/* Site Showcase */}
       <CSSection title="The Site in Detail">
         <Reveal>
           <p style={{ color: 'rgba(51,51,51,0.7)', lineHeight: 1.85, marginBottom: 28, maxWidth: 600 }}>
-            A closer look at the portfolio across sections, from the animated hero to the
+            A closer look at the portfolio across sections, from the opening card deck to the
             project carousels and case study layouts.
           </p>
         </Reveal>
@@ -5878,6 +5872,1036 @@ function PBDExplainerCaseStudyView({ cat, cs, slide }) {
 }
 
 
+// ═══════════════════════════════════════════════════════════════════════
+//  SHARED HELPERS — newer glass (.sp-cs) case studies
+//  Used by Courses Portal, Now or Next Board and PAS User Testing.
+// ═══════════════════════════════════════════════════════════════════════
+
+const SP_GRAD = {
+  navy:   'linear-gradient(135deg,#141A5C,#4A35B0)',
+  red:    'linear-gradient(135deg,#D97757,#F2492B)',
+  purple: 'linear-gradient(135deg,#6A4FD1,#9C88F0)',
+  blue:   'linear-gradient(135deg,#2A6FDB,#6A4FD1)',
+  green:  'linear-gradient(135deg,#1F8A5B,#3BB37F)',
+  yellow: 'linear-gradient(135deg,#B8A400,#DDD21A)',
+}
+
+// Hero buttons. The case-study PDF (cs.pdf) is an optional download: a quiet
+// link under the buttons when there's a live link, otherwise the main button.
+function SPHeroActions({ cs, liveUrl, liveLabel = 'View the live prototype' }) {
+  const pdf = cs.pdf ? `${BASE}${cs.pdf.file}` : null
+  const pdfText = cs.pdf ? `Download the ${cs.pdf.label.toLowerCase()}` : ''
+  return (
+    <>
+      <div className="sp-hero-actions">
+        {liveUrl ? (
+          <a className="sp-live-btn" href={liveUrl} target="_blank" rel="noopener noreferrer">
+            {liveLabel} <span><SPIcon name="arrow" size={14} /></span>
+          </a>
+        ) : pdf && (
+          <a className="sp-live-btn sp-live-btn--pdf" href={pdf} download>
+            {pdfText} <span><SPIcon name="download" size={16} /></span>
+          </a>
+        )}
+        <span className="sp-status"><i />{cs.status}</span>
+      </div>
+      {liveUrl && pdf && (
+        <a className="sp-pdf-link" href={pdf} download>
+          <SPIcon name="download" size={15} />
+          <span>{pdfText}</span>
+          <small>PDF · {cs.pdf.size}</small>
+        </a>
+      )}
+    </>
+  )
+}
+
+function SPHero({ slide, cs, kicker, title, accent, img, imgAlt, floatB, floatC, liveUrl, liveLabel, thirdBlob = 'yellow' }) {
+  return (
+    <section className="sp-hero">
+      <span className="sp-blob sp-blob--purple" style={{ top: -120, right: -60 }} aria-hidden="true" />
+      <span className="sp-blob sp-blob--red"    style={{ bottom: -160, right: '30%' }} aria-hidden="true" />
+      <span className={`sp-blob sp-blob--${thirdBlob}`} style={{ top: '20%', left: -140 }} aria-hidden="true" />
+      <div className="sp-hero-grid">
+        <div className="sp-hero-copy">
+          <Reveal>
+            <div className="sp-tags">
+              {(slide.tags || []).map((t) => <span key={t} className="sp-tag">{t}</span>)}
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <span className="sp-hero-kicker">{kicker}</span>
+            <h1 className="sp-hero-title">{title} <em>{accent}</em></h1>
+          </Reveal>
+          <Reveal delay={0.14}>
+            <p className="sp-hero-lede">{cs.subtitle}</p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <SPHeroActions cs={cs} liveUrl={liveUrl} liveLabel={liveLabel} />
+          </Reveal>
+        </div>
+        <Reveal delay={0.12} className="sp-hero-visual">
+          <div className="sp-hero-frame">
+            <img src={img} alt={imgAlt} />
+          </div>
+          {floatB && (
+            <div className="sp-float sp-float--b">
+              <span className="sp-icon-dot sp-icon-dot--sm"><SPIcon name={floatB[0]} size={16} /></span>{floatB[1]}
+            </div>
+          )}
+          {floatC && <div className="sp-float sp-float--c"><strong>{floatC[0]}</strong><span>{floatC[1]}</span></div>}
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+// Finding → response cards: first three in a row, the rest two to a row.
+function SPProblemGrid({ items }) {
+  return (
+    <div className="sp-prob-grid">
+      {items.map((it, i) => (
+        <Reveal key={i} delay={0.06 * (i % 3)} className="sp-rv">
+          <div className={`sp-card sp-stat-card${it.row ? ' sp-stat-card--row' : ''}`}>
+            {it.top}
+            {it.row ? (
+              <div className="sp-stat-col">
+                <p className="sp-finding">{it.finding}</p>
+                {it.response && <SPResponse>{it.response}</SPResponse>}
+              </div>
+            ) : (
+              <>
+                <p className="sp-finding">{it.finding}</p>
+                {it.response && <SPResponse>{it.response}</SPResponse>}
+              </>
+            )}
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  )
+}
+
+const spIconDot = (name, red) => (
+  <span className={`sp-icon-dot sp-icon-dot--lg${red ? ' sp-icon-dot--red' : ''}`}><SPIcon name={name} size={28} /></span>
+)
+
+function SPBanner({ label, children }) {
+  return (
+    <Reveal>
+      <div className="sp-banner">
+        <span className="sp-blob sp-blob--red" style={{ right: -120, top: -160, opacity: 0.5 }} aria-hidden="true" />
+        <span className="sp-label"><SPIcon name="spark" size={14} /> {label}</span>
+        <p>{children}</p>
+      </div>
+    </Reveal>
+  )
+}
+
+function SPChipCards({ left, right }) {
+  return (
+    <div className="sp-scope">
+      <Reveal className="sp-rv">
+        <div className="sp-card">
+          <span className="sp-label">{left.label}</span>
+          <div className="sp-chips">
+            {left.chips.map((c) => <span key={c} className="sp-chip"><SPIcon name="check" size={14} />{c}</span>)}
+          </div>
+        </div>
+      </Reveal>
+      <Reveal delay={0.08} className="sp-rv">
+        <div className="sp-card">
+          <span className="sp-label">{right.label}</span>
+          <div className="sp-chips">
+            {right.chips.map((c) => <span key={c} className={`sp-chip${right.off ? ' sp-chip--off' : ''}`}>{!right.off && <SPIcon name="check" size={14} />}{c}</span>)}
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  )
+}
+
+// Image cards (image on top, short title and text below).
+function SPImageCards({ items }) {
+  return (
+    <div className="sp-roles">
+      {items.map(([name, text, src, pos], i) => (
+        <Reveal key={name} delay={0.08 * i} className="sp-rv">
+          <div className="sp-card sp-role">
+            <div className="sp-role-img"><img src={src} alt="" loading="lazy" style={{ objectPosition: pos }} /></div>
+            <div className="sp-role-body">
+              <h3>{name}</h3>
+              <p>{text}</p>
+            </div>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  )
+}
+
+// Segmented tabs: copy + feature list on the left, a visual on the right.
+function SPTabs({ tabs, initial, label }) {
+  const [tab, setTab] = useState(initial ?? tabs[0].id)
+  const t = tabs.find((x) => x.id === tab)
+  return (
+    <>
+      <Reveal>
+        <div className="sp-seg" role="tablist" aria-label={label}>
+          {tabs.map((x) => (
+            <button key={x.id} role="tab" aria-selected={tab === x.id} onClick={() => setTab(x.id)}>
+              {x.label}
+            </button>
+          ))}
+        </div>
+      </Reveal>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={tab}
+          className="sp-proto"
+          role="tabpanel"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="sp-proto-copy">
+            <h3>{t.title}</h3>
+            <p>{t.lede}</p>
+            <ul className="sp-feats">
+              {t.features.map((f) => (
+                <li key={f}><span className="sp-check"><SPIcon name="check" size={13} /></span>{f}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="sp-proto-visual">{t.visual}</div>
+        </motion.div>
+      </AnimatePresence>
+    </>
+  )
+}
+
+const spStack = (front, back) => (
+  <div className="sp-stack">
+    <SPBrowser src={front[0]} alt={front[1]} className="sp-stack-front" />
+    <SPBrowser src={back[0]} alt={back[1]} className="sp-stack-back" />
+  </div>
+)
+
+const spPhones = (a, b) => (
+  <div className="sp-phones">
+    <img src={a[0]} alt={a[1]} loading="lazy" />
+    <img src={b[0]} alt={b[1]} loading="lazy" />
+  </div>
+)
+
+// Document pages (A4), shown one or two at a time.
+function SPDoc({ pages }) {
+  return (
+    <div className={`sp-doc${pages.length === 1 ? ' sp-doc--single' : ''}`}>
+      {pages.map(([src, alt]) => <img key={src} src={src} alt={alt} loading="lazy" />)}
+    </div>
+  )
+}
+
+// Navy section layout: items either side of a central picture.
+function SPSafeGrid({ left, right, centre }) {
+  const col = (items) => (
+    <div className="sp-safe-col">
+      {items.map(([icon, title, text], i) => (
+        <Reveal key={title} delay={0.06 * i}>
+          <div className="sp-card sp-safe-item">
+            <span className="sp-icon-dot"><SPIcon name={icon} size={18} /></span>
+            <div><h4>{title}</h4><p>{text}</p></div>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  )
+  return (
+    <div className="sp-safe">
+      {col(left)}
+      <Reveal delay={0.1} className="sp-safe-phone">{centre}</Reveal>
+      {col(right)}
+    </div>
+  )
+}
+
+// Small cards: a coloured badge, a title, then text, a response line or chips.
+function SPToolGrid({ tools }) {
+  return (
+    <div className="sp-tools">
+      {tools.map((t, i) => (
+        <Reveal key={t.name} delay={0.05 * i} className="sp-rv">
+          <div className="sp-card sp-tool">
+            <div className="sp-tool-head">
+              <span className="sp-mono" style={{ background: t.bg }}>{t.icon ? <SPIcon name={t.icon} size={20} /> : t.mono}</span>
+              <h4>{t.name}</h4>
+            </div>
+            {t.use && <p className="sp-small">{t.use}</p>}
+            {t.response && <SPResponse>{t.response}</SPResponse>}
+            {t.chips && (
+              <div className="sp-chips sp-chips--tight">
+                {t.chips.map((c) => <span key={c} className="sp-chip">{c}</span>)}
+              </div>
+            )}
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  )
+}
+
+function SPStats({ stats }) {
+  return (
+    <div className="sp-stats">
+      {stats.map(([value, label], i) => (
+        <Reveal key={label} delay={0.06 * i} className="sp-rv">
+          <div className="sp-card sp-stat">
+            <span className="sp-stat-value">{value}</span>
+            <span className="sp-stat-label">{label}</span>
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  )
+}
+
+// Two screenshots side by side in browser frames, each with a caption.
+function SPBeforePair({ items }) {
+  return (
+    <div className="sp-pair">
+      {items.map(([src, caption], i) => (
+        <Reveal key={src} delay={0.08 * i} className="sp-rv">
+          <figure className="sp-pair-item">
+            <SPBrowser src={src} alt={caption} />
+            <figcaption>{caption}</figcaption>
+          </figure>
+        </Reveal>
+      ))}
+    </div>
+  )
+}
+
+// Progress path: [label, 'done' | 'next' | undefined]
+function SPPath({ steps }) {
+  return (
+    <Reveal>
+      <div className="sp-path sp-path--after">
+        {steps.map(([label, state], i) => (
+          <Fragment key={label}>
+            {i > 0 && <span className="sp-path-arrow" aria-hidden="true"><SPIcon name="arrow" size={16} /></span>}
+            <span className={`sp-path-step${state ? ` ${state}` : ''}`}>
+              <b>{state === 'done' ? <SPIcon name="check" size={13} /> : i + 1}</b>{label}
+            </span>
+          </Fragment>
+        ))}
+      </div>
+    </Reveal>
+  )
+}
+
+
+// ── Spurgeons: Courses Portal ─────────────────────────────────────────
+
+const SC_LIVE_URL = 'https://spurgeonsdesign.github.io/course-portal/'
+const SC_IMG = (f) => `${BASE}spurgeons-courses/${f}`
+
+const SC_PROBLEMS = [
+  { top: <span className="sp-quote">&ldquo;Too hard to use.&rdquo;</span>,
+    finding: 'Getting into a course took more effort than it should have',
+    response: 'Take away the password' },
+  { top: <span className="sp-quote">&ldquo;Visually very plain.&rdquo;</span>,
+    finding: 'It didn’t feel like the warm, welcoming charity behind it',
+    response: 'Bring in the brand’s web look' },
+  { top: spIconDot('user'),
+    finding: 'Many parents arrive at a stressful time, like a separation',
+    response: 'Plain words, nothing to remember' },
+  { row: true, top: spIconDot('calendar'),
+    finding: 'Volunteer facilitators need guides, training and slides fast, sometimes the night before a session',
+    response: 'Progress and courses at a glance' },
+  { row: true, top: spIconDot('key', true),
+    finding: 'WCAG 2.2 treats remembering a password as a cognitive function test',
+    response: 'A sign-in that meets 3.3.8 Accessible Authentication' },
+]
+
+const SC_TABS = [
+  {
+    id: 'signin', label: 'Sign-in',
+    title: 'One field. One button.',
+    lede: 'Signing in and signing up are the same path, with nothing to remember.',
+    features: [
+      '“Access Spurgeons Courses for free” says what you get, first',
+      'One labelled email field that phones can autofill',
+      'One clear navy button that says exactly what happens next',
+      '“Need help?” in the top bar on every screen size',
+    ],
+    visual: spStack([SC_IMG('signin.webp'), 'The new sign-in page'], [SC_IMG('signin-dark.webp'), 'The sign-in page in dark mode']),
+  },
+  {
+    id: 'dashboard', label: 'Dashboard',
+    title: 'Progress at a glance',
+    lede: 'Your name, courses, completions and certificates come first, before any detail.',
+    features: [
+      'A floating pill menu: logo, Home, Manage Account and Log out on one calm line',
+      'A navy progress hero with glass stat tiles',
+      'Programme tabs and a swipeable carousel replace the unclear “peek”',
+      'Each course has its own colour and illustration, so it’s recognised before it’s read',
+    ],
+    visual: spStack([SC_IMG('dashboard.webp'), 'The course dashboard'], [SC_IMG('banner.webp'), 'A programme banner with its illustration']),
+  },
+  {
+    id: 'interactions', label: 'Interactions',
+    title: 'Interactions that explain themselves',
+    lede: 'Animated just enough to show cause and effect, with one easing curve throughout.',
+    features: [
+      'Search filters courses as you type, with a friendly “No courses match”',
+      'Expand All opens every course in a staggered cascade',
+      'Module status in words, plus a progress bar in the course’s colour',
+      'All animation switches off when a device asks for reduced motion',
+    ],
+    visual: spStack([SC_IMG('expanded.webp'), 'Expanded courses with module progress'], [SC_IMG('search.webp'), 'Search open under the toolbar']),
+  },
+  {
+    id: 'phone', label: 'Phone',
+    title: 'Made for the phone in your pocket',
+    lede: 'Checked at six widths, from 390px to 1440px, in light and dark mode.',
+    features: [
+      'The menu wraps neatly into two rows',
+      'The programme carousel becomes swipe and dots',
+      'Dark mode follows the device, with colours re-tuned rather than inverted',
+    ],
+    visual: spPhones([SC_IMG('phone-dashboard.webp'), 'The dashboard on a phone'], [SC_IMG('phone-dashboard-dark.webp'), 'The dashboard on a phone in dark mode']),
+  },
+]
+
+const SC_AUDIT = [
+  { icon: 'layers', bg: SP_GRAD.navy,   name: 'Hierarchy',   use: 'Name, stats, toolbar and courses sat in pastel boxes of similar weight. Nothing told the eye where to look first.' },
+  { icon: 'search', bg: SP_GRAD.purple, name: 'Recognition', use: 'Every programme used the same picture and every course row looked identical, so people had to read each label.' },
+  { icon: 'check',  bg: SP_GRAD.green,  name: 'Keep',        use: 'The passwordless email-link idea and its plain-English copy answered “too hard to use” directly, so I kept and strengthened them.' },
+]
+
+const SC_ROUNDS = [
+  { mono: '2',  bg: SP_GRAD.navy,   name: '“Match the brand’s web style”',           response: 'A navy glow hero, a glass card, Outfit and Figtree, and pill buttons' },
+  { mono: '6',  bg: SP_GRAD.purple, name: '“The faded peek isn’t working”',          response: 'A swipeable carousel with tabs, arrows and dots' },
+  { mono: '7',  bg: SP_GRAD.red,    name: '“Courses need to be easier to tell apart”', response: 'Each course gets its own accent: red, purple, yellow or navy' },
+  { mono: '11', bg: SP_GRAD.blue,   name: '“Illustrations popping out of their cards”', response: 'Eight illustrations cropped to their artwork, rising about 40% above each card' },
+  { mono: '13', bg: SP_GRAD.green,  name: '“Any questions? appears twice”',          response: 'Out of the menu, kept as one card at the bottom' },
+  { mono: '16', bg: SP_GRAD.yellow, name: '“The hero picture covers the text”',       response: 'Below 1100px, the picture moves above the text' },
+]
+
+const SC_TOOLS = [
+  { mono: '</>', bg: SP_GRAD.navy,   name: 'HTML, CSS, JavaScript', use: 'Two pages, no framework and no build step, with 18 KB of code over the wire (gzipped)' },
+  { mono: 'Cl',  bg: SP_GRAD.red,    name: 'Claude',                use: 'AI design and coding partner through every review round' },
+  { mono: '{ }', bg: SP_GRAD.green,  name: 'Content as data',       use: 'Programmes, courses and modules live in three short lists, so adding a course is a one-line change' },
+  { mono: 'ax',  bg: SP_GRAD.purple, name: 'axe-core',              use: 'WCAG 2.0, 2.1 and 2.2 A and AA audit on both pages',
+    chips: ['0 violations', 'Light', 'Dark'] },
+  { mono: 'Pw',  bg: SP_GRAD.yellow, name: 'Playwright',            use: 'Screenshots of every change at six widths',
+    chips: ['390px to 1440px', 'Light', 'Dark'] },
+  { mono: 'GH',  bg: SP_GRAD.blue,   name: 'GitHub Pages',          use: 'Hosted free, deployed from the main branch' },
+]
+
+function SpurgeonsCoursesCaseStudyView({ cat, cs, slide }) {
+  return (
+    <div className="cs-wrap sp-cs">
+
+      <SPHero slide={slide} cs={cs} kicker="Spurgeons" title="Courses" accent="Portal"
+        img={`${BASE}projects/spurgeons-courses.webp`} imgAlt="Spurgeons Courses sign-in and dashboard"
+        floatB={['lock', 'No password to remember']} floatC={['18', 'rounds of review on the live build']}
+        liveUrl={SC_LIVE_URL} />
+
+      {/* ── The problem ──────────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="What users told us" title="Free support, behind a hard front door"
+        intro="Spurgeons’ online parenting courses are free, but people said the login was too hard to use and looked plain. For a charity, every person who gives up at the login misses support they were entitled to."
+        blobs={[['purple', { top: -100, left: '40%' }], ['yellow', { bottom: -140, right: -60 }]]}>
+        <SPProblemGrid items={SC_PROBLEMS} />
+        <SPBanner label="The key insight">Free courses only help if people can reach them.</SPBanner>
+      </SPSection>
+
+      {/* ── Starting point ───────────────────────────────── */}
+      <SPSection eyebrow="Starting point" title="Auditing what we had"
+        intro="The first prototype already moved towards a passwordless sign-in, but the dashboard behind it was flat and hard to scan. I reviewed both against Nielsen’s usability heuristics and the Spurgeons brand guidelines."
+        blobs={[['lilac', { bottom: -120, left: -100 }]]}>
+        <SPBeforePair items={[
+          [SC_IMG('before-signin.webp'), 'The first prototype’s sign-in'],
+          [SC_IMG('before-dashboard.webp'), 'The first prototype’s dashboard'],
+        ]} />
+        <SPToolGrid tools={SC_AUDIT} />
+        <SPChipCards
+          left={{ label: 'Six principles', chips: ['One step in', 'Warm, not clinical', 'Progress at a glance', 'Easy to tell apart', 'Accessible by default', 'Any screen'] }}
+          right={{ label: 'Built on the brand', chips: ['Outfit & Figtree', 'Navy hero with glows', 'Glass cards', 'Pill navigation', 'Purple focus ring'] }} />
+      </SPSection>
+
+      {/* ── The redesign ─────────────────────────────────── */}
+      <SPSection eyebrow="The redesign" title="A warm, one-step way in"
+        intro="Switch between the parts of the redesign to see each one."
+        blobs={[['lilac', { top: -100, left: -100 }], ['yellow', { bottom: -160, right: '10%' }]]}>
+        <SPTabs tabs={SC_TABS} label="Choose a part of the redesign" />
+      </SPSection>
+
+      {/* ── Iteration ────────────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="Iteration" title="Eighteen rounds of review"
+        intro="A few of the changes made along the way:"
+        blobs={[['lilac', { top: -100, right: -60 }], ['yellow', { bottom: -150, left: '30%' }]]}>
+        <SPToolGrid tools={SC_ROUNDS} />
+        <Reveal>
+          <p className="sp-note"><SPIcon name="heart" size={14} /> Building in code meant feedback was always about real behaviour: transitions, swiping, wrapping and dark mode.</p>
+        </Reveal>
+      </SPSection>
+
+      {/* ── How it was built ─────────────────────────────── */}
+      <SPSection eyebrow="How it was built" title="Simple technology, on purpose"
+        intro="No framework, no build step and no dependencies: plain HTML, CSS and JavaScript that anyone at Spurgeons could open, edit and host for free."
+        blobs={[['lilac', { bottom: -120, left: -100 }], ['purple', { top: -140, right: '20%' }]]}>
+        <SPToolGrid tools={SC_TOOLS} />
+        <Reveal>
+          <p className="sp-note"><SPIcon name="check" size={14} /> Contrast checked by hand over the gradients: navy on grey 14.8:1, white on navy 16.7:1, white on purple 7.8:1.</p>
+        </Reveal>
+      </SPSection>
+
+      <PkgLinks cs={cs} cfg={{ linksBody: 'Try the live prototype (any email goes straight to the dashboard, so you can click through), or download the full case study.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
+// ── Spurgeons: Now or Next Board ──────────────────────────────────────
+
+const NN_LIVE_URL = 'https://spurgeonsdesign.github.io/now-or-next/'
+const NN_IMG = (f) => `${BASE}now-next/${f}`
+
+const NN_PROBLEMS = [
+  { top: spIconDot('file'),
+    finding: 'Paper boards mean finding symbols, then printing, cutting and laminating',
+    response: 'Pick illustrated cards and drop them in place' },
+  { top: spIconDot('user'),
+    finding: 'Many parents have never used a visual support, and a blank template doesn’t show them how',
+    response: 'A demo, then hands-on practice' },
+  { top: spIconDot('phone'),
+    finding: 'The best-known apps are mostly paid, and several are Apple-first',
+    response: 'Free, in any browser, nothing to install' },
+  { row: true, top: <span className="sp-big">538,547</span>,
+    finding: 'pupils in England have an EHC plan, up 11.6% in a year. Autism is the most common primary need, at 33.5%' },
+  { row: true, top: spIconDot('lock', true),
+    finding: 'Some families are wary of apps that ask for accounts and data',
+    response: 'A charity tool with nothing to sign up for' },
+]
+
+const NN_RESEARCH = [
+  { icon: 'file',   bg: SP_GRAD.navy,   name: 'NICE CG170',         use: 'NICE’s autism guideline lists visual supports among the approaches expected of professionals working with autistic children' },
+  { icon: 'layers', bg: SP_GRAD.purple, name: 'NCAEP (2020)',       use: 'Visual supports meet the criteria for an evidence-based practice, across 104 single-case and 2 group design studies' },
+  { icon: 'eyeoff', bg: SP_GRAD.red,    name: 'A note of caution',  use: 'A 2025 review found too little evidence that a visual schedule on its own improves transitions' },
+  { icon: 'target', bg: SP_GRAD.green,  name: 'Start small',        use: 'Children should understand now and next before moving to a longer timetable' },
+  { icon: 'heart',  bg: SP_GRAD.yellow, name: 'Start with what they like', use: 'When introducing a board, make both activities preferred ones' },
+  { icon: 'bookmark', bg: SP_GRAD.blue, name: 'Personal and portable', use: 'Supports should be durable, easy to find, personalised and consistent' },
+]
+
+const NN_TABS = [
+  {
+    id: 'intro', label: 'Intro',
+    title: 'One sentence, one picture',
+    lede: 'The intro explains the idea, and tapping the picture plays now and next before any instructions.',
+    features: [
+      '“Show me how” for first-timers, “Skip to my board” for confident users',
+      'Returning visitors get “Watch how it works” first, so a refresher is one tap away',
+      'Sized to fit one screen on every device, with no stray scroll',
+      'Practitioners can share a link straight to the tutorial or the board',
+    ],
+    visual: spStack([NN_IMG('intro.webp'), 'Intro, first visit'], [NN_IMG('intro-return.webp'), 'Intro, returning visit']),
+  },
+  {
+    id: 'tutorial', label: 'Tutorial',
+    title: 'Watch, then have a go',
+    lede: 'A short demo plays on a real mini-board, then hands it over.',
+    features: [
+      'An animated hand drags “eat” onto now and “play” onto next',
+      'A yellow “Now you try!” bubble with one simple instruction',
+      'Gentle hints if someone sits idle mid-practice',
+      'A celebration screen with “Start now” and “Practise again”',
+    ],
+    visual: spStack([NN_IMG('tutorial-watch.webp'), 'Tutorial: watch the demo'], [NN_IMG('tutorial-try.webp'), 'Tutorial: your turn']),
+  },
+  {
+    id: 'board', label: 'Board',
+    title: 'Drag or tap, never drag only',
+    lede: 'Every action has at least two routes in, so it works with a mouse, a finger, a stylus or a shaky hand.',
+    features: [
+      'Up to three pairs, each with its own colour band',
+      'Tap an empty space to pick from the whole library',
+      'Make your own card with a word, an optional photo and a colour',
+      'Photos are resized on the device and never uploaded',
+    ],
+    visual: spStack([NN_IMG('board.webp'), 'Building a board'], [NN_IMG('make-card.webp'), 'Making your own card']),
+  },
+  {
+    id: 'print', label: 'Print',
+    title: 'Paper is a first-class output',
+    lede: 'Boards live on fridges and classroom walls, so the output is a dedicated A4 render, not a screenshot of the page.',
+    features: [
+      'Large cards, the board name and the Spurgeons logo',
+      'One pair saves landscape; two or three save portrait',
+      'Save as a PDF, save as an image, or print',
+    ],
+    visual: <SPDoc pages={[[NN_IMG('print.webp'), 'A printed A4 board called Nell’s morning']]} />,
+  },
+  {
+    id: 'phone', label: 'Phone',
+    title: 'Phone first',
+    lede: 'Most parents meet the tool on a phone, often from a link a practitioner has sent.',
+    features: [
+      'The intro picture shrinks so everything fits one screen',
+      'The tutorial stacks, and the board itself says each step',
+      'Touch hints change to “tap a card, then tap now”, or press and hold to drag',
+    ],
+    visual: spPhones([NN_IMG('phone-intro.webp'), 'The intro on a phone'], [NN_IMG('phone-board.webp'), 'The board on a phone']),
+  },
+]
+
+const NN_A11Y_LEFT = [
+  ['target', 'Dragging movements',          'WCAG 2.2 (2.5.7): anything done by dragging can also be done with single taps'],
+  ['layers', 'Target size',                 'Buttons are 44px tall and icon buttons 44 × 44px, well above the 24px minimum in 2.5.8'],
+  ['code',   'Keyboard and screen readers', 'Native controls, visible focus, and live announcements like “eat is now”'],
+]
+const NN_A11Y_RIGHT = [
+  ['loop', 'Reduced motion',          'Every animation is removed, and the demo becomes a short text explanation'],
+  ['file', 'Plain words',             'Short sentences, everyday words and one task per screen'],
+  ['lock', 'Privacy by architecture', 'No accounts, tracking, uploads or server. A child’s photo never leaves the device'],
+]
+
+function NowNextCaseStudyView({ cat, cs, slide }) {
+  return (
+    <div className="cs-wrap sp-cs">
+
+      <SPHero slide={slide} cs={cs} kicker="Spurgeons" title="Now or Next" accent="Board"
+        img={`${BASE}projects/now-next.webp`} imgAlt="Now or Next board intro and board screens"
+        floatB={['lock', 'Nothing leaves the device']} floatC={['12', 'illustrated cards, plus your own']}
+        liveUrl={NN_LIVE_URL} liveLabel="Try the live board" />
+
+      {/* ── The problem ──────────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="The problem" title="Why a now and next board?"
+        intro="Moving from one activity to the next can be hard for many children, especially autistic children and children with speech, language or learning needs. A two-picture board makes the next step visible and less dependent on spoken language, but making one still takes effort."
+        blobs={[['purple', { top: -100, left: '40%' }], ['yellow', { bottom: -140, right: -60 }]]}>
+        <SPProblemGrid items={NN_PROBLEMS} />
+        <SPBanner label="The key insight">The barrier isn’t knowing visual supports exist. It’s the time, confidence and materials to make one.</SPBanner>
+      </SPSection>
+
+      {/* ── Research ─────────────────────────────────────── */}
+      <SPSection eyebrow="Research" title="What the evidence says"
+        intro="Desk research covered clinical guidance, systematic reviews, charity and council practice guides, and UK education data, to understand what makes visual supports work, not just whether they do."
+        blobs={[['lilac', { bottom: -120, left: -100 }]]}>
+        <SPToolGrid tools={NN_RESEARCH} />
+        <SPBanner label="What this means for the design">Not a cure, but a tool for a consistent routine, so the product teaches the routine too.</SPBanner>
+        <SPChipCards
+          left={{ label: 'Seven rules, plus one from review', chips: ['Two things, not ten', 'Pictures first, words second', 'Show, then let them try', 'Tap or drag, never drag only', 'Paper is a first-class output', 'Nothing leaves the device', 'Calm by default', 'One screen at a time'] }}
+          right={{ label: 'Deliberately out of scope', off: true, chips: ['Long timetables', 'Timers', 'Rewards', 'Tracking', 'Accounts'] }} />
+      </SPSection>
+
+      {/* ── How it works ─────────────────────────────────── */}
+      <SPSection eyebrow="How it works" title="From first visit to printed board"
+        intro="Three screens, each with one job, and the browser back button moves between them. Switch between the parts to see each one."
+        blobs={[['lilac', { top: -100, left: -100 }], ['yellow', { bottom: -160, right: '10%' }]]}>
+        <SPTabs tabs={NN_TABS} label="Choose a part of the tool" />
+      </SPSection>
+
+      {/* ── Accessibility ────────────────────────────────── */}
+      <SPSection tone="navy" eyebrow="Accessibility and inclusion"
+        title="Designed for everyone holding the phone: tired, under pressure, reading in a second language or using one hand."
+        blobs={[['purple', { top: '30%', left: '35%', width: 420, height: 420 }], ['red', { bottom: -160, right: -100 }]]}>
+        <SPSafeGrid left={NN_A11Y_LEFT} right={NN_A11Y_RIGHT}
+          centre={<img src={NN_IMG('phone-board.webp')} alt="The board on a phone" loading="lazy" />} />
+        <Reveal>
+          <p className="sp-note"><SPIcon name="heart" size={14} /> Checked by me in design and build. A formal audit and testing with screen-reader, switch and voice-control users come next.</p>
+        </Reveal>
+      </SPSection>
+
+      {/* ── Outcome ──────────────────────────────────────── */}
+      <SPSection tone="navy" eyebrow="Where it is" title="Complete, and ready for families"
+        blobs={[['purple', { top: -120, left: '40%' }], ['red', { bottom: -160, right: -100 }]]}>
+        <SPStats stats={[
+          ['3', 'screens: intro, guided tutorial, board'],
+          ['12', 'illustrated cards, plus make-your-own with a photo'],
+          ['3', 'ways out: PDF, image and print'],
+          ['0', 'accounts, installs or uploads'],
+        ]} />
+        <SPPath steps={[['Research & principles', 'done'], ['Working build', 'done'], ['Review & cross-device QA', 'done'], ['Usability study with families', 'next']]} />
+      </SPSection>
+
+      <PkgLinks cs={cs} cfg={{ linksBody: 'Make a board in the live tool, or download the full case study, from the research and design principles to the build, testing and roadmap.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
+// ── Chieveley Village Hall (Studio KAIL) ──────────────────────────────
+
+const CV_LIVE_URL = 'https://kailstudio.github.io/chieveleyvillagehall/'
+const CV_IMG = (f) => `${BASE}chieveley/${f}`
+
+const CV_PROBLEMS = [
+  { top: <span className="sp-big">24</span>,
+    finding: 'menu links before any content: nine top-level items, organised around the committee',
+    response: 'Four menu items and two clear buttons' },
+  { top: spIconDot('layers'),
+    finding: 'The same content in several places, with fireworks and volunteering each listed twice',
+    response: 'One home for everything' },
+  { top: spIconDot('user'),
+    finding: 'Weekly classes on one page, their organisers’ contact details on another',
+    response: 'Each class card carries its contact' },
+  { row: true, top: spIconDot('file'),
+    finding: 'Booking explained in one long paragraph of centred text',
+    response: 'Five numbered steps and a live calendar' },
+  { row: true, top: spIconDot('calendar', true),
+    finding: 'News posted as images of a printed letter, hard to read on a phone and hard to keep current',
+    response: 'One dated list of what’s coming up' },
+]
+
+const CV_VISITORS = [
+  { icon: 'calendar', bg: SP_GRAD.green,  name: 'Hirers',     use: 'Which room fits? What does it cost? Is my date free? How do I book?', to: 'Hire the hall' },
+  { icon: 'heart',    bg: SP_GRAD.red,    name: 'Villagers',  use: 'What’s on this week? Who runs Pilates? When is the Christmas market?', to: 'What’s on' },
+  { icon: 'spark',    bg: SP_GRAD.yellow, name: 'Supporters', use: 'How can I give or help? Did my 500 Club number win?', to: 'Support us' },
+  { icon: 'file',     bg: SP_GRAD.navy,   name: 'Community & trustees', use: 'Who’s on the committee? When’s the AGM? Where are the documents?', to: 'About' },
+]
+
+const CV_TABS = [
+  {
+    id: 'home', label: 'Home',
+    title: 'The sun comes up as you scroll',
+    lede: 'The home page opens on the hall’s logo, drawn in white on moss green. Scrolling raises the sun over the arch and opens onto the fields.',
+    features: [
+      'Book the hall and Donate, the two things the committee most wants, on the first screen',
+      'What’s next is pulled from the events list, stacked like cards',
+      'Short sections that each point somewhere: four ways in, the Coffee Stop, reviews',
+      'A soft orange glow follows the cursor across the hall’s name',
+    ],
+    visual: spStack([CV_IMG('hero.webp'), 'The home page hero'], [CV_IMG('home-village.webp'), 'A hall for the whole village, as fanned stat cards']),
+  },
+  {
+    id: 'hire', label: 'Hire the hall',
+    title: 'Everything a hirer needs, in order',
+    lede: 'Booking, Facilities, the hall photos and the dog clubs used to be four places. Now they are one page.',
+    features: [
+      'The room fan: six rooms fanned like cards, pulled out with a click',
+      'How to book as five numbered steps that stack as you scroll',
+      'The hall’s existing Hallmaster calendar, framed in the site’s design',
+      'Hirer documents that were buried on the old Facilities page',
+    ],
+    visual: spStack([CV_IMG('header-hire.webp'), 'The Hire the hall page header'], [CV_IMG('rooms.webp'), 'The room fan']),
+  },
+  {
+    id: 'whats-on', label: 'What’s on',
+    title: 'Every class with the person to ask',
+    lede: 'Five old menu links become one page: weekly classes, a dated list of what’s coming up, and photos of past events.',
+    features: [
+      'Sixteen weekly groups, each card with its organiser’s phone or email',
+      'Filter chips for dance, sport, social, creative, wellbeing or dogs',
+      'One dated events list replaces posters that went stale',
+    ],
+    visual: spStack([CV_IMG('classes.webp'), 'Weekly classes with filter chips'], [CV_IMG('upcoming.webp'), 'Upcoming events']),
+  },
+  {
+    id: 'support', label: 'Support us',
+    title: 'Fundraising, renamed for the people giving',
+    lede: 'Every way to give or help on one page, and the header’s Donate button goes straight to it.',
+    features: [
+      'One-off or monthly donations, or a gift in a will',
+      'The 500 Club: prizes up front, then how to join, the draws and the winners',
+      'The two volunteering appeals combined, with the jobs listed beside them',
+    ],
+    visual: spStack([CV_IMG('club.webp'), 'Join the 500 Club'], [CV_IMG('donate.webp'), 'Ways to donate']),
+  },
+  {
+    id: 'about', label: 'About',
+    title: 'How the hall is run, on one page',
+    lede: 'Governance’s three menu links and Vision 2050 become sections of About.',
+    features: [
+      'The committee and their roles as compact cards',
+      'The AGM date as a card you can’t miss',
+      'Governance documents, now hosted with the site',
+      'Contacts for bookings, the committee and classes',
+    ],
+    visual: spStack([CV_IMG('team.webp'), 'Meet the team'], [CV_IMG('agm.webp'), 'The next AGM']),
+  },
+  {
+    id: 'phone', label: 'Phone',
+    title: 'Made for the phone in your pocket',
+    lede: 'With four menu items there’s no deep tree to navigate.',
+    features: [
+      'The menu opens as a sheet listing each page’s sections as tappable pills',
+      'The jump-link bar scrolls sideways under the header',
+      'The room fan becomes a swipe row',
+    ],
+    visual: spPhones([CV_IMG('phone-home.webp'), 'The home page on a phone'], [CV_IMG('phone-menu.webp'), 'The menu sheet on a phone']),
+  },
+]
+
+const CV_HANDOVER_LEFT = [
+  ['file',     '14 documents moved',          'Every file the old site linked to was hosted by Wix. Governance documents, the price list and six hirer documents now sit with the site'],
+  ['calendar', 'Booking stays in Hallmaster', 'Accounts, requests and approvals carry on as before, framed in the site’s design'],
+  ['link',     'Old addresses still work',    'Old page names like booking, facilities and gallery map to their new sections'],
+]
+const CV_HANDOVER_RIGHT = [
+  ['code', 'One content file',          'Classes, events, contacts and document links live in one file, so updates never mean touching a layout'],
+  ['zap',  'Low running cost',          'Static hosting on GitHub Pages replaces the Wix plan'],
+  ['loop', 'Motion with an off switch', 'Every animation respects the visitor’s reduced-motion setting'],
+]
+
+function ChieveleyCaseStudyView({ cat, cs, slide }) {
+  return (
+    <div className="cs-wrap sp-cs">
+
+      <SPHero slide={slide} cs={cs} kicker="Studio KAIL" title="Chieveley" accent="Village Hall"
+        img={`${BASE}projects/chieveley.webp`} imgAlt="The new Chieveley Village Hall website on desktop and phone"
+        floatB={['layers', 'Organised around what visitors do']} floatC={['13 → 5', 'pages']}
+        liveUrl={CV_LIVE_URL} liveLabel="Visit the live site" />
+
+      {/* ── Where we started ─────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="Where we started" title="A busy hall, and a website that was hard to find your way around"
+        intro="Chieveley Village Hall is the centre of a West Berkshire village, with a main hall, club room, two kitchens, a bar and nine acres of recreation ground, all run by volunteers. Its Wix site had grown page by page as the committee needed it."
+        blobs={[['purple', { top: -100, left: '40%' }], ['yellow', { bottom: -140, right: -60 }]]}>
+        <SPBeforePair items={[
+          [CV_IMG('before-home.webp'), 'The old home page'],
+          [CV_IMG('before-booking.webp'), 'The old booking page'],
+        ]} />
+        <SPProblemGrid items={CV_PROBLEMS} />
+        <SPBanner label="The key insight">The menu followed how the committee is organised, not what visitors come to do.</SPBanner>
+      </SPSection>
+
+      {/* ── Structure ────────────────────────────────────── */}
+      <SPSection eyebrow="Structure first" title="Four kinds of visitor, so four menu items"
+        intro="I mapped every menu link and what sat behind it, then grouped visitors by what they come to do. If each top-level item answers one of those tasks, a visitor only has to make one choice."
+        blobs={[['lilac', { bottom: -120, left: -100 }]]}>
+        <div className="sp-tools sp-tools--four">
+          {CV_VISITORS.map((t, i) => (
+            <Reveal key={t.name} delay={0.05 * i} className="sp-rv">
+              <div className="sp-card sp-tool">
+                <div className="sp-tool-head">
+                  <span className="sp-mono" style={{ background: t.bg }}><SPIcon name={t.icon} size={20} /></span>
+                  <h4>{t.name}</h4>
+                </div>
+                <p className="sp-small">{t.use}</p>
+                <SPResponse>{t.to}</SPResponse>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <SPBanner label="The deliverable">A five-page sitemap review for the Executive Committee, giving them one structure to agree before any visual design.</SPBanner>
+        <SPDoc pages={[
+          [CV_IMG('review-cover.webp'), 'Sitemap review: cover'],
+          [CV_IMG('review-visitors.webp'), 'Sitemap review: four kinds of visitor'],
+        ]} />
+        <SPStats stats={[
+          ['13 → 5', 'pages, organised around four visitor tasks'],
+          ['24 → 4', 'menu links, plus Book the hall and Donate'],
+          ['2 → 1', 'places to find a class and its organiser'],
+          ['14', 'documents moved off Wix'],
+        ]} />
+      </SPSection>
+
+      {/* ── The new site ─────────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="The new site" title="One page per visitor task"
+        intro="Each menu item goes straight to its page, and a row of jump links under the header reaches every section. Switch between the pages to see each one."
+        blobs={[['lilac', { top: -100, left: -100 }], ['yellow', { bottom: -160, right: '10%' }]]}>
+        <SPTabs tabs={CV_TABS} label="Choose a page of the site" />
+      </SPSection>
+
+      {/* ── Visual direction ─────────────────────────────── */}
+      <SPSection eyebrow="Visual direction" title="Taking the cue from the hall’s own logo"
+        intro="Mixed stock photos, several typefaces and bright yellow buttons gave way to one illustrated world. Each page opens on a painterly scene in the same warm, late-afternoon light, and the logo’s arch became the site’s pill and arched shapes."
+        blobs={[['lilac', { bottom: -120, left: -100 }], ['purple', { top: -140, right: '20%' }]]}>
+        <SPImageCards items={[
+          ['What’s on', 'Dancers for the page of classes and events.', CV_IMG('header-whats-on.webp'), 'center 40%'],
+          ['Support us', 'The canal, in the same palette as the cards beneath.', CV_IMG('header-support.webp'), 'center 40%'],
+          ['About', 'A walled garden for how the hall is run.', CV_IMG('header-about.webp'), 'center 40%'],
+        ]} />
+        <SPChipCards
+          left={{ label: 'Palette from the logo', chips: ['Timberwolf #DFDDD1', 'Palm Leaf #799851', 'Olivine #9FB878', 'Dark Moss #47622A', 'Kombu #374426', 'Accent #EE8A50'] }}
+          right={{ label: 'Type and surfaces', chips: ['Momo Trust Display headings', 'Crimson Text body', 'Green glass cards', 'Warm glass cards', 'Dark moss calls to action'] }} />
+        <Reveal>
+          <p className="sp-note"><SPIcon name="heart" size={14} /> Real photos stay where they matter for decisions: the rooms, the kitchen and the bar, with their printed names cleaned off and set in pill captions instead.</p>
+        </Reveal>
+      </SPSection>
+
+      {/* ── Handover ─────────────────────────────────────── */}
+      <SPSection tone="navy" eyebrow="Leaving Wix"
+        title="Built so a volunteer-run hall can keep it up, and move off Wix without losing anything."
+        blobs={[['purple', { top: '30%', left: '35%', width: 420, height: 420 }], ['red', { bottom: -160, right: -100 }]]}>
+        <SPSafeGrid left={CV_HANDOVER_LEFT} right={CV_HANDOVER_RIGHT}
+          centre={<img src={CV_IMG('phone-opening.webp')} alt="The opening screen on a phone" loading="lazy" />} />
+        <SPPath steps={[['Audit & sitemap review', 'done'], ['Working demo site', 'done'], ['Refinement', 'done'], ['Launch prep', 'done'], ['Point the hall’s domain', 'next']]} />
+        <Reveal>
+          <p className="sp-note"><SPIcon name="code" size={14} /> Built in React and Vite with Claude as a coding partner: I set the structure, the visual design and each interaction, and reviewed every change at desktop and phone sizes.</p>
+        </Reveal>
+      </SPSection>
+
+      <PkgLinks cs={cs} cfg={{ linksBody: 'Explore the live site, or download the full case study, from the audit and sitemap review to the build and the move off Wix.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
+// ── Spurgeons: PAS User Testing proposal ──────────────────────────────
+
+const PAS_IMG = (f) => `${BASE}pas-testing/${f}`
+
+const PAS_FEEDBACK = [
+  { top: <span className="sp-big">+90</span>,
+    finding: 'Net Promoter Score: 29 promoters, 1 passive and 1 detractor',
+    response: 'High praise, but no direction' },
+  { top: <span className="sp-big">3.32<small> → </small>4.81</span>,
+    finding: 'Average confidence out of 5, before and after the course',
+    response: 'Ask the “before” at sign-up, not from memory' },
+  { top: (
+      <div className="sp-dots-row">
+        <span className="sp-big">3<small>/31</small></span>
+        <div className="sp-dots" aria-hidden="true">
+          {Array.from({ length: 31 }, (_, i) => <i key={i} className={i < 3 ? 'on' : ''} />)}
+        </div>
+      </div>
+    ),
+    finding: 'parents said their confidence went down',
+    response: 'Find out why, in interviews' },
+  { row: true, top: <SPRing value={87} color="#6A4FD1" />,
+    finding: 'feel fully equipped with practical tools',
+    response: 'Check the tools are still in use a week later' },
+  { row: true, top: spIconDot('clock', true),
+    finding: '8 of 21 written comments came in after 9pm',
+    response: 'Evening slots, on the parent’s own phone' },
+]
+
+const PAS_QUESTIONS = [
+  { mono: '1', bg: SP_GRAD.navy,   name: 'Find and join', use: 'Can parents find, understand and sign up without help?',
+    response: 'Hunch: referred parents expect co-parent communication content', chips: ['Landing page', 'Sign-up'] },
+  { mono: '2', bg: SP_GRAD.purple, name: 'Learn',         use: 'Can parents move through the course on a phone, in short bursts?',
+    response: 'Hunch: late-night use makes captions and resume points critical', chips: ['Platform', 'Navigation'] },
+  { mono: '3', bg: SP_GRAD.red,    name: 'Relevance',     use: 'Does the content fit each parent’s stage of separation?',
+    response: 'Hunch: sections 4 to 6 feel less relevant to experienced parents', chips: ['Content roadmap'] },
+  { mono: '4', bg: SP_GRAD.blue,   name: 'Take home',     use: 'Do parents get, keep and use the tools?',
+    response: 'Hunch: downloads are most valued but hardest to use on a phone', chips: ['Resource formats', 'Nudges'] },
+  { mono: '5', bg: SP_GRAD.green,  name: 'Feel safe',     use: 'Is it supportive and accessible on a hard day?',
+    response: 'Hunch: non-resident parents find fewer tools they can use', chips: ['Tone', 'Signposting', 'Accessibility'] },
+]
+
+const PAS_PRINCIPLES_LEFT = [
+  ['eyeoff', 'Watch behaviour, not opinions', 'Realistic tasks first, then ask why'],
+  ['loop',   'Small rounds, often',           'Five parents per round find most problems. Fix, then retest'],
+  ['heart',  'Trauma-informed',               'No questions about the separation. Skip any task, or stop at any time'],
+]
+const PAS_PRINCIPLES_RIGHT = [
+  ['user',   'Inclusive from the start', 'Dads, non-resident parents and access needs, tested to WCAG 2.2 AA'],
+  ['clock',  'Design for the hardest day', 'Remote, on the parent’s own phone, with evening and weekend slots'],
+  ['layers', 'Triangulate',               'Analytics shows where, testing shows why, the diary shows what lasts'],
+]
+
+const PAS_TABS = [
+  {
+    id: 'plan', label: 'Timeline',
+    title: 'Discover, test, report',
+    lede: 'No fieldwork over Christmas: handovers and contact arrangements make it one of the hardest times of year for separated families.',
+    features: [
+      'Weeks 1 to 3: an expert review against usability heuristics and WCAG 2.2 AA, an analytics funnel, then round 1 with 5 past participants',
+      'Weeks 4 to 6: the same 5 keep a 7-day diary while fixes are made, then round 2 tests the improved course with 5 new parents',
+      'Weeks 7 to 8: severity-rated findings, a journey map, a prioritised fix list and a playback with the team',
+    ],
+    visual: <SPDoc pages={[[PAS_IMG('page-5.webp'), 'Proposal page: the 8-week plan'], [PAS_IMG('page-2.webp'), 'Proposal page: feedback so far and what we propose']]} />,
+  },
+  {
+    id: 'sessions', label: 'Sessions',
+    title: 'Realistic tasks, clear targets',
+    lede: 'Tasks are everyday situations, not instructions, read to the parent as a scenario.',
+    features: [
+      '“Your child’s school has suggested a course… sign up”: signs up unaided in under 5 minutes',
+      '“It’s late and your child is asleep next door”: video watched, captions found',
+      '“Your 7-year-old doesn’t want to go to their other parent’s”: finds a relevant tool',
+      '“Things feel like too much”: finds a support route',
+    ],
+    visual: <SPDoc pages={[[PAS_IMG('page-6.webp'), 'Proposal page: usability tasks and measures'], [PAS_IMG('page-4.webp'), 'Proposal page: research questions and principles']]} />,
+  },
+  {
+    id: 'people', label: 'Participants',
+    title: '10 parents, two rounds',
+    lede: '5 past participants do an interview, three tasks and the diary. 5 parents new to the course do the full usability test.',
+    features: [
+      'A spread of time since separating, with 40% dads',
+      'Non-resident parents, parents referred by school, court or social care, and parents who didn’t finish',
+      'At least 3 of the 5 new parents with no link to Spurgeons, to avoid insider bias',
+      'From £0 if parents volunteer, to about £500 with thank-you payments',
+    ],
+    visual: <SPDoc pages={[[PAS_IMG('page-7.webp'), 'Proposal page: recruitment mix and costs']]} />,
+  },
+  {
+    id: 'data', label: 'Data',
+    title: 'Handling data, and improving it',
+    lede: 'How we’ll look after what parents share, and how the feedback form can give better evidence after this round.',
+    features: [
+      'A data protection check before we start, and pseudonymised IDs',
+      'Recordings deleted once analysis is complete, within 6 months',
+      'Ask confidence at sign-up for a true baseline, plus a 30-day check-in',
+      'Ask what was missing, and fill the blank fields: child age, residency, referral route and device',
+    ],
+    visual: <SPDoc pages={[[PAS_IMG('page-8.webp'), 'Proposal page: data handling and next steps'], [PAS_IMG('page-3.webp'), 'Proposal page: round one feedback']]} />,
+  },
+]
+
+function PASTestingCaseStudyView({ cat, cs, slide }) {
+  return (
+    <div className="cs-wrap sp-cs">
+
+      <SPHero slide={slide} cs={cs} kicker="Spurgeons · Parenting After Separation" title="User Testing" accent="Proposal"
+        img={PAS_IMG('cover-crop.webp')} imgAlt="Cover of the Parenting After Separation user testing proposal"
+        floatB={['heart', 'Trauma-informed by design']} floatC={['10', 'parents across two rounds']} thirdBlob="lilac" />
+
+      {/* ── Feedback so far ──────────────────────────────── */}
+      <SPSection tone="tint" eyebrow="Feedback so far" title="Great scores, but little to act on"
+        intro="Parenting After Separation is a free online course for separating and separated parents. Round one feedback from 31 parents who finished it, between April and October 2026, sits near the top of the scale, so the survey can’t show what to improve. The comments give better leads."
+        blobs={[['purple', { top: -100, left: '40%' }], ['yellow', { bottom: -140, right: -60 }]]}>
+        <SPProblemGrid items={PAS_FEEDBACK} />
+        <SPBanner label="What we don’t know yet">Where parents drop out, where phones get in the way, and who the course doesn’t serve yet.</SPBanner>
+      </SPSection>
+
+      {/* ── Questions ────────────────────────────────────── */}
+      <SPSection eyebrow="What we want to learn" title="Five questions, each with a hunch to test"
+        intro="Each research question has a hypothesis to test and a decision it feeds into."
+        blobs={[['lilac', { bottom: -120, left: -100 }]]}>
+        <SPToolGrid tools={PAS_QUESTIONS} />
+        <SPBanner label="The outcome">Clear ideas on what to fix in the UI, UX and user journeys.</SPBanner>
+      </SPSection>
+
+      {/* ── Principles ───────────────────────────────────── */}
+      <SPSection tone="navy" eyebrow="UX principles behind the plan" title="We test the course, never the parent."
+        blobs={[['purple', { top: '30%', left: '35%', width: 420, height: 420 }], ['red', { bottom: -160, right: -100 }]]}>
+        <SPSafeGrid left={PAS_PRINCIPLES_LEFT} right={PAS_PRINCIPLES_RIGHT}
+          centre={<img src={PAS_IMG('illustration.webp')} alt="" loading="lazy" />} />
+      </SPSection>
+
+      {/* ── The plan ─────────────────────────────────────── */}
+      <SPSection eyebrow="The plan" title="8 weeks: discover, test, report"
+        intro="I run every interview and session, so the plan uses small numbers and one activity at a time. Fixes are made between rounds, so round 2 tests an improved course."
+        blobs={[['lilac', { top: -100, left: -100 }], ['yellow', { bottom: -160, right: '10%' }]]}>
+        <SPTabs tabs={PAS_TABS} label="Choose a part of the plan" />
+      </SPSection>
+
+      {/* ── Measures ─────────────────────────────────────── */}
+      <SPSection tone="navy" eyebrow="How we’ll measure it" title="Clear targets, and a clear next step"
+        blobs={[['purple', { top: -120, left: '40%' }], ['red', { bottom: -160, right: -100 }]]}>
+        <SPStats stats={[
+          ['80%', 'task success on tasks 1 to 5, unaided'],
+          ['5.5', 'average ease per task, on the 7-point Single Ease Question'],
+          ['75', 'System Usability Scale score to aim for (the average is 68)'],
+          ['3 of 5', 'diary parents using a tool at home on 3 or more days'],
+        ]} />
+        <SPPath steps={[['Round one feedback reviewed', 'done'], ['Proposal drafted', 'done'], ['Accessibility review & recruitment', 'next'], ['Two testing rounds & a diary study'], ['Findings & playback']]} />
+      </SPSection>
+
+      <PkgLinks cs={cs} cfg={{ linksBody: 'Download the full proposal, with the timeline, session tasks, recruitment mix, costs and data handling.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
 function CaseStudyView({ cat, slide, onProjectOpen }) {
   const cs = slide.caseStudy
   if (cat.id === 'packaging') {
@@ -5906,6 +6930,10 @@ function CaseStudyView({ cat, slide, onProjectOpen }) {
   if (cat.id === 'web' && slide.id === 1) return <PortfolioWebsiteCaseStudyView    cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'web' && slide.id === 3) return <SpurgeonsSupportPlatformCaseStudyView cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'web' && slide.id === 4) return <PBDExplainerCaseStudyView cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'web' && slide.id === 5) return <SpurgeonsCoursesCaseStudyView cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'web' && slide.id === 6) return <NowNextCaseStudyView cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'web' && slide.id === 7) return <PASTestingCaseStudyView cat={cat} cs={cs} slide={slide} />
+  if (cat.id === 'web' && slide.id === 8) return <ChieveleyCaseStudyView cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 2) return <PGMCaseStudyView           cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 3) return <PreschoolsCaseStudyView      cat={cat} cs={cs} slide={slide} />
   if (cat.id === 'brand' && slide.id === 5) return <InvisibleWallsCaseStudyView cat={cat} cs={cs} slide={slide} />
@@ -5947,7 +6975,15 @@ export default function ProjectDetail({ cat, slide: initialSlide, onClose, onPro
       <motion.div className="pd-sheet" {...CONTENT}>
 
         <header className="pd-header">
-          <button className="pd-back" onClick={onClose} aria-label="Close">&#8592; Back</button>
+          <div className="pd-header-nav">
+            <button className="pd-back" onClick={onClose} aria-label="Close">&#8592; Back</button>
+            {/* Next project — same target as the floating Next button at the bottom */}
+            {hasCaseStudy && nextSlide && (
+              <button className="pd-back pd-next" onClick={() => navigate(nextSlide)} aria-label={`Next: ${nextSlide.label}`}>
+                Next &#8594;
+              </button>
+            )}
+          </div>
           <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Studio KAIL" className="pd-header-logo" />
           <button className="pd-close" onClick={onClose} aria-label="Close">&#215;</button>
         </header>

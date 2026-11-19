@@ -657,26 +657,6 @@ export const CATEGORIES = [
     ],
     slides: [
       {
-        id: 1, bg: '#335CFF', img: 'projects/portfolio-showcase.webp', label: 'Portfolio Website',
-        tags: ['React', 'Vite', 'Framer Motion', 'Custom CSS'],
-        caseStudy: {
-          subtitle: 'React 18 + Vite · Framer Motion · Lenis · Custom CSS · GitHub Pages',
-          year: '2026',
-          duration: 'Ongoing',
-          status: 'Live · kail.studio · Awwwards Honorable Mention',
-          sections: [
-            {
-              id: 'overview',
-              body: "This portfolio is designed and built from scratch, developed with Claude Code and prototyped live in the browser throughout. The architecture is built on React 18 and Vite, with Framer Motion handling all scroll-triggered reveals and page transitions. Lenis provides the butter-smooth inertia scrolling. The visual system is built in custom CSS, glass tokens, bento grids, motion curves, defined once and applied consistently across every section.\n\nThe result is a site that loads fast, animates fluidly, and scales cleanly across every device and screen size.",
-            },
-            {
-              id: 'tech',
-              body: 'React 18 provides the component architecture. Vite handles bundling with near-instant hot reload in development and optimised production builds. Framer Motion powers every entrance animation, reveal, and transition. Lenis is wired to a React context for smooth, inertia-based scrolling throughout. Custom CSS tokens handle the entire design system: colours, spacing, type scale, glass effects, and dark/light surface variants throughout.',
-            },
-          ],
-        },
-      },
-      {
         id: 3, bg: '#D4C7FF', img: 'projects/spurgeons-supportplatform.webp', label: 'Spurgeons: Support Platform',
         tags: ['UX Design', 'Product Design', 'Prototyping', 'Safeguarding', 'Charity'],
         caseStudy: {
@@ -709,6 +689,104 @@ export const CATEGORIES = [
               id: 'overview',
               title: 'Project Overview',
               body: `An interactive web explainer for PBD Project, a nonprofit funding research into Peroxisome Biogenesis Disorders. Visitors explore the peroxisome two ways, by what it does and by the diseases it is linked to, and every topic leads to what is known, what is still open, and the research behind it.\n\nBuilt in React with the peroxisome drawn live in WebGL, in three weeks alongside a companion film, working directly with PBD Project's owner.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 8, bg: '#47622A', img: 'projects/chieveley.webp', label: 'Chieveley Village Hall',
+        tags: ['UX Audit', 'Information Architecture', 'Web Design', 'React', 'Charity'],
+        caseStudy: {
+          subtitle: 'UX Audit · Information Architecture · Visual Design · Build · Migration',
+          year: '2026',
+          duration: 'Oct to Nov 2026',
+          status: 'Built · Ready for the hall’s domain',
+          client: 'Chieveley Village Hall',
+          demo: 'https://kailstudio.github.io/chieveleyvillagehall/',
+          pdf: { file: 'case-studies/chieveley-village-hall-case-study.pdf', label: 'Full case study', pages: 26, size: '9.1 MB' },
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `A redesign for Chieveley Village Hall, a volunteer-run charity in West Berkshire. Its Wix site had grown page by page, with a menu that mirrored how the committee is organised rather than what visitors come to do.\n\nI audited the site and proposed a simpler structure to the Executive Committee, then designed and built the new site, connected the hall’s existing booking system and moved its documents off Wix: from thirteen pages to five, organised around four visitor tasks.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 1, bg: '#335CFF', img: 'projects/portfolio-showcase.webp', label: 'Portfolio Website',
+        tags: ['React', 'Vite', 'Framer Motion', 'Custom CSS'],
+        caseStudy: {
+          subtitle: 'React 18 + Vite · Framer Motion · Lenis · Custom CSS · GitHub Pages',
+          year: '2026',
+          duration: 'Ongoing',
+          status: 'Live · kail.studio · Awwwards Honorable Mention',
+          sections: [
+            {
+              id: 'overview',
+              body: "This portfolio is designed and built from scratch, developed with Claude Code and prototyped live in the browser throughout. The architecture is built on React 18 and Vite, with Framer Motion handling all scroll-triggered reveals and page transitions. Lenis provides the butter-smooth inertia scrolling. The visual system is built in custom CSS, glass tokens, bento grids, motion curves, defined once and applied consistently across every section.\n\nThe result is a site that loads fast, animates fluidly, and scales cleanly across every device and screen size.",
+            },
+            {
+              id: 'tech',
+              body: 'React 18 provides the component architecture. Vite handles bundling with near-instant hot reload in development and optimised production builds. Framer Motion powers every entrance animation, reveal, and transition. Lenis is wired to a React context for smooth, inertia-based scrolling throughout. Custom CSS tokens handle the entire design system: colours, spacing, type scale, glass effects, and dark/light surface variants throughout.',
+            },
+          ],
+        },
+      },
+      {
+        id: 6, bg: '#DBCF00', img: 'projects/now-next.webp', label: 'Spurgeons: Now or Next Board',
+        tags: ['UX Design', 'Interactive', 'Accessibility', 'Research', 'Charity'],
+        caseStudy: {
+          subtitle: 'Research · UX · Interaction Design · Accessibility · Coded Build',
+          year: '2026',
+          status: 'Working build · Usability study next',
+          client: 'Spurgeons',
+          demo: 'https://spurgeonsdesign.github.io/now-or-next/',
+          pdf: { file: 'case-studies/now-or-next-board-case-study.pdf', label: 'Full case study', pages: 21, size: '4.2 MB' },
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `A free, no-sign-up web tool that helps parents, carers and practitioners make a now and next picture board in minutes. The board shows a child what's happening now and what's next, and can be printed or saved to a phone.\n\nGrounded in published guidance on visual supports, it teaches the routine through a short demo and hands-on practice, works by tap as well as drag, and keeps everything on the device: no accounts, no uploads.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 5, bg: '#5E33BF', img: 'projects/spurgeons-courses.webp', label: 'Spurgeons: Courses Portal',
+        tags: ['UX Design', 'UI Design', 'Accessibility', 'Prototyping', 'Charity'],
+        caseStudy: {
+          subtitle: 'Research · UX · UI & Visual Design · Accessibility · Coded Prototype',
+          year: '2026',
+          status: 'Live prototype · Usability testing next',
+          client: 'Spurgeons',
+          demo: 'https://spurgeonsdesign.github.io/course-portal/',
+          // Optional download: the full case study as a PDF (public/case-studies/)
+          pdf: { file: 'case-studies/spurgeons-courses-case-study.pdf', label: 'Full case study', pages: 19, size: '6.7 MB' },
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `Spurgeons offers free online parenting courses. People told the team the course login was too hard to use and looked plain. I redesigned the way in and the dashboard behind it, then built and tested the result as a working coded prototype.\n\nThe new sign-in is one field and one button, with a passwordless email link and nothing to remember. The dashboard shows progress at a glance, with a programme carousel and colour-coded, illustrated courses. Audited against WCAG 2.2 AA, at six screen widths, in light and dark mode.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 7, bg: '#001951', img: 'projects/pas-testing.webp', label: 'Spurgeons: PAS User Testing',
+        tags: ['UX Research', 'Usability Testing', 'Research Plan', 'Charity'],
+        caseStudy: {
+          subtitle: 'UX Research · Usability Testing · Diary Study · Research Plan',
+          year: '2026',
+          duration: '8 weeks · Dec 2026 to Feb 2027',
+          status: 'Proposal · Draft for discussion',
+          client: 'Spurgeons',
+          pdf: { file: 'case-studies/pas-user-testing-proposal.pdf', label: 'Research proposal', pages: 8, size: '3.3 MB' },
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `An 8-week user testing plan for Parenting After Separation, Spurgeons' free online course, to see how parents find, use and take the course home, and what to fix.\n\nBuilt on round one feedback from 31 parents, it proposes an expert review, two small rounds of remote usability testing with 10 separated parents, and a 7-day diary study, all run with trauma-informed care.`,
             },
           ],
         },

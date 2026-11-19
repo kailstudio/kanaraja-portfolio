@@ -47,6 +47,7 @@ const EXPERIENCE = [
     points: [
       'Design and deliver a range of digital products supporting families across the UK.',
       'Lead the full creative process, including research, prototyping, UI design, testing, and implementation, ensuring accessibility and alignment with the organisation’s values.',
+      'Plan user testing for our online courses: analysing parent feedback, then designing mixed-method research (expert reviews against WCAG 2.2 AA, remote usability testing and at-home diary studies) run with trauma-informed care.',
     ],
     projects: [
       {
@@ -80,8 +81,9 @@ const EXPERIENCE = [
     org:   'Swingers',
     dates: 'Jun 2022 – Mar 2023',
     points: [
-      'Coordinated design briefs across multiple departments to maintain consistency and efficient workflows.',
+      'In-house designer for a hospitality brand, coordinating design briefs across multiple departments to maintain consistency and efficient workflows.',
       'Produced digital and print assets including social media animations, event materials, and brand guidelines.',
+      'Designed paid social ads for Swingers campaigns on Facebook and Instagram.',
       'Liaised with suppliers and ensured brand alignment across marketing and internal communications.',
     ],
   },
@@ -94,6 +96,8 @@ const EXPERIENCE = [
       'Oversaw branding, digital presence, and creative strategy from concept through to delivery.',
     ],
     highlights: [
+      { label: 'Chieveley Village Hall', link: ['web', 8] },
+      { label: 'PBD Project Website',    link: ['web', 4] },
       { label: 'Portfolio Website', link: ['web', 1] },
       { label: 'Studio Intro',      link: ['motion', 1] },
       { label: 'PGM',               link: ['brand', 2] },
@@ -145,11 +149,10 @@ const A_LEVELS = {
 }
 
 const COURSES = [
-  { provider: 'Google',                 name: 'UX Design' },
-  { provider: 'IBM',                    name: 'Generative AI for UI/UX Design' },
-  { provider: 'Anthropic',              name: 'AI Fluency: Framework & Foundations' },
-  { provider: 'IBM',                    name: 'Introduction to HTML, CSS, & JavaScript' },
-  { provider: 'University of Colorado', name: 'Packaging Design for the Circular Economy' },
+  { provider: 'University of Cambridge',        name: 'Ethical AI for Research and Innovation' },
+  { provider: 'University of Colorado Boulder', name: 'Product Design for the Circular Economy' },
+  { provider: 'University of Michigan',         name: 'Interactivity with JavaScript' },
+  { provider: 'Google',                         name: 'Foundations of User Experience (UX) Design' },
 ]
 
 // Resolve a [category id, slide id] pair to the real objects ProjectDetail expects.

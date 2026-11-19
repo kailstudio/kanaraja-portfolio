@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio KAIL · Studio intro (preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cobalt: #335CFF;
+    --lime:   #E0F87D;
+    --lilac:  #D4C7FF;
+    --dark:   #333333;
+    --white:  #FFFFFF;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Raleway', system-ui, sans-serif;
+    color: var(--dark);
+    background: #F6F4FF;
+  }
+
+  /* Tall scroll scaffold; the stage is pinned while it scrolls past */
+  .pg-scroll { position: relative; height: 1100vh; }
+  .pg-stage {
+    position: sticky; top: 0;
+    height: 100vh; height: 100dvh; width: 100%;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 55% at 18% 12%, rgba(212, 199, 255, 0.55) 0%, rgba(212, 199, 255, 0) 70%),
+      radial-gradient(50% 45% at 88% 85%, rgba(224, 248, 125, 0.35) 0%, rgba(224, 248, 125, 0) 70%),
+      linear-gradient(180deg, #FBFAFF 0%, #EFEBFF 100%);
+  }
+  canvas.pg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* ── Opening: the main animation in its glass orb ── */
+  .pg-intro {
+    position: absolute; left: 50%; top: 50%;
+    width: min(62vmin, 520px); aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    pointer-events: none; will-change: transform, opacity;
+  }
+  .pg-ring {
+    position: absolute; border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 0 1px rgba(51, 92, 255, 0.08), 0 10px 34px rgba(51, 92, 255, 0.10);
+  }
+  .pg-ring--outer { inset: 0; }
+  .pg-ring--inner { inset: 11%; }
+  .pg-orb {
+    position: absolute; inset: 21%; border-radius: 50%;
+    background: radial-gradient(circle at 30% 26%,
+      rgba(255, 255, 255, 0.95) 0%, rgba(212, 199, 255, 0.6) 32%,
+      rgba(212, 199, 255, 0.3) 60%, rgba(51, 92, 255, 0.12) 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
+    box-shadow: inset 0 0 50px rgba(255, 255, 255, 0.55), 0 20px 60px rgba(51, 92, 255, 0.16);
+  }
+  .pg-intro-media {
+    position: absolute; inset: 14%;
+    display: grid; place-items: center;
+  }
+  .pg-intro-media video, .pg-intro-media img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* ── The six clips that appear through the playground ── */
+  .pg-chip {
+    position: absolute; left: 0; top: 0;
+    width: 400px; height: 400px;
+    transform-origin: 0 0;
+    pointer-events: none; will-change: transform, opacity;
+    opacity: 0;
+  }
+  .pg-chip video, .pg-chip img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .pg-chip-tag {
+    position: absolute; left: 50%; bottom: -6%;
+    transform: translateX(-50%);
+    font-size: 22px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--dark); white-space: nowrap;
+    padding: 6px 16px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 22px -10px rgba(51, 92, 255, 0.4);
+  }
+  .pg-chip-tag b { color: var(--cobalt); font-weight: 600; }
+
+  /* ── Ending: logo ── */
+  .pg-end {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(34vmin, 300px);
+    opacity: 0; pointer-events: none; text-align: center;
+  }
+  .pg-end svg { width: 100%; height: auto; display: block; }
+  .pg-byline {
+    display: flex; justify-content: space-between; margin-top: 10px;
+    font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dark);
+  }
+
+  .pg-hint {
+    position: absolute; left: 50%; bottom: 5vh; transform: translateX(-50%);
+    font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dark);
+    opacity: 0.7;
+  }
+  .pg-progress {
+    position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+    width: 2px; height: 140px; border-radius: 2px; background: rgba(51, 92, 255, 0.15);
+  }
+  .pg-progress i { position: absolute; left: 0; top: 0; width: 100%; border-radius: 2px; background: var(--cobalt); }
+  .pg-label {
+    position: fixed; left: 18px; top: 16px; z-index: 50;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 7px 12px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7); border: 1px solid #fff; color: var(--dark);
+  }
+  .pg-after {
+    min-height: 60vh; display: grid; place-items: center;
+    background: #F6F4FF; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.6;
+  }
+  @media (prefers-reduced-motion: reduce) { .pg-scroll { height: 400vh; } }
+</style>
+</head>
+<body>
+<div class="pg-label">Preview · Studio intro</div>
+
+<section class="pg-scroll" id="pgScroll">
+  <div class="pg-stage" id="pgStage">
+    <canvas class="pg-canvas" id="pgCanvas"></canvas>
+
+    <div class="pg-intro" id="pgIntro">
+      <div class="pg-ring pg-ring--outer"></div>
+      <div class="pg-ring pg-ring--inner"></div>
+      <div class="pg-orb"></div>
+      <div class="pg-intro-media" id="pgIntroMedia"></div>
+    </div>
+
+    <div id="pgChips"></div>
+
+    <div class="pg-end" id="pgEnd">
+      <svg viewBox="0 0 1590 460" aria-label="Studio KAIL">
+        <g fill="#333333">
+          <rect x="25.83" y="40" width="180" height="380"/>
+          <rect x="605.83" y="40" width="180" height="380"/>
+          <circle cx="317.17" cy="128.67" r="88.67"/>
+          <rect x="805.83" y="268" width="180" height="152"/>
+          <polygon points="1185.83 242.67 1185.83 40 1005.83 40 1005.83 420 1031.55 420 1185.83 420 1365.83 420 1365.83 242.67 1185.83 242.67"/>
+          <circle cx="894.5" cy="154" r="88.67"/>
+          <circle cx="1474.17" cy="330" r="90" fill="#335CFF"/>
+          <path d="M585.83,420c-99.76,0-180.63-85.07-180.63-190s80.87-190,180.63-190"/>
+          <path d="M406.17,420c0-110.46-80.74-200-180.33-200v200h180.33Z"/>
+        </g>
+      </svg>
+      <div class="pg-byline"><span>by</span><span>kana</span><span>raja</span></div>
+    </div>
+
+    <div class="pg-hint" id="pgHint">Scroll to explore</div>
+    <div class="pg-progress"><i id="pgProg"></i></div>
+  </div>
+</section>
+<div class="pg-after">Portfolio continues here</div>
+
+<script>
+(() => {
+  const MEDIA = {
+    start: { webm: '../public/hero-intro/herointrostart.webm', webp: '../public/hero-intro/herointrostart.webp' },
+    chips: [
+      { webm: '../public/hero-intro/herointro1.webm', webp: '../public/hero-intro/herointro1.webp', tag: 'Colour' },
+      { webm: '../public/hero-intro/herointro2.webm', webp: '../public/hero-intro/herointro2.webp', tag: 'Illustration' },
+      { webm: '../public/hero-intro/herointro4.webm', webp: '../public/hero-intro/herointro4.webp', tag: 'Planning' },
+      { webm: '../public/hero-intro/herointro5.webm', webp: '../public/hero-intro/herointro5.webp', tag: 'Materials' },
+      { webm: '../public/hero-intro/herointro6.webm', webp: '../public/hero-intro/herointro6.webp', tag: 'Making' },
+      { webm: '../public/hero-intro/herointrostart.webm', webp: '../public/hero-intro/herointrostart.webp', tag: 'Ideas' },
+    ],
+  };
+
+  // webm (with transparency) first, still webp if the browser can't play it
+  const probe = document.createElement('video');
+  const canWebm = !!probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"') !== '';
+  function media(m) {
+    if (canWebm) {
+      const v = document.createElement('video');
+      v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+      v.poster = m.webp; v.src = m.webm;
+      v.addEventListener('error', () => v.replaceWith(img(m)));
+      return v;
+    }
+    return img(m);
+  }
+  function img(m) { const i = new Image(); i.src = m.webp; i.alt = ''; return i; }
+
+  document.getElementById('pgIntroMedia').appendChild(media(MEDIA.start));
+
+  // ── Palette ──
+  const COBALT = [51, 92, 255], LIME = [224, 248, 125], LILAC = [212, 199, 255], DARK = [51, 51, 51];
+  const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+
+  // ── Seeded random, so the drawing is the same every visit ──
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const rr = (a, b) => a + rnd() * (b - a);
+
+  // ── World: a design studio drawn as line segments ──
+  // Units are metres. z runs away from the viewer down the central aisle.
+  const WALL = 8.5, CEIL = 4.2;
+  const structures = [];
+  let CUR = null, OX = 0, OZ = 0, SX = 1;           // current object + local frame
+  function S(z) { CUR = { z, segs: [], dims: [], dots: [] }; structures.push(CUR); return CUR; }
+  // Local frame: x points from the aisle towards the wall on that side
+  function at(x, z, side) { OX = x; OZ = z; SX = side; }
+  const P = (x, y, z) => [OX + SX * x, y, OZ + z];
+  function L(a, b, style = 'line') { CUR.segs.push({ a: P(...a), b: P(...b), style, t: rnd() * 0.6 }); }
+  function poly(pts, style, close) { for (let i = 0; i < pts.length - 1; i++) L(pts[i], pts[i + 1], style); if (close) L(pts[pts.length - 1], pts[0], style); }
+  function box(x, y, z, w, h, d, style) {
+    const p = [[x,y,z],[x+w,y,z],[x+w,y,z+d],[x,y,z+d]], q = p.map(([a,b,c]) => [a, b + h, c]);
+    for (let i = 0; i < 4; i++) { L(p[i], p[(i+1)%4], style); L(q[i], q[(i+1)%4], style); L(p[i], q[i], style); }
+  }
+  // rectangle in the plane x = const
+  function rectX(x, y0, y1, z0, z1, style) { poly([[x,y0,z0],[x,y1,z0],[x,y1,z1],[x,y0,z1]], style, true); }
+  // rectangle in the plane y = const
+  function rectY(y, x0, x1, z0, z1, style) { poly([[x0,y,z0],[x1,y,z0],[x1,y,z1],[x0,y,z1]], style, true); }
+  function ring(cx, cy, cz, r, plane = 'xz', n = 20, style) {
+    const pts = [];
+    for (let i = 0; i <= n; i++) {
+      const t = (i / n) * Math.PI * 2;
+      pts.push(plane === 'xz' ? [cx + Math.cos(t) * r, cy, cz + Math.sin(t) * r]
+             : plane === 'xy' ? [cx + Math.cos(t) * r, cy + Math.sin(t) * r, cz]
+             : [cx, cy + Math.sin(t) * r, cz + Math.cos(t) * r]);
+    }
+    poly(pts, style);
+  }
+  function cyl(cx, y0, y1, cz, r, n = 16, style) {
+    ring(cx, y0, cz, r, 'xz', n, style); ring(cx, y1, cz, r, 'xz', n, style);
+    [0, Math.PI].forEach((a) => L([cx + Math.cos(a) * r, y0, cz + Math.sin(a) * r], [cx + Math.cos(a) * r, y1, cz + Math.sin(a) * r], style));
+  }
+  const dot = (x, y, z) => CUR.dots.push(P(x, y, z));
+  const dim = (a, b, label) => CUR.dims.push({ a: P(...a), b: P(...b), label });
+
+  // ── Furniture & objects (local frame: x towards the wall) ──
+  function chair(x, z) {
+    ring(x, 0.47, z, 0.24, 'xz', 18);                                // seat
+    L([x, 0.08, z], [x, 0.47, z]);                                   // gas lift
+    for (let i = 0; i < 5; i++) { const a = (i / 5) * Math.PI * 2; L([x, 0.08, z], [x + Math.cos(a) * 0.3, 0.04, z + Math.sin(a) * 0.3]); }
+    for (let i = 0; i < 5; i++) { const a = (i / 5) * Math.PI * 2; dot(x + Math.cos(a) * 0.3, 0.03, z + Math.sin(a) * 0.3); }
+    rectX(x - 0.24, 0.55, 1.0, z - 0.2, z + 0.2);                   // backrest
+    L([x - 0.24, 0.47, z], [x - 0.24, 0.55, z], 'dash');
+    [-1, 1].forEach((s) => { L([x - 0.1, 0.47, z + s * 0.24], [x - 0.1, 0.66, z + s * 0.24], 'dash'); L([x - 0.1, 0.66, z + s * 0.24], [x + 0.18, 0.66, z + s * 0.24]); });
+  }
+  function desk(z) {                                                 // desk facing the aisle, at local x 0.4..1.2
+    const x0 = 0.4, x1 = 1.2, z0 = z, z1 = z + 1.6;
+    box(x0, 0.72, z0, x1 - x0, 0.04, z1 - z0);
+    [[x0 + 0.04, z0 + 0.04], [x0 + 0.04, z1 - 0.04], [x1 - 0.04, z0 + 0.04]].forEach(([x, zz]) => L([x, 0, zz], [x, 0.72, zz]));
+    box(x1 - 0.42, 0, z1 - 0.46, 0.4, 0.7, 0.42);                    // drawer pedestal
+    [0.24, 0.47].forEach((y) => L([x1 - 0.42, y, z1 - 0.46], [x1 - 0.42, y, z1 - 0.04], 'dash'));
+    [0.12, 0.36, 0.58].forEach((y) => dot(x1 - 0.42, y, z1 - 0.25));
+    // monitor
+    rectY(0.765, x1 - 0.3, x1 - 0.12, z0 + 0.65, z0 + 0.95);
+    L([x1 - 0.2, 0.765, z0 + 0.8], [x1 - 0.2, 1.0, z0 + 0.8]);
+    rectX(x1 - 0.22, 0.98, 1.44, z0 + 0.38, z0 + 1.22);
+    rectX(x1 - 0.225, 1.02, 1.4, z0 + 0.42, z0 + 1.18, 'dash');
+    [1.3, 1.22, 1.14].forEach((y, i) => L([x1 - 0.23, y, z0 + 0.48], [x1 - 0.23, y, z0 + 0.48 + [0.55, 0.38, 0.62][i]], 'dot'));
+    rectX(x1 - 0.23, 1.06, 1.1, z0 + 0.5, z0 + 0.62);
+    // keyboard + mouse
+    rectY(0.765, x0 + 0.12, x0 + 0.3, z0 + 0.52, z0 + 1.08);
+    [0.17, 0.21, 0.25].forEach((x) => L([x0 + x, 0.767, z0 + 0.55], [x0 + x, 0.767, z0 + 1.05], 'dot'));
+    ring(x0 + 0.2, 0.77, z0 + 1.24, 0.035, 'xz', 10);
+    // mug
+    cyl(x0 + 0.2, 0.76, 0.86, z0 + 0.22, 0.045, 12);
+    // papers + pencil
+    rectY(0.762, x0 + 0.05, x0 + 0.33, z0 + 1.3, z0 + 1.52, 'dash');
+    L([x0 + 0.08, 0.765, z0 + 1.35], [x0 + 0.28, 0.765, z0 + 1.47]);
+    // articulated lamp
+    ring(x1 - 0.12, 0.765, z0 + 0.14, 0.07, 'xz', 12);
+    poly([[x1 - 0.12, 0.77, z0 + 0.14], [x1 - 0.3, 1.18, z0 + 0.2], [x1 - 0.45, 1.3, z0 + 0.42]]);
+    ring(x1 - 0.45, 1.2, z0 + 0.42, 0.1, 'xz', 14);
+    [0, 1, 2, 3].forEach((i) => { const a = i * Math.PI / 2; L([x1 - 0.45 + Math.cos(a) * 0.1, 1.2, z0 + 0.42 + Math.sin(a) * 0.1], [x1 - 0.45, 1.32, z0 + 0.42]); });
+    dot(x1 - 0.45, 1.17, z0 + 0.42);
+    chair(x0 - 0.15, z0 + 0.8);
+    if (rnd() < 0.5) dim([x0 - 0.05, 0.78, z0], [x0 - 0.05, 0.78, z1], '1.60');
+  }
+  function draftingTable(z) {
+    const x0 = 0.6;
+    L([x0, 0, z], [x0 + 0.5, 0.9, z + 0.1]); L([x0 + 1, 0, z], [x0 + 0.5, 0.9, z + 0.1]);
+    L([x0, 0, z + 1.4], [x0 + 0.5, 0.9, z + 1.3]); L([x0 + 1, 0, z + 1.4], [x0 + 0.5, 0.9, z + 1.3]);
+    L([x0 + 0.5, 0.9, z + 0.1], [x0 + 0.5, 0.9, z + 1.3], 'dash');
+    const b = (u, v) => [x0 + 0.1 + u * 0.8, 0.85 + u * 0.4, z + v * 1.4];   // tilted board
+    poly([b(0, 0), b(1, 0), b(1, 1), b(0, 1)], 'line', true);
+    poly([b(0.06, 0.05), b(0.94, 0.05), b(0.94, 0.95), b(0.06, 0.95)], 'dash', true);
+    L(b(0.25, 0), b(0.25, 1));                                       // parallel ruler
+    poly([b(0.4, 0.3), b(0.8, 0.3), b(0.4, 0.62)], 'line', true);    // set square
+    for (let i = 1; i < 6; i++) L(b(0.5 + i * 0.07, 0.65), b(0.5 + i * 0.07, 0.9), 'dot');
+    ring(x0 - 0.3, 0.68, z + 0.7, 0.2, 'xz', 16); L([x0 - 0.3, 0, z + 0.7], [x0 - 0.3, 0.68, z + 0.7]);   // stool
+    ring(x0 - 0.3, 0.3, z + 0.7, 0.16, 'xz', 14, 'dash');
+    dim([x0 + 1.15, 0, z], [x0 + 1.15, 0, z + 1.4], '1.40');
+  }
+  function easel(z) {
+    const x = 0.9;
+    L([x - 0.3, 0, z - 0.25], [x, 1.9, z]); L([x - 0.3, 0, z + 0.25], [x, 1.9, z]); L([x + 0.35, 0, z], [x, 1.7, z]);
+    L([x - 0.15, 0.85, z - 0.35], [x - 0.15, 0.85, z + 0.35]);
+    rectX(x - 0.12, 0.88, 1.75, z - 0.42, z + 0.42);
+    rectX(x - 0.125, 0.98, 1.65, z - 0.32, z + 0.32, 'dot');
+    ring(x - 0.13, 1.3, z, 0.18, 'yz', 18, 'dash');
+    L([x - 0.13, 1.05, z - 0.25], [x - 0.13, 1.3, z + 0.2], 'line');
+  }
+  function shelves(z, len = 2.4) {
+    const x = WALL - 2.85, w = 0.4;
+    for (const y of [0, 0.42, 0.84, 1.26, 1.68, 2.1]) { L([x, y, z], [x, y, z + len]); L([x + w, y, z], [x + w, y, z + len], 'dash'); }
+    [0, len / 2, len].forEach((dz) => { L([x, 0, z + dz], [x, 2.1, z + dz]); L([x + w, 0, z + dz], [x + w, 2.1, z + dz], 'dash'); });
+    for (const y of [0, 0.42, 0.84, 1.26, 1.68]) {
+      let zz = z + 0.06;
+      while (zz < z + len - 0.12) {
+        const bw = rr(0.03, 0.08), bh = rr(0.22, 0.38), lean = rnd() < 0.12 ? rr(0.05, 0.12) : 0;
+        if (rnd() < 0.85) { L([x + 0.05, y, zz], [x + 0.05, y + bh, zz + lean]); L([x + 0.05, y + bh, zz + lean], [x + 0.05, y + bh, zz + lean + bw], 'line'); }
+        else { ring(x + 0.05, y + 0.12, zz + 0.1, 0.1, 'yz', 12, 'dash'); }
+        zz += bw + rr(0.01, 0.05) + lean;
+        if (rnd() < 0.08) zz += rr(0.15, 0.3);
+      }
+    }
+  }
+  function plant(x, z, h = 1.4) {
+    cyl(x, 0, 0.42, z, 0.2, 16);
+    ring(x, 0.42, z, 0.23, 'xz', 16);
+    L([x, 0.42, z], [x, h * 0.55, z]);
+    for (let i = 0; i < 9; i++) {
+      const a = rr(0, Math.PI * 2), r = rr(0.25, 0.55), y0 = rr(0.5, h * 0.7), y1 = y0 + rr(0.2, 0.55);
+      const mx = x + Math.cos(a) * r * 0.55, mz = z + Math.sin(a) * r * 0.55;
+      poly([[x, y0 * 0.85, z], [mx, y1, mz], [x + Math.cos(a) * r, y1 - 0.15, z + Math.sin(a) * r]]);
+      L([x, y0 * 0.85, z], [x + Math.cos(a) * r, y1 - 0.15, z + Math.sin(a) * r], 'dot');
+    }
+  }
+  function meetingTable(z) {
+    const x0 = 1.6, x1 = 3.0, z0 = z, z1 = z + 3.2;
+    box(x0, 0.72, z0, x1 - x0, 0.04, z1 - z0);
+    [[x0 + 0.3, z0 + 0.4], [x1 - 0.3, z0 + 0.4], [x0 + 0.3, z1 - 0.4], [x1 - 0.3, z1 - 0.4]].forEach(([x, zz]) => L([x, 0, zz], [x, 0.72, zz]));
+    rectY(0.765, x0 + 0.3, x1 - 0.3, z0 + 0.6, z0 + 1.4, 'dash');   // plans on the table
+    rectY(0.766, x0 + 0.4, x1 - 0.5, z0 + 1.9, z0 + 2.5, 'dot');
+    cyl(x0 + 0.5, 0.76, 0.84, z1 - 0.6, 0.045, 10);
+    [z0 + 0.6, z0 + 1.6, z0 + 2.6].forEach((zz) => { chair(x0 - 0.35, zz); });
+    [z0 + 0.6, z0 + 1.6, z0 + 2.6].forEach((zz) => {
+      ring(x1 + 0.35, 0.47, zz, 0.24, 'xz', 18); L([x1 + 0.35, 0.08, zz], [x1 + 0.35, 0.47, zz]); rectX(x1 + 0.59, 0.55, 1.0, zz - 0.2, zz + 0.2);
+    });
+    pendant(x0 + 0.7, z0 + 0.9); pendant(x0 + 0.7, z0 + 2.3);
+    dim([x1 + 0.9, 0.76, z0], [x1 + 0.9, 0.76, z1], '3.20');
+  }
+  function lounge(z) {
+    const x0 = 1.6;
+    rectY(0.01, x0 - 0.3, x0 + 2.4, z - 0.3, z + 2.6, 'dot');        // rug
+    rectY(0.012, x0 - 0.15, x0 + 2.25, z - 0.15, z + 2.45, 'dot');
+    box(x0 + 1.4, 0, z, 0.9, 0.42, 2.2);                              // sofa base
+    box(x0 + 2.05, 0.42, z, 0.25, 0.45, 2.2);                         // back
+    box(x0 + 1.4, 0.42, z, 0.65, 0.2, 0.2, 'dash'); box(x0 + 1.4, 0.42, z + 2.0, 0.65, 0.2, 0.2, 'dash');
+    L([x0 + 1.4, 0.42, z + 1.1], [x0 + 2.05, 0.42, z + 1.1], 'dash');
+    ring(x0 + 0.5, 0.42, z + 1.1, 0.45, 'xz', 22); ring(x0 + 0.5, 0.4, z + 1.1, 0.45, 'xz', 22, 'dot');   // coffee table
+    L([x0 + 0.5, 0, z + 1.1], [x0 + 0.5, 0.4, z + 1.1]);
+    rectY(0.43, x0 + 0.3, x0 + 0.62, z + 0.95, z + 1.3, 'dash');     // magazine
+    plant(x0 + 2.5, z + 2.7, 1.7);
+  }
+  function plotter(z) {
+    const x0 = 1.1;
+    box(x0, 0.75, z, 0.7, 0.35, 2.6);
+    [[x0 + 0.1, z + 0.1], [x0 + 0.1, z + 2.5], [x0 + 0.6, z + 0.1], [x0 + 0.6, z + 2.5]].forEach(([x, zz]) => L([x, 0, zz], [x, 0.75, zz]));
+    L([x0 + 0.1, 0.12, z + 0.1], [x0 + 0.1, 0.12, z + 2.5], 'dash');
+    ring(x0 + 0.35, 1.1, z + 0.08, 0.12, 'xy', 14);
+    rectX(x0 - 0.01, 0.15, 0.85, z + 0.25, z + 2.35, 'dash');       // paper hanging out
+    for (let i = 0; i < 5; i++) L([x0 - 0.02, 0.25 + i * 0.12, z + 0.4], [x0 - 0.02, 0.25 + i * 0.12, z + 0.4 + rr(0.6, 1.6)], 'dot');
+    dot(x0 + 0.68, 1.02, z + 2.4);
+    // flat file drawers
+    box(x0 + 1.4, 0, z + 0.2, 0.9, 0.9, 2.2);
+    for (let i = 1; i < 5; i++) L([x0 + 1.4, i * 0.18, z + 0.2], [x0 + 1.4, i * 0.18, z + 2.4], 'dash');
+    for (let i = 0; i < 5; i++) dot(x0 + 1.4, 0.09 + i * 0.18, z + 1.3);
+  }
+  function pendant(x, z) {
+    L([x, CEIL, z], [x, 2.7, z], 'dot');
+    ring(x, 2.45, z, 0.24, 'xz', 18);
+    [0, 1, 2, 3, 4, 5].forEach((i) => { const a = i * Math.PI / 3; L([x + Math.cos(a) * 0.24, 2.45, z + Math.sin(a) * 0.24], [x, 2.7, z]); });
+    dot(x, 2.43, z);
+  }
+  function pinboard(z, len = 2.6) {
+    const x = WALL - 0.03;
+    rectX(x, 1.0, 2.4, z, z + len);
+    for (let i = 0; i < 9; i++) {
+      const cz = z + rr(0.1, len - 0.5), cy = rr(1.1, 2.0), w = rr(0.22, 0.42), h = rr(0.18, 0.32);
+      rectX(x - 0.01, cy, cy + h, cz, cz + w, rnd() < 0.5 ? 'line' : 'dash');
+      if (rnd() < 0.5) L([x - 0.012, cy + h * 0.3, cz + 0.04], [x - 0.012, cy + h * 0.3, cz + w - 0.04], 'dot');
+      dot(x - 0.02, cy + h - 0.03, cz + w / 2);
+    }
+    // swatch strip
+    for (let i = 0; i < 6; i++) rectX(x - 0.01, 1.05, 1.18, z + len - 0.9 + i * 0.13, z + len - 0.79 + i * 0.13);
+  }
+  function windows(z0, z1) {
+    const x = WALL;
+    L([x, 0.9, z0], [x, 0.9, z1]); L([x, 3.6, z0], [x, 3.6, z1]); L([x, 2.3, z0], [x, 2.3, z1], 'dash');
+    for (let zz = z0; zz <= z1 + 0.001; zz += 1) L([x, 0.9, zz], [x, 3.6, zz], zz === z0 || Math.abs(zz - z1) < 0.01 ? 'line' : 'dash');
+    L([x - 0.25, 0.9, z0], [x - 0.25, 0.9, z1], 'dot');            // sill
+  }
+  function column(z) { box(WALL - 3.4, 0, z, 0.36, CEIL, 0.36); L([WALL - 3.4, 0, z], [WALL - 3.04, CEIL, z + 0.36], 'dot'); }
+  function bay(z, side, kind) {
+    at(0, 0, side);
+    // envelope: wall base, windows or pinboard, ceiling beam, light
+    S(z);
+    L([WALL, 0, z], [WALL, 0, z + 8]); L([WALL, CEIL, z], [WALL, CEIL, z + 8]); L([WALL, 0, z], [WALL, CEIL, z]);
+    if (kind % 3 === 1) { windows(z + 0.5, z + 3.5); pinboard(z + 4.2, 3.0); } else windows(z + 0.5, z + 7.5);
+    L([0, CEIL, z], [WALL, CEIL, z], 'dash');                      // ceiling beam across
+    L([WALL * 0.45, CEIL, z], [WALL * 0.45, CEIL, z + 8], 'dot');
+    column(z + 0.1);
+    // furniture (local frame starts 2.4 m from the aisle centre)
+    at(side * 2.4, 0, side);
+    S(z + 2);
+    if (kind === 0) { desk(z + 0.8); desk(z + 3.0); pendant(1.8, z + 1.6); pendant(1.8, z + 3.8); plant(WALL - 3.1, z + 6.5, 1.6); }
+    else if (kind === 1) { draftingTable(z + 1.0); easel(z + 4.4); shelves(z + 5.2, 2.4); pendant(1.5, z + 1.7); }
+    else if (kind === 2) { meetingTable(z + 1.2); shelves(z + 5.0, 2.6); plant(0.9, z + 6.9, 1.2); }
+    else if (kind === 3) { lounge(z + 1.0); shelves(z + 4.6, 3.0); }
+    else { plotter(z + 0.8); desk(z + 4.4); pendant(1.8, z + 5.2); plant(WALL - 3.1, z + 7.2, 1.3); }
+  }
+  for (let i = 0, z = -2; z < 116; i++, z += 8) {
+    bay(z, -1, i % 5);
+    bay(z, 1, (i + 2) % 5);
+  }
+  // ceiling height callout near the start
+  at(0, 0, 1); S(6); dim([WALL - 0.3, 0, 8], [WALL - 0.3, CEIL, 8], '4.20');
+
+  // Six clips placed through the walk, alternating sides
+  const CHIP_Z = [17, 33, 49, 65, 81, 97];
+  const chipEls = MEDIA.chips.map((m, i) => {
+    const el = document.createElement('div');
+    el.className = 'pg-chip';
+    el.appendChild(media(m));
+    const tag = document.createElement('div');
+    tag.className = 'pg-chip-tag';
+    tag.innerHTML = `<b>0${i + 1}</b> &nbsp;${m.tag}`;
+    el.appendChild(tag);
+    document.getElementById('pgChips').appendChild(el);
+    return { el, x: i % 2 ? 1.85 : -1.85, y: 0.95, z: CHIP_Z[i], size: 1.8 };
+  });
+
+  // ── Canvas ──
+  const cvs = document.getElementById('pgCanvas');
+  const ctx = cvs.getContext('2d');
+  let W = 0, H = 0, DPR = 1;
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cvs.clientWidth; H = cvs.clientHeight;
+    cvs.width = W * DPR; cvs.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', resize); resize();
+
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ease = (t) => t * t * (3 - 2 * t);
+  const range = (p, a, b) => clamp((p - a) / (b - a));
+
+  const cam = { x: 0, y: 1.55, z: 0, yaw: 0 };
+  const NEAR = 0.35, FAR = 70;
+  let F = 1, HY = 0;
+
+  function project(x, y, z) {
+    const dx = x - cam.x, dy = y - cam.y, dz = z - cam.z;
+    const c = Math.cos(cam.yaw), s = Math.sin(cam.yaw);
+    const rx = dx * c - dz * s, rz = dx * s + dz * c;
+    return [rx, dy, rz];
+  }
+  function toScreen([rx, ry, rz]) { return [W / 2 + (rx * F) / rz, HY - (ry * F) / rz]; }
+
+  // Lines are collected into buckets (style × width × alpha) and stroked
+  // once per bucket, so thousands of segments stay smooth to scroll.
+  let buckets = new Map();
+  function addLine(style, lw, al, ax, ay, bx, by) {
+    const lwB = Math.round(lw * 4) / 4, aB = Math.round(al * 16) / 16;
+    if (aB <= 0) return;
+    const key = style + '|' + lwB + '|' + aB;
+    let b = buckets.get(key);
+    if (!b) { b = { style, lw: lwB, a: aB, pts: [] }; buckets.set(key, b); }
+    b.pts.push(ax, ay, bx, by);
+  }
+  function flush() {
+    ctx.lineCap = 'round';
+    for (const b of buckets.values()) {
+      const lw = b.lw;
+      if (b.style === 'dash') ctx.setLineDash([lw * 5, lw * 4]);
+      else if (b.style === 'dot') ctx.setLineDash([lw * 0.5, lw * 3.4]);
+      else ctx.setLineDash([]);
+      ctx.lineWidth = lw;
+      ctx.strokeStyle = b.style === 'ink' ? rgba(DARK, b.a) : rgba(COBALT, b.a);
+      ctx.beginPath();
+      const p = b.pts;
+      for (let i = 0; i < p.length; i += 4) { ctx.moveTo(p[i], p[i + 1]); ctx.lineTo(p[i + 2], p[i + 3]); }
+      ctx.stroke();
+    }
+    buckets = new Map();
+  }
+
+  function drawSeg(a, b, style, alphaMul, frac) {
+    let A = project(...a), B = project(...b);
+    if (A[2] < NEAR && B[2] < NEAR) return;
+    if (frac < 1) B = [A[0] + (B[0] - A[0]) * frac, A[1] + (B[1] - A[1]) * frac, A[2] + (B[2] - A[2]) * frac];
+    if (A[2] < NEAR || B[2] < NEAR) {
+      const t = (NEAR - A[2]) / (B[2] - A[2]);
+      const Pn = [A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t, NEAR];
+      if (A[2] < NEAR) A = Pn; else B = Pn;
+    }
+    const zMid = (A[2] + B[2]) / 2;
+    const fog = clamp(1 - (zMid - 8) / (FAR - 8)) * clamp(zMid / 1.4);
+    const al = fog * alphaMul * (style === 'line' ? 0.95 : 0.75);
+    if (al < 0.02) return;
+    const [ax, ay] = toScreen(A), [bx, by] = toScreen(B);
+    if ((ax < -50 && bx < -50) || (ax > W + 50 && bx > W + 50) || (ay < -50 && by < -50) || (ay > H + 50 && by > H + 50)) return;
+    const lw = clamp(6 / zMid, 0.5, 2.2);
+    addLine(style, lw, al, ax, ay, bx, by);
+    if (style === 'line' && frac >= 1 && zMid < 22) {               // sketch overshoot
+      const ex = (bx - ax) * 0.1, ey = (by - ay) * 0.1;
+      addLine('line', 0.5, al * 0.25, ax - ex, ay - ey, bx + ex, by + ey);
+    }
+  }
+
+  function drawGround(alpha) {
+    // dotted floor grid between the walls
+    const z0 = Math.ceil(cam.z + NEAR), z1 = cam.z + FAR;
+    for (let z = z0; z < z1; z += 1) {
+      const far = z - cam.z > 28;
+      if (far && z % 2) continue;
+      for (let x = -8; x <= 8; x += far ? 2 : 1) {
+        const Pp = project(x, 0, z); if (Pp[2] < NEAR) continue;
+        const [sx, sy] = toScreen(Pp);
+        if (sx < -20 || sx > W + 20 || sy > H + 20) continue;
+        const fog = clamp(1 - (Pp[2] - 6) / (FAR - 6));
+        const r = clamp(4.8 / Pp[2], 0.5, 2.4);
+        ctx.fillStyle = Math.abs(x) <= 1 ? rgba(DARK, 0.4 * fog * alpha) : rgba(COBALT, 0.55 * fog * alpha);
+        ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    // aisle edges, floor joints, ceiling lines
+    [-1.3, 1.3].forEach((x) => drawSeg([x, 0, cam.z + NEAR + 0.01], [x, 0, cam.z + FAR], 'line', 0.85 * alpha, 1));
+    for (let z = Math.ceil(cam.z / 2) * 2; z < cam.z + 36; z += 2) drawSeg([-1.3, 0, z], [1.3, 0, z], 'dot', 0.6 * alpha, 1);
+    [-1.3, 1.3].forEach((x) => drawSeg([x, CEIL, cam.z + NEAR + 0.01], [x, CEIL, cam.z + FAR], 'dot', 0.55 * alpha, 1));
+    [-WALL, WALL].forEach((x) => drawSeg([x, 0, cam.z + 1], [x, 0, cam.z + FAR], 'line', 0.5 * alpha, 1));
+    flush();
+  }
+
+  function drawDim(d, alpha) {
+    const A = project(...d.a), B = project(...d.b);
+    if (A[2] < 1.2 || B[2] < 1.2) return;
+    const zMid = (A[2] + B[2]) / 2;
+    const fog = clamp(1 - (zMid - 5) / 26) * alpha;
+    if (fog < 0.03) return;
+    const [ax, ay] = toScreen(A), [bx, by] = toScreen(B);
+    ctx.setLineDash([]); ctx.lineWidth = 0.8; ctx.strokeStyle = rgba(DARK, 0.6 * fog);
+    ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
+    const ang = Math.atan2(by - ay, bx - ax), t = 5;
+    [[ax, ay], [bx, by]].forEach(([x, y]) => { ctx.moveTo(x - Math.cos(ang + 0.8) * t, y - Math.sin(ang + 0.8) * t); ctx.lineTo(x + Math.cos(ang + 0.8) * t, y + Math.sin(ang + 0.8) * t); });
+    ctx.stroke();
+    const fs = clamp(120 / zMid, 9, 14);
+    ctx.font = `500 ${fs}px Raleway, sans-serif`;
+    ctx.fillStyle = rgba(DARK, 0.8 * fog);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText(d.label, (ax + bx) / 2, (ay + by) / 2 - 4);
+  }
+
+  function drawStructures(alpha) {
+    const list = structures.filter((s) => s.z - cam.z > -10 && s.z - cam.z < FAR);
+    const dotsToDraw = [];
+    for (const s of list) {
+      const d = s.z - cam.z;
+      const build = clamp((40 - d) / 24);                 // sketches itself in as you approach
+      for (const g of s.segs) {
+        const f = clamp((build - g.t) / 0.4);
+        if (f < 1) drawSeg(g.a, g.b, 'dot', 0.5 * alpha, 1);
+        if (f > 0) drawSeg(g.a, g.b, g.style, alpha, ease(f));
+      }
+      if (build > 0.5) for (const p of s.dots) dotsToDraw.push([p, build]);
+      if (build > 0.7) s.dims.forEach((dd) => drawDim(dd, alpha * range(build, 0.7, 1)));
+    }
+    flush();
+    // lime joint markers on top
+    ctx.setLineDash([]);
+    for (const [p, build] of dotsToDraw) {
+      const Pp = project(...p); if (Pp[2] < NEAR) continue;
+      const [sx, sy] = toScreen(Pp), r = clamp(9 / Pp[2], 1.5, 6);
+      const fog = clamp(1 - (Pp[2] - 8) / (FAR - 8)) * alpha * range(build, 0.5, 1);
+      if (fog < 0.03) continue;
+      ctx.fillStyle = rgba(LIME, fog); ctx.strokeStyle = rgba(COBALT, 0.8 * fog); ctx.lineWidth = 0.8;
+      ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    }
+  }
+
+  // Lime "plinth" under each clip: a ground circle marking where it stands
+  function drawPlinths(alpha) {
+    chipEls.forEach((c) => {
+      const d = c.z - cam.z; if (d < NEAR || d > FAR) return;
+      let prev = null;
+      for (let i = 0; i <= 36; i++) {
+        const t = (i / 36) * Math.PI * 2;
+        const P = project(c.x + Math.cos(t) * 0.6, 0.01, c.z + Math.sin(t) * 0.6);
+        if (P[2] < NEAR) { prev = null; continue; }
+        const S2 = toScreen(P);
+        if (prev) {
+          const fog = clamp(1 - (P[2] - 8) / (FAR - 8)) * alpha;
+          ctx.setLineDash([]); ctx.lineWidth = 2;
+          ctx.strokeStyle = rgba(COBALT, 0.55 * fog);
+          ctx.beginPath(); ctx.moveTo(prev[0], prev[1]); ctx.lineTo(S2[0], S2[1]); ctx.stroke();
+        }
+        prev = S2;
+      }
+      const C = project(c.x, 0.01, c.z);
+      if (C[2] > NEAR) {
+        const [sx, sy] = toScreen(C), fog = clamp(1 - (C[2] - 8) / (FAR - 8)) * alpha;
+        const rx = (0.55 * F) / C[2], ry = rx * clamp(cam.y / C[2], 0.08, 0.6);
+        ctx.fillStyle = rgba(LIME, 0.55 * fog);
+        ctx.beginPath(); ctx.ellipse(sx, sy, rx, ry, 0, 0, Math.PI * 2); ctx.fill();
+      }
+    });
+  }
+
+  // ── Scroll → progress (smoothed) ──
+  const scroller = document.getElementById('pgScroll');
+  let target = 0, p = 0;
+  function readScroll() {
+    const r = scroller.getBoundingClientRect();
+    const total = scroller.offsetHeight - window.innerHeight;
+    target = clamp(-r.top / total);
+  }
+  window.addEventListener('scroll', readScroll, { passive: true });
+  readScroll(); p = target;
+
+  const intro = document.getElementById('pgIntro');
+  const endEl = document.getElementById('pgEnd');
+  const hint = document.getElementById('pgHint');
+  const prog = document.getElementById('pgProg');
+
+  // Timeline (0 → 1 across the scroll)
+  const T = { introOut: [0.04, 0.15], walkIn: [0.08, 0.16], walk: [0.1, 0.86], gather: [0.84, 0.96] };
+  const WALK_END = 108;
+
+  function frame() {
+    p += (target - p) * 0.12;
+    if (Math.abs(target - p) < 0.00005) p = target;
+
+    F = H * 0.95; HY = H * 0.47;
+    const wt = range(p, T.walk[0], T.walk[1]);
+    // camera eases in and out of the walk; a gentle sway like walking
+    cam.z = lerp(-6, WALK_END, ease(wt) * 0.92 + wt * 0.08);
+    cam.x = Math.sin(cam.z * 0.09) * 0.45;
+    cam.yaw = Math.sin(cam.z * 0.06 + 0.5) * 0.06;
+    cam.y = 1.55 + Math.sin(cam.z * 0.9) * 0.015;
+
+    const worldA = range(p, T.walkIn[0], T.walkIn[1]) * (1 - range(p, 0.9, 0.97) * 0.75);
+
+    ctx.clearRect(0, 0, W, H);
+    if (worldA > 0.002) {
+      drawGround(worldA);
+      drawPlinths(worldA);
+      drawStructures(worldA);
+    }
+
+    // Opening animation: grows past the viewer and dissolves into the playground
+    const io = ease(range(p, T.introOut[0], T.introOut[1]));
+    intro.style.opacity = 1 - io;
+    intro.style.transform = `translate(-50%, -50%) scale(${1 + io * 2.6})`;
+    intro.style.visibility = io >= 1 ? 'hidden' : 'visible';
+    hint.style.opacity = 0.7 * (1 - range(p, 0, 0.04));
+
+    // Clips: placed in the world while walking, then gather round the logo
+    const g = ease(range(p, T.gather[0], T.gather[1]));
+    const ringR = Math.min(W, H) * 0.31, chipPx = Math.min(W, H) * 0.2;
+    chipEls.forEach((c, i) => {
+      // in-world position
+      const P = project(c.x, c.y, c.z);
+      let wx = 0, wy = 0, ws = 0, wo = 0;
+      if (P[2] > NEAR) {
+        const [sx, sy] = toScreen(P);
+        const px = (c.size * F) / P[2];
+        ws = px / 400; wx = sx - px / 2; wy = sy - px / 2;
+        wo = range(P[2], 46, 30) * (1 - range(P[2], 3.4, 1.6));
+      }
+      // gathered position: evenly round the logo
+      const a = -Math.PI / 2 + (i / chipEls.length) * Math.PI * 2;
+      const gx = W / 2 + Math.cos(a) * ringR - chipPx / 2;
+      const gy = H / 2 + Math.sin(a) * ringR - chipPx / 2;
+      const gs = chipPx / 400;
+      // entering from outside the frame along its own angle
+      const sx0 = W / 2 + Math.cos(a) * ringR * 2.4 - chipPx / 2, sy0 = H / 2 + Math.sin(a) * ringR * 2.4 - chipPx / 2;
+      const ex = lerp(sx0, gx, g), ey = lerp(sy0, gy, g);
+      const useG = g > 0.001;
+      const x = useG ? ex : wx, y = useG ? ey : wy, s = useG ? gs * lerp(0.7, 1, g) : ws, o = useG ? g : wo;
+      c.el.style.opacity = o.toFixed(3);
+      c.el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${s})`;
+      c.el.style.zIndex = useG ? 20 : Math.round(1000 - P[2] * 10);
+      c.el.querySelector('.pg-chip-tag').style.opacity = useG ? 0 : clamp(range(P[2], 22, 12) * (1 - range(P[2], 4, 2)));
+    });
+
+    endEl.style.opacity = ease(range(p, 0.9, 0.98));
+    endEl.style.transform = `translate(-50%, -50%) scale(${lerp(0.92, 1, ease(range(p, 0.9, 0.98)))})`;
+    prog.style.height = `${(p * 100).toFixed(2)}%`;
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
