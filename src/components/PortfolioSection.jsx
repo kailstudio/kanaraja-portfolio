@@ -504,6 +504,60 @@ export const CATEGORIES = [
     ],
     slides: [
       {
+        id: 8, bg: '#3A2A8C', img: 'projects/spurgeons-christmas-booklet.webp', label: 'Spurgeons: Christmas Activity Booklet',
+        tags: ['Print', 'Editorial', 'Activity Design', 'Charity'],
+        caseStudy: {
+          subtitle: 'Print Design · Editorial Layout · Activity Design · A4 Booklet',
+          year: '2026',
+          status: 'Complete',
+          client: 'Spurgeons',
+          live: { href: 'https://spurgeons.org/resources-and-courses/resources/parenting-resources/activity-sheets-for-kids/christmas-activities-for-kids/', label: 'View it live on the Spurgeons website' },
+          pdf: { file: 'spurgeons-christmas/christmas-activity-booklet.pdf', label: 'Booklet', pages: 13, size: '5.6 MB' },
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `A 13-page A4 Christmas activity booklet for Spurgeons to share with the children and families it supports. It opens with a welcome page and contents, then moves through nine festive activities: a wordsearch, a wool tangle puzzle, two spot the differences, a find-the-sleighbell scene, a 123-dot dot to dot, a maze, a design-your-own stocking and a paper snowflake to make.\n\nEvery activity sits in the same calm system of rounded cards, numbered activity tags and clear instructions, so children can work through it on their own. An answers spread is printed upside down to stop peeking, and the back cover links families to a Spurgeons origami activity with a QR code.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-signage.webp', label: 'Spurgeons: Signage',
+        tags: ['Print', 'Signage', 'Charity'],
+        caseStudy: {
+          subtitle: 'Print Design · Signage · Festival & Event Materials',
+          year: '2022–2025',
+          duration: '3.5 Years',
+          status: 'Ongoing',
+          client: 'Spurgeons',
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `Spurgeons is one of the UK's leading children's charities, delivering community-based services to families facing poverty, abuse, and neglect. Over more than three years, I have designed a wide range of print and physical materials for the charity: from large-format festival banners and pull-up banners to building signage, event posters, and social media assets.\n\nThe work spans indoor and outdoor environments, seasonal campaigns, and location-specific installations, each piece designed to communicate Spurgeons' warmth, credibility, and community presence at scale.`,
+            },
+          ],
+        },
+      },
+      {
+        id: 9, bg: '#FFF7D6', img: 'projects/spurgeons-safety-posters.webp', label: 'Spurgeons: Safety Posters',
+        tags: ['Print', 'Poster Series', 'Information Design', 'Charity'],
+        caseStudy: {
+          subtitle: 'Print Design · Poster Series · Information Design · A4',
+          year: '2026',
+          status: 'Complete',
+          client: 'Spurgeons',
+          sections: [
+            {
+              id: 'overview',
+              title: 'Project Overview',
+              body: `A set of three A4 safety posters for Spurgeons, covering online safety, sun safety and road safety for children and young people.\n\nThe three share one system: a two-tone headline, the Spurgeons logo top right, soft gradient backgrounds and short tips set in rounded glass cards with simple icons. Each poster then gets its own visual idea: a scrolling list of online tips beside two figures sharing a phone, a smiling sun ringed by four tips, and a winding numbered road that walks children through crossing step by step.`,
+            },
+          ],
+        },
+      },
+      {
         id: 1, bg: '#C8B898', img: 'projects/woodco.webp', label: 'Woodco',
         tags: ['Packaging', 'Label Design', 'Visual Identity'],
         caseStudy: {
@@ -587,24 +641,6 @@ export const CATEGORIES = [
         },
       },
       {
-        id: 5, bg: '#B8C8D8', img: 'projects/spurgeons-signage.webp', label: 'Spurgeons: Signage',
-        tags: ['Print', 'Signage', 'Charity'],
-        caseStudy: {
-          subtitle: 'Print Design · Signage · Festival & Event Materials',
-          year: '2022–2025',
-          duration: '3.5 Years',
-          status: 'Ongoing',
-          client: 'Spurgeons',
-          sections: [
-            {
-              id: 'overview',
-              title: 'Project Overview',
-              body: `Spurgeons is one of the UK's leading children's charities, delivering community-based services to families facing poverty, abuse, and neglect. Over more than three years, I have designed a wide range of print and physical materials for the charity: from large-format festival banners and pull-up banners to building signage, event posters, and social media assets.\n\nThe work spans indoor and outdoor environments, seasonal campaigns, and location-specific installations, each piece designed to communicate Spurgeons' warmth, credibility, and community presence at scale.`,
-            },
-          ],
-        },
-      },
-      {
         id: 6, bg: '#D4C7FF', img: 'projects/spurgeons-merch.webp', label: 'Spurgeons: Merch',
         tags: ['Merch', 'Apparel', 'Charity'],
         caseStudy: {
@@ -662,9 +698,8 @@ export const CATEGORIES = [
         caseStudy: {
           subtitle: 'UX · Product Design · Visual Design · Prototyping · Built with Claude',
           year: '2026',
-          status: 'Prototype · Going to Senior Leadership Team',
+          status: 'In development · Not yet live to the public',
           client: 'Spurgeons',
-          demo: 'https://spurgeonsdesign.github.io/support-platform/',
           sections: [
             {
               id: 'overview',

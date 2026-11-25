@@ -9,6 +9,7 @@
 import { Fragment, useState, useEffect, useRef, useCallback } from 'react'
 import { motion, useInView, AnimatePresence, useMotionValue, useTransform, useReducedMotion } from 'framer-motion'
 import { PDFFlipbook } from './PDFFlipbook'
+import PageFlipBook from './PageFlipBook'
 import { CATEGORIES } from './PortfolioSection'
 
 // ── Transitions ──────────────────────────────────────────────────────
@@ -1719,6 +1720,21 @@ const DownloadSVG = () => (
   </svg>
 )
 
+// Cleaner line icons for the View the Project links (no tile behind them)
+const LiveSiteSVG = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M3.5 12h17M12 3.5c2.4 2.6 3.6 5.4 3.6 8.5s-1.2 5.9-3.6 8.5c-2.4-2.6-3.6-5.4-3.6-8.5s1.2-5.9 3.6-8.5z" />
+  </svg>
+)
+const FileDownSVG = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3.5v11" />
+    <path d="M7.5 10.5L12 15l4.5-4.5" />
+    <path d="M4 15.5v2.5a2.5 2.5 0 0 0 2.5 2.5h11a2.5 2.5 0 0 0 2.5-2.5v-2.5" />
+  </svg>
+)
+
 // ── Generic Pkg components ────────────────────────────────────────────
 
 function PkgHero({ cs, slide, cfg, heroContent }) {
@@ -1750,6 +1766,13 @@ function PkgHero({ cs, slide, cfg, heroContent }) {
           <span className="cs-status-text" style={{ color: dark + 'aa' }}>{cs.status}</span>
         </div>
       </Reveal>
+      {cs.live && (
+        <Reveal delay={0.34}>
+          <a className="pkg-live-btn" href={cs.live.href} target="_blank" rel="noopener noreferrer">
+            {cs.live.label} <span aria-hidden="true">↗</span>
+          </a>
+        </Reveal>
+      )}
     </CSSection>
   )
 }
@@ -1858,7 +1881,8 @@ function PkgImpact({ cfg }) {
 function PkgLinks({ cs, cfg }) {
   const { linksBody } = cfg
   const links = [
-    cs.demo     && { href: cs.demo,     Icon: GlobeSVG,    label: 'Live Demo' },
+    cs.live     && { href: cs.live.href, Icon: LiveSiteSVG, label: cs.live.label },
+    cs.demo     && { href: cs.demo,     Icon: LiveSiteSVG, label: 'Live Demo' },
     cs.behance  && { href: cs.behance,  Icon: BehanceSVG,  label: 'Behance'  },
     cs.dribbble && { href: cs.dribbble, Icon: DribbbleSVG, label: 'Dribbble' },
     cs.website  && { href: cs.website,  Icon: GlobeSVG,    label: cs.client ? `${cs.client} Website` : 'Website' },
@@ -1866,7 +1890,7 @@ function PkgLinks({ cs, cfg }) {
     cs.article  && { href: cs.article,  Icon: GlobeSVG,    label: 'Read Article' },
     cs.vimeo    && { href: cs.vimeo,    Icon: VimeoSVG,    label: 'Watch on Vimeo' },
     // Optional PDF download — cs.pdf = { file, label, pages, size }, file in public/
-    cs.pdf      && { href: `${BASE}${cs.pdf.file}`, Icon: DownloadSVG, label: `Download the ${cs.pdf.label.toLowerCase()}`,
+    cs.pdf      && { href: `${BASE}${cs.pdf.file}`, Icon: FileDownSVG, label: `Download the ${cs.pdf.label.toLowerCase()}`,
                      sub: `PDF · ${cs.pdf.pages} pages · ${cs.pdf.size}`, download: true },
   ].filter(Boolean)
   if (!links.length) return null
@@ -1884,8 +1908,8 @@ function PkgLinks({ cs, cfg }) {
           {linksBody && <p className="plx-body">{linksBody}</p>}
         </Reveal>
         <Reveal delay={0.1} className="plx-links">
-          {links.map(({ href, Icon, label, sub, download }) => (
-            <a key={href} href={href} className="plx-link"
+          {links.map(({ href, Icon, label, sub, download }, i) => (
+            <a key={href} href={href} className={`plx-link${download ? ' plx-link--download' : i === 0 && links.length > 1 ? ' plx-link--primary' : ''}`}
               {...(download ? { download: '' } : { target: '_blank', rel: 'noopener noreferrer' })}>
               <span className="plx-link-icon"><Icon /></span>
               <span className="plx-link-text">
@@ -5003,10 +5027,144 @@ function SpurgeonsFlyersCaseStudyView({ cat, cs, slide }) {
 }
 
 
+// ── Spurgeons: Christmas Activity Booklet ────────────────────────────
+
+const XMAS_IMG = (f) => `${BASE}spurgeons-christmas/${f}`
+const XMAS_CFG = {
+  accent: '#335CFF', lightAccent: '#335CFF', dark: '#333333',
+  heroSrc: XMAS_IMG('booklet-covers.webp'), heroLabel: 'Christmas activity booklet, front and back covers',
+  specs: [
+    { label: 'Client',     value: 'Spurgeons'               },
+    { label: 'Year',       value: '2026'                    },
+    { label: 'Format',     value: 'A4 booklet · 13 pages'   },
+    { label: 'Activities', value: '9, plus answers'         },
+    { label: 'Audience',   value: 'Children and families'   },
+  ],
+  stats: [
+    { value: '13',  label: 'A4 pages, from cover to back cover' },
+    { value: '9',   label: 'Festive activities, each with clear instructions' },
+    { value: '123', label: 'Dots in the dot to dot' },
+    { value: '1',   label: 'Upside-down answers spread, so no peeking' },
+  ],
+}
+
+const XMAS_PAGES = Array.from({ length: 13 }, (_, i) => XMAS_IMG(`pages/p${String(i + 1).padStart(2, '0')}.webp`))
+// Drop mockups into public/spurgeons-christmas/ with these names and they appear automatically.
+const XMAS_PRINT = ['print-1.webp', 'print-2.webp', 'print-3.webp'].map(XMAS_IMG)
+
+function PrintRow({ images }) {
+  const [ok, setOk] = useState({})
+  return (
+    <div className="print-row">
+      {images.map((src, i) => (
+        <Reveal key={src} delay={0.06 + i * 0.08}>
+          <div className={`print-slot${ok[i] ? ' has-img' : ''}`}>
+            <img src={src} alt={`Booklet in print, mockup ${i + 1}`} loading="lazy"
+              style={{ display: ok[i] === false ? 'none' : undefined }}
+              onLoad={() => setOk((o) => ({ ...o, [i]: true }))}
+              onError={() => setOk((o) => ({ ...o, [i]: false }))} />
+            {ok[i] === false && (
+              <div className="print-slot-empty">Mockup {i + 1}<code>{src.split('/').slice(-2).join('/')}</code></div>
+            )}
+          </div>
+        </Reveal>
+      ))}
+    </div>
+  )
+}
+
+function ChristmasBookletCaseStudyView({ cat, cs, slide }) {
+  const cfg = XMAS_CFG
+  return (
+    <div className="cs-wrap pkg-case-study">
+      <PkgHero cs={cs} slide={slide} cfg={cfg} />
+      <PkgOverview cs={cs} cfg={cfg} />
+
+      <CSSection title="The Booklet">
+        <Reveal>
+          <p style={{ marginBottom: '2rem', lineHeight: 1.7, color: cfg.dark }}>
+            Flip through all 13 pages. Click a page or use the arrows to turn it.
+          </p>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <PageFlipBook pages={XMAS_PAGES} title="Christmas activity booklet" pdfUrl={XMAS_IMG('christmas-activity-booklet.pdf')} />
+        </Reveal>
+      </CSSection>
+
+      <CSSection title="Booklet in Print" variant="dark">
+        <PrintRow images={XMAS_PRINT} />
+      </CSSection>
+
+      <MotionStats cfg={cfg} />
+      <PkgLinks cs={cs} cfg={{ linksBody: 'See the booklet live on the Spurgeons website, or download the print-ready PDF.' }} />
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+// ── Spurgeons: Safety Posters ────────────────────────────────────────
+
+const SAFETY_IMG = (f) => `${BASE}spurgeons-safety/${f}`
+const SAFETY_POSTERS = [
+  { name: 'Online safety', img: 'poster-online.webp', pdf: 'online-safety-poster.pdf', size: '2.2 MB',
+    body: 'Five tips on keeping personal information private, blocking and reporting, posting and sharing photos, with a clear message to talk to an adult.' },
+  { name: 'Sun safety', img: 'poster-sun.webp', pdf: 'sun-safety-poster.pdf', size: '1.3 MB',
+    body: 'A smiling sun with four simple habits around it: wear a hat, stay in the shade, drink lots of water and wear sun cream.' },
+  { name: 'Road safety', img: 'poster-road.webp', pdf: 'road-safety-poster.pdf', size: '0.9 MB',
+    body: 'A winding numbered road that takes children through crossing in six steps: think, stop, listen and look, wait, look again, walk.' },
+]
+const SAFETY_CFG = {
+  accent: '#335CFF', lightAccent: '#335CFF', dark: '#333333',
+  heroSrc: SAFETY_IMG('posters-set.webp'), heroLabel: 'Online, sun and road safety posters',
+  specs: [
+    { label: 'Client',   value: 'Spurgeons'                },
+    { label: 'Year',     value: '2026'                     },
+    { label: 'Format',   value: 'A4 posters · set of 3'    },
+    { label: 'Topics',   value: 'Online, sun, road'        },
+    { label: 'Audience', value: 'Children and young people'},
+  ],
+}
+
+function SafetyPostersCaseStudyView({ cat, cs, slide }) {
+  const cfg = SAFETY_CFG
+  return (
+    <div className="cs-wrap pkg-case-study">
+      <PkgHero cs={cs} slide={slide} cfg={cfg} />
+      <PkgOverview cs={cs} cfg={cfg} />
+
+      <CSSection title="The Series in Print" variant="dark">
+        <Reveal>
+          <img className="safety-mockup" src={SAFETY_IMG('posters-mockup.webp')}
+            alt="The online, sun and road safety posters on a wall" loading="lazy" />
+        </Reveal>
+      </CSSection>
+
+      <CSSection title="The Original Posters">
+        <div className="safety-originals">
+          {SAFETY_POSTERS.map((p, i) => (
+            <Reveal key={p.name} delay={0.06 + i * 0.08} className="safety-original">
+              <a href={SAFETY_IMG(p.pdf)} target="_blank" rel="noopener noreferrer" className="safety-original-img">
+                <img src={SAFETY_IMG(p.img)} alt={`${p.name} poster`} loading="lazy" />
+              </a>
+              <h3>{p.name}</h3>
+              <p>{p.body}</p>
+              <a className="safety-original-dl" href={SAFETY_IMG(p.pdf)} download>
+                Download PDF <span>· {p.size}</span>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+      </CSSection>
+
+      <CSCTA cat={cat} />
+    </div>
+  )
+}
+
+
 // ── Spurgeons: Support Platform ───────────────────────────────────────
 // Glassmorphism case study. All styles are scoped under .sp-cs in styles.css.
 
-const SP_LIVE_URL = 'https://spurgeonsdesign.github.io/support-platform/'
 
 const SP_IMG = (f) => `${BASE}spurgeons-supportplatform/${f}`
 
@@ -5236,9 +5394,6 @@ function SpurgeonsSupportPlatformCaseStudyView({ cat, cs, slide }) {
             </Reveal>
             <Reveal delay={0.2}>
               <div className="sp-hero-actions">
-                <a className="sp-live-btn" href={SP_LIVE_URL} target="_blank" rel="noopener noreferrer">
-                  View the live prototype <span><SPIcon name="arrow" size={14} /></span>
-                </a>
                 <span className="sp-status"><i />{cs.status}</span>
               </div>
             </Reveal>
@@ -5463,7 +5618,6 @@ function SpurgeonsSupportPlatformCaseStudyView({ cat, cs, slide }) {
         </Reveal>
       </SPSection>
 
-      <PkgLinks cs={cs} cfg={{ linksBody: 'Try the live, clickable prototype: switch between the practitioner, client and content admin views.' }} />
       <CSCTA cat={cat} />
     </div>
   )
@@ -6912,6 +7066,8 @@ function CaseStudyView({ cat, slide, onProjectOpen }) {
     if (slide.id === 5) return <SpurgeonsSignageCaseStudyView cat={cat} cs={cs} slide={slide} />
     if (slide.id === 6) return <SpurgeonsMerchCaseStudyView   cat={cat} cs={cs} slide={slide} />
     if (slide.id === 7) return <SpurgeonsFlyersCaseStudyView  cat={cat} cs={cs} slide={slide} />
+    if (slide.id === 8) return <ChristmasBookletCaseStudyView cat={cat} cs={cs} slide={slide} />
+    if (slide.id === 9) return <SafetyPostersCaseStudyView   cat={cat} cs={cs} slide={slide} />
   }
   if (cat.id === 'motion') {
     if (slide.id === 1) return <StudioIntroCaseStudyView  cat={cat} cs={cs} slide={slide} />
